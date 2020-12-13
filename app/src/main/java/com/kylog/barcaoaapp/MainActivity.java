@@ -3,13 +3,12 @@ package com.kylog.barcaoaapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.gson.GsonBuilder;
+import com.kylog.barcaoaapp.models.Auth;
 import com.kylog.barcaoaapp.models.LoginForm;
 
 import okhttp3.OkHttpClient;
@@ -47,17 +46,13 @@ public class MainActivity extends AppCompatActivity {
     private void login(LoginForm loginForm)
     {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-// set your desired log level
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-// add your other interceptors …
-
-// add logging as last interceptor
         httpClient.addInterceptor(logging);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.0.14:8002/")
+                .baseUrl("http://18.219.178.157/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient.build())
                 .build();

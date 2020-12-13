@@ -1,1 +1,3 @@
-/.gradle/buildOutputCleanup/cache.properties
+local.properties
+/.gradle
+/.idea
