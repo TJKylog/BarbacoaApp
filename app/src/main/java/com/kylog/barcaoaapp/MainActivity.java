@@ -1,12 +1,14 @@
 package com.kylog.barcaoaapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.kylog.barcaoaapp.models.Auth;
 import com.kylog.barcaoaapp.models.LoginForm;
@@ -66,7 +68,10 @@ public class MainActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     Auth auth = response.body();
                     token = auth.getAccessToken();
+                    Intent intent = new Intent(MainActivity.this , MainMenu.class);
+                    intent.putExtra("token", token);
                     Toast.makeText(MainActivity.this, token , Toast.LENGTH_LONG).show();
+                    startActivity(intent);
                 } else {
                     response.errorBody(); // do something with that
                 }
