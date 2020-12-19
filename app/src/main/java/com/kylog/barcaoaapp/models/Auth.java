@@ -14,12 +14,6 @@ public class Auth {
     @SerializedName("expires_at")
     @Expose
     private String expiresAt;
-    @SerializedName("user_id")
-    @Expose
-    private Integer userId;
-    @SerializedName("role")
-    @Expose
-    private String role;
 
     /**
      * No args constructor for use in serialization
@@ -30,19 +24,15 @@ public class Auth {
 
     /**
      *
-     * @param role
      * @param accessToken
      * @param tokenType
-     * @param userId
      * @param expiresAt
      */
-    public Auth(String accessToken, String tokenType, String expiresAt, Integer userId, String role) {
+    public Auth(String accessToken, String tokenType, String expiresAt) {
         super();
         this.accessToken = accessToken;
         this.tokenType = tokenType;
         this.expiresAt = expiresAt;
-        this.userId = userId;
-        this.role = role;
     }
 
     public String getAccessToken() {
@@ -61,28 +51,9 @@ public class Auth {
         this.tokenType = tokenType;
     }
 
-    public String getExpiresAt() {
-        return expiresAt;
-    }
+    public String getExpiresAt() { return expiresAt; }
 
     public void setExpiresAt(String expiresAt) {
         this.expiresAt = expiresAt;
     }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
 }

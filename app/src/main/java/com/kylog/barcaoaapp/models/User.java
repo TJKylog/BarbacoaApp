@@ -14,15 +14,36 @@ public class User {
     @SerializedName("email")
     @Expose
     private String email;
-    @SerializedName("email_verified_at")
+    @SerializedName("role")
     @Expose
-    private String emailVerifiedAt;
-    @SerializedName("created_at")
+    private String role;
+    @SerializedName("role_id")
     @Expose
-    private String createdAt;
-    @SerializedName("updated_at")
-    @Expose
-    private String updatedAt;
+    private Integer roleId;
+
+    /**
+     * No args constructor for use in serialization
+     *
+     */
+    public User() {
+    }
+
+    /**
+     *
+     * @param role
+     * @param roleId
+     * @param name
+     * @param id
+     * @param email
+     */
+    public User(Integer id, String name, String email, String role, Integer roleId) {
+        super();
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.role = role;
+        this.roleId = roleId;
+    }
 
     public Integer getId() {
         return id;
@@ -48,28 +69,20 @@ public class User {
         this.email = email;
     }
 
-    public String getEmailVerifiedAt() {
-        return emailVerifiedAt;
+    public String getRole() {
+        return role;
     }
 
-    public void setEmailVerifiedAt(String emailVerifiedAt) {
-        this.emailVerifiedAt = emailVerifiedAt;
+    public void setRole(String role) {
+        this.role = role;
     }
 
-    public String getCreatedAt() {
-        return createdAt;
+    public Integer getRoleId() {
+        return roleId;
     }
 
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
     }
 
 }
