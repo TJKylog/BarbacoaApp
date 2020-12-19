@@ -70,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
                     token = auth.getAccessToken();
                     Intent intent = new Intent(MainActivity.this , MainMenu.class);
                     intent.putExtra("token", token);
-                    Toast.makeText(MainActivity.this, token , Toast.LENGTH_LONG).show();
                     startActivity(intent);
                 } else {
                     response.errorBody(); // do something with that
