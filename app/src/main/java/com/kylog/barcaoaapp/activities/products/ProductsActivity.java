@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.kylog.barcaoaapp.AppCustomService;
 import com.kylog.barcaoaapp.R;
+import com.kylog.barcaoaapp.RetrofitClient;
 import com.kylog.barcaoaapp.models.Product;
 import com.kylog.barcaoaapp.models.User;
 
@@ -34,26 +35,14 @@ public class ProductsActivity extends AppCompatActivity {
         pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
 
         get_products();
-
     }
 
     private void get_products(){
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        AppCustomService service = RetrofitClient.getClient();
 
-        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-        httpClient.addInterceptor(logging);
+        Call<List<Product>> productCall = service.products(getTokenType()+" "+getToken());
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://18.219.178.157/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(httpClient.build())
-                .build();
-        AppCustomService service = retrofit.create(AppCustomService.class);
-
-        Class<List<Product>> productCall = service.products(getTokenType()+" "+getToken());
-
-        productCall.cast(new Callback<List<Product>>() {
+        productCall.enqueue(new Callback<List<Product>>() {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 if (response.isSuccessful()) {

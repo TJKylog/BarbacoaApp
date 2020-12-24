@@ -55,18 +55,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void login(LoginForm loginForm) {
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-
-        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-        httpClient.addInterceptor(logging);
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://18.219.178.157/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(httpClient.build())
-                .build();
-        AppCustomService service = retrofit.create(AppCustomService.class);
+        AppCustomService service = RetrofitClient.getClient();
 
         Call<Auth> authCall = service.login(loginForm);
 

@@ -50,19 +50,8 @@ public class MainMenu extends AppCompatActivity {
     }
 
     private void getUser(){
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-        httpClient.addInterceptor(logging);
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://18.219.178.157/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(httpClient.build())
-                .build();
-        AppCustomService service = retrofit.create(AppCustomService.class);
-
+        AppCustomService service = RetrofitClient.getClient();
 
         Call<User> userCall = service.user(getTokenType()+" "+getToken());
 
@@ -73,8 +62,12 @@ public class MainMenu extends AppCompatActivity {
                     User user = response.body();
                     tokenview.setText(user.getEmail());
                     Toast.makeText(MainMenu.this, user.getName() , Toast.LENGTH_LONG);
-                } else {
-                    response.errorBody(); // do something with that
+                } else { //this returns you to the login activity if your session is invalid or has expired
+                    response.errorBody();
+                    pref.edit().clear().apply();
+                    Intent intent = new Intent(MainMenu.this , MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
                 }
             }
 
