@@ -1,4 +1,4 @@
-package com.kylog.barcaoaapp.models;
+package com.kylog.barcaoaapp.models.forms;
 
 public class LoginForm {
     private String email;

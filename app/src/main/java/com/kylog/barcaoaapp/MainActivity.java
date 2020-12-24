@@ -11,7 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.kylog.barcaoaapp.models.Auth;
-import com.kylog.barcaoaapp.models.LoginForm;
+import com.kylog.barcaoaapp.models.forms.LoginForm;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;

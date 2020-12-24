@@ -4,9 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kylog.barcaoaapp.activities.products.ProductsActivity;
 import com.kylog.barcaoaapp.models.Auth;
 import com.kylog.barcaoaapp.models.User;
 
@@ -21,6 +24,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainMenu extends AppCompatActivity {
 
     private TextView tokenview;
+    private Button products_button;
+    private String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,12 +33,19 @@ public class MainMenu extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
 
         tokenview = findViewById(R.id.token_view);
+        products_button = findViewById(R.id.productos_button);
+
+        products_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                show_products();
+            }
+        });
 
         Bundle bundle = getIntent().getExtras();
-
         if(bundle != null)
         {
-            String token = bundle.getString("token");
+            token = bundle.getString("token");
             getUser(token);
         } else{
             Toast.makeText(MainMenu.this, "xD" , Toast.LENGTH_LONG);
@@ -75,5 +87,11 @@ public class MainMenu extends AppCompatActivity {
                 Toast.makeText(MainMenu.this, "Error", Toast.LENGTH_LONG).show();
             }
         });
+    }
+    private void show_products()
+    {
+        Intent intent = new Intent(MainMenu.this , ProductsActivity.class);
+        intent.putExtra("token", token);
+        startActivity(intent);
     }
 }

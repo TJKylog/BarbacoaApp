@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BarcaoaApp"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.ProductsActivity"></activity>
+        <activity android:name=".activities.products.ProductsCreate"></activity>
+        <activity android:name=".activities.products.ProductsActivity" />
         <activity android:name=".MainMenu" />
         <activity android:name=".MainActivity">
             <intent-filter>

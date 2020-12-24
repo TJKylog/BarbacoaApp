@@ -1,7 +1,7 @@
 package com.kylog.barcaoaapp;
 
 import com.kylog.barcaoaapp.models.Auth;
-import com.kylog.barcaoaapp.models.LoginForm;
+import com.kylog.barcaoaapp.models.forms.LoginForm;
 import com.kylog.barcaoaapp.models.User;
 
 import retrofit2.Call;
