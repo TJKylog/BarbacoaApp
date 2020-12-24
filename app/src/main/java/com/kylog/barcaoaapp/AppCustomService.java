@@ -35,4 +35,5 @@ public interface AppCustomService {
             "X-Requested-With: XMLHttpRequest"
     })
     Call<List<Product>> products(@Header("Authorization") String authorization);
+
 }

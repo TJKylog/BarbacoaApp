@@ -10,7 +10,7 @@ public class Product {
     private String name;
     @SerializedName("price")
     @Expose
-    private Integer price;
+    private Double price;
     @SerializedName("type")
     @Expose
     private String type;
@@ -44,7 +44,7 @@ public class Product {
      * @param type
      * @param updatedAt
      */
-    public Product(String name, Integer price, String type, String measure, String updatedAt, String createdAt, Integer id) {
+    public Product(String name, Double price, String type, String measure, String updatedAt, String createdAt, Integer id) {
         super();
         this.name = name;
         this.price = price;
@@ -63,11 +63,11 @@ public class Product {
         this.name = name;
     }
 
-    public Integer getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

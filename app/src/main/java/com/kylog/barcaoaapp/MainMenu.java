@@ -12,16 +12,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kylog.barcaoaapp.activities.products.ProductsActivity;
-import com.kylog.barcaoaapp.models.Auth;
 import com.kylog.barcaoaapp.models.User;
 
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainMenu extends AppCompatActivity {
 
