@@ -2,7 +2,9 @@ package com.kylog.barcaoaapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -23,9 +25,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainMenu extends AppCompatActivity {
 
+    private SharedPreferences pref;
     private TextView tokenview;
     private Button products_button;
-    private String token_1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,18 +44,12 @@ public class MainMenu extends AppCompatActivity {
             }
         });
 
-        Bundle bundle = getIntent().getExtras();
-        if(bundle != null)
-        {
-            token_1 = bundle.getString("token");
-            getUser(token_1);
-            Toast.makeText(MainMenu.this, token_1 , Toast.LENGTH_LONG);
-        } else{
-            Toast.makeText(MainMenu.this, "xD" , Toast.LENGTH_LONG);
-        }
+        pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+
+        getUser();
     }
 
-    private void getUser(String token){
+    private void getUser(){
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -67,9 +63,8 @@ public class MainMenu extends AppCompatActivity {
                 .build();
         AppCustomService service = retrofit.create(AppCustomService.class);
 
-        String authUser = "Bearer ";
 
-        Call<User> userCall = service.user(authUser+token);
+        Call<User> userCall = service.user(getTokenType()+" "+getToken());
 
         userCall.enqueue(new Callback<User>() {
             @Override
@@ -77,7 +72,7 @@ public class MainMenu extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     User user = response.body();
                     tokenview.setText(user.getEmail());
-                    Toast.makeText(MainMenu.this, user.getName() , Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainMenu.this, user.getName() , Toast.LENGTH_LONG);
                 } else {
                     response.errorBody(); // do something with that
                 }
@@ -89,10 +84,17 @@ public class MainMenu extends AppCompatActivity {
             }
         });
     }
+
     private void show_products()
     {
         Intent intent = new Intent(MainMenu.this , ProductsActivity.class);
-        intent.putExtra("token", token_1);
         startActivity(intent);
+    }
+
+    private String getToken(){
+        return pref.getString("token", null);
+    }
+    private String getTokenType(){
+        return pref.getString("token_type",null);
     }
 }

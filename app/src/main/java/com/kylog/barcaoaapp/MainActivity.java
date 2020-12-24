@@ -1,7 +1,11 @@
 package com.kylog.barcaoaapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,11 +27,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText emailEdit;
-    EditText passwordEdit;
-    Boolean remember_me = true;
-    Button login_button;
-    String token;
+    private SharedPreferences pref;
+
+    private EditText emailEdit;
+    private EditText passwordEdit;
+    private Boolean remember_me = true;
+    private Button login_button;
+    private String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
         emailEdit = findViewById(R.id.user_email);
         passwordEdit = findViewById(R.id.user_password);
         login_button = findViewById(R.id.login_button);
+        pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+
+        setCredentialsIfExist();
 
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,8 +54,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void login(LoginForm loginForm)
-    {
+    private void login(LoginForm loginForm) {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -67,9 +75,12 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<Auth> call, Response<Auth> response) {
                 if (response.isSuccessful()) {
                     Auth auth = response.body();
+
+                    saveOnPreferences(auth.getAccessToken(),auth.getTokenType());
+
                     token = auth.getAccessToken();
                     Intent intent = new Intent(MainActivity.this , MainMenu.class);
-                    intent.putExtra("token", token);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 } else {
                     response.errorBody(); // do something with that
@@ -81,5 +92,38 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private boolean isValidEmail(String email) {
+        return !TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    private boolean isValidPassword(String password) {
+        return password.length() > 4;
+    }
+
+    private void saveOnPreferences(String accessToken, String tokenType) {
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("token",accessToken);
+        editor.putString("token_type",tokenType);
+        editor.apply();
+    }
+
+    private void setCredentialsIfExist() {
+        String token = getToken();
+        String token_type = getTokenType();
+        if(!TextUtils.isEmpty(token_type) && !TextUtils.isEmpty(token))
+        {
+            Intent intent = new Intent(MainActivity.this , MainMenu.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }
+    }
+
+    private String getToken(){
+        return pref.getString("token", null);
+    }
+    private String getTokenType(){
+        return pref.getString("token_type",null);
     }
 }

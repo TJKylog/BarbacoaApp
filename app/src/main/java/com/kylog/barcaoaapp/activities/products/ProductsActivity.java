@@ -2,6 +2,8 @@ package com.kylog.barcaoaapp.activities.products;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -22,24 +24,20 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ProductsActivity extends AppCompatActivity {
 
-    private String token;
+    private SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_products);
 
-        Bundle bundle = getIntent().getExtras();
-        if(bundle != null)
-        {
-            token = bundle.getString("token");
-            Toast.makeText(ProductsActivity.this,token ,Toast.LENGTH_LONG);
-        } else{
-            Toast.makeText(ProductsActivity.this, "xD" , Toast.LENGTH_LONG);
-        }
+        pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+
+        get_products();
+
     }
 
-    private void get_products(String token){
+    private void get_products(){
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -53,15 +51,12 @@ public class ProductsActivity extends AppCompatActivity {
                 .build();
         AppCustomService service = retrofit.create(AppCustomService.class);
 
-        String authUser = "Bearer ";
+        Class<List<Product>> productCall = service.products(getTokenType()+" "+getToken());
 
-        Class<List<Product>> productCall = service.products(authUser+token);
-
-        /* productCall.cast(new Callback<List<Product>>() {
+        productCall.cast(new Callback<List<Product>>() {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 if (response.isSuccessful()) {
-
                     Toast.makeText(ProductsActivity.this, "Productos obtenidos" , Toast.LENGTH_LONG).show();
                 } else {
                     response.errorBody(); // do something with that
@@ -72,7 +67,13 @@ public class ProductsActivity extends AppCompatActivity {
             public void onFailure(Call<List<Product>> call, Throwable t) {
                 Toast.makeText(ProductsActivity.this, "Error", Toast.LENGTH_LONG).show();
             }
-        }); */
+        });
     }
 
+    private String getToken(){
+        return pref.getString("token", null);
+    }
+    private String getTokenType(){
+        return pref.getString("token_type",null);
+    }
 }
