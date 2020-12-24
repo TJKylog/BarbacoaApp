@@ -25,7 +25,7 @@ public class MainMenu extends AppCompatActivity {
 
     private TextView tokenview;
     private Button products_button;
-    private String token;
+    private String token_1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +45,9 @@ public class MainMenu extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if(bundle != null)
         {
-            token = bundle.getString("token");
-            getUser(token);
+            token_1 = bundle.getString("token");
+            getUser(token_1);
+            Toast.makeText(MainMenu.this, token_1 , Toast.LENGTH_LONG);
         } else{
             Toast.makeText(MainMenu.this, "xD" , Toast.LENGTH_LONG);
         }
@@ -91,7 +92,7 @@ public class MainMenu extends AppCompatActivity {
     private void show_products()
     {
         Intent intent = new Intent(MainMenu.this , ProductsActivity.class);
-        intent.putExtra("token", token);
+        intent.putExtra("token", token_1);
         startActivity(intent);
     }
 }

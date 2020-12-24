@@ -1,8 +1,11 @@
 package com.kylog.barcaoaapp;
 
 import com.kylog.barcaoaapp.models.Auth;
+import com.kylog.barcaoaapp.models.Product;
 import com.kylog.barcaoaapp.models.forms.LoginForm;
 import com.kylog.barcaoaapp.models.User;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -26,4 +29,10 @@ public interface AppCustomService {
     })
     Call<User> user(@Header("Authorization") String authorization);
 
+    @GET("api/auth/products")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Class <List<Product>> products(@Header("Authorization") String authorization);
 }
