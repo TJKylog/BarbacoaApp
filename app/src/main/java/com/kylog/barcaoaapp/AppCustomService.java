@@ -4,6 +4,7 @@ import com.kylog.barcaoaapp.models.Auth;
 import com.kylog.barcaoaapp.models.Product;
 import com.kylog.barcaoaapp.models.forms.LoginForm;
 import com.kylog.barcaoaapp.models.User;
+import com.kylog.barcaoaapp.models.forms.NewProductForm;
 
 import java.util.List;
 
@@ -35,5 +36,12 @@ public interface AppCustomService {
             "X-Requested-With: XMLHttpRequest"
     })
     Call<List<Product>> products(@Header("Authorization") String authorization);
+
+    @POST("api/auth/products")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<Product> create_product(@Header("Authorization") String authorization, @Body NewProductForm newProductForm);
 
 }

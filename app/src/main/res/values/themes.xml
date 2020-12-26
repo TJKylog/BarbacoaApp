@@ -15,4 +15,13 @@
 
         <item name="android:windowBackground">@color/grey_ligth</item>
     </style>
+
+    <style name="Theme.BarcaoaApp.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.BarcaoaApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.BarcaoaApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

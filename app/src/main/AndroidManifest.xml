@@ -13,7 +13,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BarcaoaApp"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.products.ProductsCreate"></activity>
+        <activity
+            android:name=".MainActivity2"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/Theme.BarcaoaApp.NoActionBar"></activity>
+        <activity android:name=".activities.products.ProductsCreate" />
         <activity android:name=".activities.products.ProductsActivity" />
         <activity android:name=".MainMenu" />
         <activity android:name=".MainActivity">

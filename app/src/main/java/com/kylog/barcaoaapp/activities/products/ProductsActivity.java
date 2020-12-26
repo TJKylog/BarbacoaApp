@@ -6,10 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kylog.barcaoaapp.AppCustomService;
 import com.kylog.barcaoaapp.MainActivity;
 import com.kylog.barcaoaapp.MainMenu;
@@ -30,6 +32,7 @@ public class ProductsActivity extends AppCompatActivity {
     private ListView list_products_view;
     private List<Product> products;
     private ProductAdapter adbPerson;
+    private FloatingActionButton add_product_button_1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +40,19 @@ public class ProductsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_products);
 
         list_products_view = findViewById(R.id.list_products_labels);
+        add_product_button_1 = findViewById(R.id.add_product_button);
 
         pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
 
         get_products();
+
+        add_product_button_1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProductsActivity.this, ProductsCreate.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void get_products(){
