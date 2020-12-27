@@ -6,14 +6,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kylog.barcaoaapp.AppCustomService;
 import com.kylog.barcaoaapp.MainActivity;
 import com.kylog.barcaoaapp.R;
 import com.kylog.barcaoaapp.RetrofitClient;
 import com.kylog.barcaoaapp.activities.products.ProductsActivity;
+import com.kylog.barcaoaapp.activities.products.ProductsCreate;
 import com.kylog.barcaoaapp.models.Mesa;
 import com.kylog.barcaoaapp.models.Product;
 
@@ -30,6 +33,7 @@ public class MesasActivity extends AppCompatActivity {
     private List<Mesa> mesas;
     private MesaAdapter adapter;
     private ListView mesas_list_view;
+    private FloatingActionButton create_mesa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +41,19 @@ public class MesasActivity extends AppCompatActivity {
         setContentView(R.layout.activity_mesas);
 
         mesas_list_view = findViewById(R.id.list_mesas_labels);
+        create_mesa = findViewById(R.id.float_button_create_mesa);
 
         pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
 
         get_mesas();
+
+        create_mesa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MesasActivity.this, MesasCreate.class);
+                startActivity(intent);
+            }
+        });
 
     }
 

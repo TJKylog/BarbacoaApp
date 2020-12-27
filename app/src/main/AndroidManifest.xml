@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BarcaoaApp"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.mesas.MesasActivity"></activity>
+        <activity android:name=".activities.mesas.MesasCreate"></activity>
+        <activity android:name=".activities.mesas.MesasActivity" />
         <activity
             android:name=".MainActivity2"
             android:label="@string/title_activity_main2"
