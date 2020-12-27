@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kylog.barcaoaapp.activities.mesas.MesasActivity;
 import com.kylog.barcaoaapp.activities.products.ProductsActivity;
 import com.kylog.barcaoaapp.models.User;
 
@@ -23,6 +24,7 @@ public class MainMenu extends AppCompatActivity {
     private SharedPreferences pref;
     private TextView tokenview;
     private Button products_button;
+    private Button mesas_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,11 +33,18 @@ public class MainMenu extends AppCompatActivity {
 
         tokenview = findViewById(R.id.token_view);
         products_button = findViewById(R.id.productos_button);
+        mesas_button = findViewById(R.id.mesas_button);
 
         products_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 show_products();
+            }
+        });
+        mesas_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                show_mesas();
             }
         });
 
@@ -76,6 +85,11 @@ public class MainMenu extends AppCompatActivity {
     private void show_products()
     {
         Intent intent = new Intent(MainMenu.this , ProductsActivity.class);
+        startActivity(intent);
+    }
+
+    private void show_mesas(){
+        Intent intent = new Intent(MainMenu.this , MesasActivity.class);
         startActivity(intent);
     }
 
