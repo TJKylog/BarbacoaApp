@@ -1,6 +1,7 @@
 package com.kylog.barcaoaapp;
 
 import com.kylog.barcaoaapp.models.Auth;
+import com.kylog.barcaoaapp.models.Mesa;
 import com.kylog.barcaoaapp.models.Product;
 import com.kylog.barcaoaapp.models.forms.LoginForm;
 import com.kylog.barcaoaapp.models.User;
@@ -43,5 +44,12 @@ public interface AppCustomService {
             "X-Requested-With: XMLHttpRequest"
     })
     Call<Product> create_product(@Header("Authorization") String authorization, @Body NewProductForm newProductForm);
+
+    @GET("api/auth/mesas")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<List<Mesa>> mesas(@Header("Authorization") String authorization);
 
 }
