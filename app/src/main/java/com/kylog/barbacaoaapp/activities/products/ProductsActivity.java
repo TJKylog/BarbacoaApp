@@ -139,7 +139,7 @@ public class ProductsActivity extends AppCompatActivity {
             }
             case R.id.product_edit_option:{
                 Intent intent = new  Intent(ProductsActivity.this,ProductsEdit.class);
-                intent.putExtra("id", id.toString() );
+                intent.putExtra("id", id);
                 startActivity(intent);
             }
             default:

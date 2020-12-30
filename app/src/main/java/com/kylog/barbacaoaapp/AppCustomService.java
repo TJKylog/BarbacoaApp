@@ -7,6 +7,7 @@ import com.kylog.barbacaoaapp.models.forms.LoginForm;
 import com.kylog.barbacaoaapp.models.User;
 import com.kylog.barbacaoaapp.models.forms.NewMesaForm;
 import com.kylog.barbacaoaapp.models.forms.NewProductForm;
+import com.kylog.barbacaoaapp.models.forms.ProductsFrom;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface AppCustomService {
@@ -63,6 +65,12 @@ public interface AppCustomService {
     })
     Call<ResponseBody> delete_product(@Header("Authorization") String authorization, @Path("id") Integer id);
 
+    @PUT("api/auth/products/{id}")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<Product> update_product(@Header("Authorization") String authorization, @Path("id") Integer id, @Body NewProductForm newProductForm);
 
     @GET("api/auth/mesas")
     @Headers({
