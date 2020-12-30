@@ -1,4 +1,4 @@
-package com.kylog.barcaoaapp.activities.mesas;
+package com.kylog.barbacaoaapp.activities.mesas;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.kylog.barcaoaapp.R;
-import com.kylog.barcaoaapp.models.Mesa;
+import com.kylog.barbacaoaapp.R;
+import com.kylog.barbacaoaapp.models.Mesa;
 
 import java.util.ArrayList;
 

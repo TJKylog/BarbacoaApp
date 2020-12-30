@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.kylog.barcaoaapp">
+    package="com.kylog.barbacaoaapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -13,16 +13,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BarcaoaApp"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.mesas.MesasCreate"></activity>
-        <activity android:name=".activities.mesas.MesasActivity" />
+        <activity android:name="com.kylog.barbacaoaapp.activities.products.ProductsEdit"></activity>
+        <activity android:name="com.kylog.barbacaoaapp.activities.mesas.MesasCreate" />
+        <activity android:name="com.kylog.barbacaoaapp.activities.mesas.MesasActivity" />
         <activity
             android:name=".MainActivity2"
             android:label="@string/title_activity_main2"
             android:theme="@style/Theme.BarcaoaApp.NoActionBar" />
-        <activity android:name=".activities.products.ProductsCreate" />
-        <activity android:name=".activities.products.ProductsActivity" />
-        <activity android:name=".MainMenu" />
-        <activity android:name=".MainActivity">
+        <activity android:name="com.kylog.barbacaoaapp.activities.products.ProductsCreate" />
+        <activity android:name="com.kylog.barbacaoaapp.activities.products.ProductsActivity" />
+        <activity android:name="com.kylog.barbacaoaapp.MainMenu" />
+        <activity android:name="com.kylog.barbacaoaapp.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

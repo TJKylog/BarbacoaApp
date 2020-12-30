@@ -1,12 +1,12 @@
-package com.kylog.barcaoaapp;
+package com.kylog.barbacaoaapp;
 
-import com.kylog.barcaoaapp.models.Auth;
-import com.kylog.barcaoaapp.models.Mesa;
-import com.kylog.barcaoaapp.models.Product;
-import com.kylog.barcaoaapp.models.forms.LoginForm;
-import com.kylog.barcaoaapp.models.User;
-import com.kylog.barcaoaapp.models.forms.NewMesaForm;
-import com.kylog.barcaoaapp.models.forms.NewProductForm;
+import com.kylog.barbacaoaapp.models.Auth;
+import com.kylog.barbacaoaapp.models.Mesa;
+import com.kylog.barbacaoaapp.models.Product;
+import com.kylog.barbacaoaapp.models.forms.LoginForm;
+import com.kylog.barbacaoaapp.models.User;
+import com.kylog.barbacaoaapp.models.forms.NewMesaForm;
+import com.kylog.barbacaoaapp.models.forms.NewProductForm;
 
 import java.util.List;
 
@@ -42,6 +42,13 @@ public interface AppCustomService {
     })
     Call<List<Product>> products(@Header("Authorization") String authorization);
 
+    @GET("api/auth/products/{id}")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<Product> product(@Header("Authorization") String authorization, @Path("id") Integer id);
+
     @POST("api/auth/products")
     @Headers({
             "Content-Type: application/json",
@@ -55,6 +62,7 @@ public interface AppCustomService {
             "X-Requested-With: XMLHttpRequest"
     })
     Call<ResponseBody> delete_product(@Header("Authorization") String authorization, @Path("id") Integer id);
+
 
     @GET("api/auth/mesas")
     @Headers({

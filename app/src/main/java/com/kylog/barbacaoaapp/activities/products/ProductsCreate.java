@@ -1,4 +1,4 @@
-package com.kylog.barcaoaapp.activities.products;
+package com.kylog.barbacaoaapp.activities.products;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,17 +6,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Editable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.kylog.barcaoaapp.AppCustomService;
-import com.kylog.barcaoaapp.R;
-import com.kylog.barcaoaapp.RetrofitClient;
-import com.kylog.barcaoaapp.models.Product;
-import com.kylog.barcaoaapp.models.forms.NewProductForm;
+import com.kylog.barbacaoaapp.AppCustomService;
+import com.kylog.barbacaoaapp.R;
+import com.kylog.barbacaoaapp.RetrofitClient;
+import com.kylog.barbacaoaapp.models.Product;
+import com.kylog.barbacaoaapp.models.forms.NewProductForm;
 
 import retrofit2.Call;
 import retrofit2.Callback;

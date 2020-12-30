@@ -1,4 +1,4 @@
-package com.kylog.barcaoaapp.activities.mesas;
+package com.kylog.barbacaoaapp.activities.mesas;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,13 +11,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.kylog.barcaoaapp.AppCustomService;
-import com.kylog.barcaoaapp.R;
-import com.kylog.barcaoaapp.RetrofitClient;
-import com.kylog.barcaoaapp.activities.products.ProductsActivity;
-import com.kylog.barcaoaapp.activities.products.ProductsCreate;
-import com.kylog.barcaoaapp.models.Mesa;
-import com.kylog.barcaoaapp.models.forms.NewMesaForm;
+import com.kylog.barbacaoaapp.AppCustomService;
+import com.kylog.barbacaoaapp.R;
+import com.kylog.barbacaoaapp.RetrofitClient;
+import com.kylog.barbacaoaapp.models.Mesa;
+import com.kylog.barbacaoaapp.models.forms.NewMesaForm;
 
 import retrofit2.Call;
 import retrofit2.Callback;

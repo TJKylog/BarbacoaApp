@@ -1,4 +1,4 @@
-package com.kylog.barcaoaapp.activities.products;
+package com.kylog.barbacaoaapp.activities.products;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,19 +11,16 @@ import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.kylog.barcaoaapp.AppCustomService;
-import com.kylog.barcaoaapp.MainActivity;
-import com.kylog.barcaoaapp.MainMenu;
-import com.kylog.barcaoaapp.R;
-import com.kylog.barcaoaapp.RetrofitClient;
-import com.kylog.barcaoaapp.models.Product;
+import com.kylog.barbacaoaapp.AppCustomService;
+import com.kylog.barbacaoaapp.MainActivity;
+import com.kylog.barbacaoaapp.R;
+import com.kylog.barbacaoaapp.RetrofitClient;
+import com.kylog.barbacaoaapp.models.Product;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -135,13 +132,15 @@ public class ProductsActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+                        Toast.makeText(ProductsActivity.this, "No se completo la acción: "+ name , Toast.LENGTH_LONG).show();
                     }
                 });
                 return true;
             }
             case R.id.product_edit_option:{
-
+                Intent intent = new  Intent(ProductsActivity.this,ProductsEdit.class);
+                intent.putExtra("id", id.toString() );
+                startActivity(intent);
             }
             default:
                 return super.onContextItemSelected(item);

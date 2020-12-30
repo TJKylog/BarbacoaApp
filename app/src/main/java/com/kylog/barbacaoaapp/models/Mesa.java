@@ -1,5 +1,5 @@
 
-package com.kylog.barcaoaapp.models;
+package com.kylog.barbacaoaapp.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

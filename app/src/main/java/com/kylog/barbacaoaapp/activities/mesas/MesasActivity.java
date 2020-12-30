@@ -1,4 +1,4 @@
-package com.kylog.barcaoaapp.activities.mesas;
+package com.kylog.barbacaoaapp.activities.mesas;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,14 +11,11 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.kylog.barcaoaapp.AppCustomService;
-import com.kylog.barcaoaapp.MainActivity;
-import com.kylog.barcaoaapp.R;
-import com.kylog.barcaoaapp.RetrofitClient;
-import com.kylog.barcaoaapp.activities.products.ProductsActivity;
-import com.kylog.barcaoaapp.activities.products.ProductsCreate;
-import com.kylog.barcaoaapp.models.Mesa;
-import com.kylog.barcaoaapp.models.Product;
+import com.kylog.barbacaoaapp.AppCustomService;
+import com.kylog.barbacaoaapp.MainActivity;
+import com.kylog.barbacaoaapp.R;
+import com.kylog.barbacaoaapp.RetrofitClient;
+import com.kylog.barbacaoaapp.models.Mesa;
 
 import java.util.ArrayList;
 import java.util.List;

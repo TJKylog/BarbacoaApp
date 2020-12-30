@@ -1,6 +1,4 @@
-package com.kylog.barcaoaapp;
-
-import android.app.Service;
+package com.kylog.barbacaoaapp;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

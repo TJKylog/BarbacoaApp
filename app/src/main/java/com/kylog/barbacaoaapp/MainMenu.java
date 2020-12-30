@@ -1,4 +1,4 @@
-package com.kylog.barcaoaapp;
+package com.kylog.barbacaoaapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,9 +11,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.kylog.barcaoaapp.activities.mesas.MesasActivity;
-import com.kylog.barcaoaapp.activities.products.ProductsActivity;
-import com.kylog.barcaoaapp.models.User;
+import com.kylog.barbacaoaapp.activities.mesas.MesasActivity;
+import com.kylog.barbacaoaapp.activities.products.ProductsActivity;
+import com.kylog.barbacaoaapp.models.User;
 
 import retrofit2.Call;
 import retrofit2.Callback;
