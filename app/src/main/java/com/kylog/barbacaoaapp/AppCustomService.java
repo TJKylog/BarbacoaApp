@@ -1,20 +1,24 @@
-package com.kylog.barcaoaapp;
+package com.kylog.barbacaoaapp;
 
-import com.kylog.barcaoaapp.models.Auth;
-import com.kylog.barcaoaapp.models.Mesa;
-import com.kylog.barcaoaapp.models.Product;
-import com.kylog.barcaoaapp.models.forms.LoginForm;
-import com.kylog.barcaoaapp.models.User;
-import com.kylog.barcaoaapp.models.forms.NewProductForm;
+import com.kylog.barbacaoaapp.models.Auth;
+import com.kylog.barbacaoaapp.models.Mesa;
+import com.kylog.barbacaoaapp.models.Product;
+import com.kylog.barbacaoaapp.models.forms.LoginForm;
+import com.kylog.barbacaoaapp.models.User;
+import com.kylog.barbacaoaapp.models.forms.NewMesaForm;
+import com.kylog.barbacaoaapp.models.forms.NewProductForm;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface AppCustomService {
     @POST("api/auth/login")
@@ -38,6 +42,13 @@ public interface AppCustomService {
     })
     Call<List<Product>> products(@Header("Authorization") String authorization);
 
+    @GET("api/auth/products/{id}")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<Product> product(@Header("Authorization") String authorization, @Path("id") Integer id);
+
     @POST("api/auth/products")
     @Headers({
             "Content-Type: application/json",
@@ -45,11 +56,26 @@ public interface AppCustomService {
     })
     Call<Product> create_product(@Header("Authorization") String authorization, @Body NewProductForm newProductForm);
 
+    @DELETE("api/auth/products/{id}")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<ResponseBody> delete_product(@Header("Authorization") String authorization, @Path("id") Integer id);
+
+
     @GET("api/auth/mesas")
     @Headers({
             "Content-Type: application/json",
             "X-Requested-With: XMLHttpRequest"
     })
     Call<List<Mesa>> mesas(@Header("Authorization") String authorization);
+
+    @POST("api/auth/mesas")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<Mesa> create_mesa(@Header("Authorization") String authorization, @Body NewMesaForm newMesaForm);
 
 }

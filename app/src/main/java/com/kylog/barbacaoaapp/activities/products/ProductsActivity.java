@@ -1,27 +1,31 @@
-package com.kylog.barcaoaapp.activities.products;
+package com.kylog.barbacaoaapp.activities.products;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.kylog.barcaoaapp.AppCustomService;
-import com.kylog.barcaoaapp.MainActivity;
-import com.kylog.barcaoaapp.MainMenu;
-import com.kylog.barcaoaapp.R;
-import com.kylog.barcaoaapp.RetrofitClient;
-import com.kylog.barcaoaapp.models.Product;
+import com.kylog.barbacaoaapp.AppCustomService;
+import com.kylog.barbacaoaapp.MainActivity;
+import com.kylog.barbacaoaapp.R;
+import com.kylog.barbacaoaapp.RetrofitClient;
+import com.kylog.barbacaoaapp.models.Product;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -53,6 +57,8 @@ public class ProductsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        registerForContextMenu(list_products_view);
     }
 
     private void get_products(){
@@ -64,7 +70,6 @@ public class ProductsActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(ProductsActivity.this, "Productos obtenidos" , Toast.LENGTH_LONG).show();
                     products = new ArrayList<Product>();
 
                     products = (List<Product>) response.body();
@@ -94,5 +99,53 @@ public class ProductsActivity extends AppCompatActivity {
     private String getTokenType(){
         return pref.getString("token_type",null);
     }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        menu.setHeaderTitle(this.products.get(info.position).getId().toString()+" "+products.get(info.position).getName());
+        inflater.inflate(R.menu.context_menu_products, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        Integer id;
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        id = this.products.get(info.position).getId();
+        String name = this.products.get(info.position).getName();
+        switch (item.getItemId()){
+            case R.id.product_delete_option:
+            {
+                AppCustomService service = RetrofitClient.getClient();
+                Call<ResponseBody> deleteResponse = service.delete_product(getTokenType()+" "+getToken(), id);
+                deleteResponse.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if(response.isSuccessful()) {
+                            Toast.makeText(ProductsActivity.this, "Producto eliminado: "+ name , Toast.LENGTH_LONG).show();
+                            products.remove(info.position);
+                            adbPerson.notifyDataSetChanged();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Toast.makeText(ProductsActivity.this, "No se completo la acción: "+ name , Toast.LENGTH_LONG).show();
+                    }
+                });
+                return true;
+            }
+            case R.id.product_edit_option:{
+                Intent intent = new  Intent(ProductsActivity.this,ProductsEdit.class);
+                intent.putExtra("id", id.toString() );
+                startActivity(intent);
+            }
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
 }
 

@@ -1,4 +1,4 @@
-package com.kylog.barcaoaapp;
+package com.kylog.barbacaoaapp;
 
 import org.junit.Test;
 

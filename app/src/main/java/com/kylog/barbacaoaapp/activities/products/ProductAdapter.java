@@ -1,4 +1,4 @@
-package com.kylog.barcaoaapp.activities.products;
+package com.kylog.barbacaoaapp.activities.products;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,11 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import com.kylog.barcaoaapp.R;
+import com.kylog.barbacaoaapp.R;
 
-import com.kylog.barcaoaapp.models.Product;
-
-import org.w3c.dom.Text;
+import com.kylog.barbacaoaapp.models.Product;
 
 import java.util.ArrayList;
 

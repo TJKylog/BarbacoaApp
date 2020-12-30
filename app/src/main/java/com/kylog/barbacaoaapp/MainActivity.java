@@ -1,4 +1,4 @@
-package com.kylog.barcaoaapp;
+package com.kylog.barbacaoaapp;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,8 +14,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.kylog.barcaoaapp.models.Auth;
-import com.kylog.barcaoaapp.models.forms.LoginForm;
+import com.kylog.barbacaoaapp.models.Auth;
+import com.kylog.barbacaoaapp.models.forms.LoginForm;
 
 
 import retrofit2.Call;
@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     private EditText passwordEdit;
     private Boolean remember_me = true;
     private Button login_button;
-    private String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +45,12 @@ public class MainActivity extends AppCompatActivity {
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                login(new LoginForm(emailEdit.getText().toString(),passwordEdit.getText().toString(),remember_me));
+                if(isValidEmail(emailEdit.getText().toString()) && isValidPassword(passwordEdit.getText().toString())) {
+                    login(new LoginForm(emailEdit.getText().toString(),passwordEdit.getText().toString(),remember_me));
+                }
+                else{
+                    Toast.makeText(MainActivity.this, "Escribe un correo valido y una contraseña", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -61,10 +65,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<Auth> call, Response<Auth> response) {
                 if (response.isSuccessful()) {
                     Auth auth = response.body();
-
                     saveOnPreferences(auth.getAccessToken(),auth.getTokenType());
-
-                    token = auth.getAccessToken();
                     Intent intent = new Intent(MainActivity.this , MainMenu.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
