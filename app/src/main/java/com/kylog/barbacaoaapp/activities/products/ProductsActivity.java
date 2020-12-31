@@ -1,9 +1,11 @@
 package com.kylog.barbacaoaapp.activities.products;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -118,23 +120,37 @@ public class ProductsActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.product_delete_option:
             {
-                AppCustomService service = RetrofitClient.getClient();
-                Call<ResponseBody> deleteResponse = service.delete_product(getTokenType()+" "+getToken(), id);
-                deleteResponse.enqueue(new Callback<ResponseBody>() {
+                final CharSequence [] options = {"Eliminar","Cancelar"};
+                final AlertDialog.Builder alertDelete = new AlertDialog.Builder(ProductsActivity.this);
+                alertDelete.setTitle("Desea eliminar: "+name);
+                alertDelete.setItems(options, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if(response.isSuccessful()) {
-                            Toast.makeText(ProductsActivity.this, "Producto eliminado: "+ name , Toast.LENGTH_LONG).show();
-                            products.remove(info.position);
-                            adbPerson.notifyDataSetChanged();
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(options[which].equals("Eliminar")) {
+                            AppCustomService service = RetrofitClient.getClient();
+                            Call<ResponseBody> deleteResponse = service.delete_product(getTokenType()+" "+getToken(), id);
+                            deleteResponse.enqueue(new Callback<ResponseBody>() {
+                                @Override
+                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                    if(response.isSuccessful()) {
+                                        Toast.makeText(ProductsActivity.this, "Producto eliminado: "+ name , Toast.LENGTH_LONG).show();
+                                        products.remove(info.position);
+                                        adbPerson.notifyDataSetChanged();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                    Toast.makeText(ProductsActivity.this, "No se completo la acción: "+ name , Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
+                        else {
+                            dialog.dismiss();
                         }
                     }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Toast.makeText(ProductsActivity.this, "No se completo la acción: "+ name , Toast.LENGTH_LONG).show();
-                    }
                 });
+                alertDelete.show();
                 return true;
             }
             case R.id.product_edit_option:{
