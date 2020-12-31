@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BarcaoaApp"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.users.UsersCreate"></activity>
+        <activity android:name=".activities.users.UsersEdit"></activity>
+        <activity android:name=".activities.users.UsersCreate" />
         <activity android:name=".activities.users.UsersActivity" />
         <activity android:name=".activities.products.ProductsEdit" />
         <activity android:name=".activities.mesas.MesasCreate" />

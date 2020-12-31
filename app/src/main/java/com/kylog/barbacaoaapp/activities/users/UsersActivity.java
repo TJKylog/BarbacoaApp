@@ -1,12 +1,19 @@
 package com.kylog.barbacaoaapp.activities.users;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -20,6 +27,7 @@ import com.kylog.barbacaoaapp.models.User;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -48,6 +56,8 @@ public class UsersActivity extends AppCompatActivity {
                 add_user();
             }
         });
+
+        registerForContextMenu(list_user_view);
     }
 
     private void getUsers(){
@@ -81,9 +91,70 @@ public class UsersActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        menu.setHeaderTitle(this.users.get(info.position).getId().toString()+" "+users.get(info.position).getName());
+        inflater.inflate(R.menu.context_menu, menu);
+    }
+
     private void add_user() {
         Intent intent = new Intent(UsersActivity.this, UsersCreate.class);
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        Integer id;
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        id = this.users.get(info.position).getId();
+        String name = this.users.get(info.position).getName();
+        switch (item.getItemId()){
+            case R.id.delete_option:
+            {
+                final CharSequence [] options = {"Eliminar","Cancelar"};
+                final AlertDialog.Builder alertDelete = new AlertDialog.Builder(UsersActivity.this);
+                alertDelete.setTitle("Desea eliminar: "+name);
+                alertDelete.setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(options[which].equals("Eliminar")) {
+                            AppCustomService service = RetrofitClient.getClient();
+                            Call<ResponseBody> deleteResponse = service.delete_user(getTokenType()+" "+getToken(), id);
+                            deleteResponse.enqueue(new Callback<ResponseBody>() {
+                                @Override
+                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                    if(response.isSuccessful()) {
+                                        Toast.makeText(UsersActivity.this, "Usuario eliminado: "+ name , Toast.LENGTH_LONG).show();
+                                        users.remove(info.position);
+                                        userAdapter.notifyDataSetChanged();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                    Toast.makeText(UsersActivity.this, "No se completo la acción: "+ name , Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
+                        else {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+                alertDelete.show();
+                return true;
+            }
+            case R.id.edit_option:{
+                Intent intent = new  Intent(UsersActivity.this, UsersEdit.class);
+                intent.putExtra("id", id);
+                startActivity(intent);
+            }
+            default:
+                return super.onContextItemSelected(item);
+        }
     }
 
     private String getToken(){

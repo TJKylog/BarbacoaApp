@@ -108,7 +108,7 @@ public class ProductsActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
         menu.setHeaderTitle(this.products.get(info.position).getId().toString()+" "+products.get(info.position).getName());
-        inflater.inflate(R.menu.context_menu_products, menu);
+        inflater.inflate(R.menu.context_menu, menu);
     }
 
     @Override
@@ -118,7 +118,7 @@ public class ProductsActivity extends AppCompatActivity {
         id = this.products.get(info.position).getId();
         String name = this.products.get(info.position).getName();
         switch (item.getItemId()){
-            case R.id.product_delete_option:
+            case R.id.delete_option:
             {
                 final CharSequence [] options = {"Eliminar","Cancelar"};
                 final AlertDialog.Builder alertDelete = new AlertDialog.Builder(ProductsActivity.this);
@@ -153,7 +153,7 @@ public class ProductsActivity extends AppCompatActivity {
                 alertDelete.show();
                 return true;
             }
-            case R.id.product_edit_option:{
+            case R.id.edit_option:{
                 Intent intent = new  Intent(ProductsActivity.this,ProductsEdit.class);
                 intent.putExtra("id", id);
                 startActivity(intent);

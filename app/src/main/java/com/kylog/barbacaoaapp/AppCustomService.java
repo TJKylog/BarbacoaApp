@@ -94,11 +94,25 @@ public interface AppCustomService {
     })
     Call<List<User>> get_users(@Header("Authorization") String authorization);
 
+    @GET("api/auth/users/{id}")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<List<User>> get_user(@Header("Authorization") String authorization,@Path("id") Integer id);
+
     @POST("api/auth/users")
     @Headers({
             "Content-Type: application/json",
             "X-Requested-With: XMLHttpRequest"
     })
     Call<User> create_user(@Header("Authorization") String authorization, @Body UserForm userForm);
+
+    @DELETE("api/auth/users/{id}")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<ResponseBody> delete_user(@Header("Authorization") String authorization,@Path("id") Integer id);
 
 }
