@@ -13,17 +13,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BarcaoaApp"
         android:usesCleartextTraffic="true">
-        <activity android:name="com.kylog.barbacaoaapp.activities.products.ProductsEdit"></activity>
-        <activity android:name="com.kylog.barbacaoaapp.activities.mesas.MesasCreate" />
-        <activity android:name="com.kylog.barbacaoaapp.activities.mesas.MesasActivity" />
+        <activity android:name=".activities.users.UsersCreate"></activity>
+        <activity android:name=".activities.users.UsersActivity" />
+        <activity android:name=".activities.products.ProductsEdit" />
+        <activity android:name=".activities.mesas.MesasCreate" />
+        <activity android:name=".activities.mesas.MesasActivity" />
         <activity
             android:name=".MainActivity2"
             android:label="@string/title_activity_main2"
             android:theme="@style/Theme.BarcaoaApp.NoActionBar" />
-        <activity android:name="com.kylog.barbacaoaapp.activities.products.ProductsCreate" />
-        <activity android:name="com.kylog.barbacaoaapp.activities.products.ProductsActivity" />
-        <activity android:name="com.kylog.barbacaoaapp.MainMenu" />
-        <activity android:name="com.kylog.barbacaoaapp.MainActivity">
+        <activity android:name=".activities.products.ProductsCreate" />
+        <activity android:name=".activities.products.ProductsActivity" />
+        <activity android:name=".MainMenu" />
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
