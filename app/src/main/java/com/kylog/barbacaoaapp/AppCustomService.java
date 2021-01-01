@@ -8,6 +8,7 @@ import com.kylog.barbacaoaapp.models.User;
 import com.kylog.barbacaoaapp.models.forms.NewMesaForm;
 import com.kylog.barbacaoaapp.models.forms.NewProductForm;
 import com.kylog.barbacaoaapp.models.forms.ProductsFrom;
+import com.kylog.barbacaoaapp.models.forms.UserForm;
 
 import java.util.List;
 
@@ -85,5 +86,33 @@ public interface AppCustomService {
             "X-Requested-With: XMLHttpRequest"
     })
     Call<Mesa> create_mesa(@Header("Authorization") String authorization, @Body NewMesaForm newMesaForm);
+
+    @GET("api/auth/users")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<List<User>> get_users(@Header("Authorization") String authorization);
+
+    @GET("api/auth/users/{id}")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<List<User>> get_user(@Header("Authorization") String authorization,@Path("id") Integer id);
+
+    @POST("api/auth/users")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<User> create_user(@Header("Authorization") String authorization, @Body UserForm userForm);
+
+    @DELETE("api/auth/users/{id}")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<ResponseBody> delete_user(@Header("Authorization") String authorization,@Path("id") Integer id);
 
 }
