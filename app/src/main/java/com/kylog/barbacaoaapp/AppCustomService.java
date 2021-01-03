@@ -115,4 +115,11 @@ public interface AppCustomService {
     })
     Call<ResponseBody> delete_user(@Header("Authorization") String authorization,@Path("id") Integer id);
 
+    @PUT("api/auth/users/{id}")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<User> update_user(@Header("Authorization") String authorization,@Path("id") Integer id,@Body UserForm userForm);
+
 }
