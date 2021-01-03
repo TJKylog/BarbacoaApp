@@ -2,15 +2,117 @@ package com.kylog.barbacaoaapp.activities.users;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
+import com.kylog.barbacaoaapp.AppCustomService;
 import com.kylog.barbacaoaapp.R;
+import com.kylog.barbacaoaapp.RetrofitClient;
+import com.kylog.barbacaoaapp.activities.products.ProductsActivity;
+import com.kylog.barbacaoaapp.activities.products.ProductsEdit;
+import com.kylog.barbacaoaapp.models.User;
+import com.kylog.barbacaoaapp.models.forms.UserForm;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class UsersEdit extends AppCompatActivity {
+
+    private SharedPreferences pref;
+    private EditText editName;
+    private EditText editEmail;
+    private EditText editPassword;
+    private EditText editType;
+    private Button updateUser;
+    private Integer id;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_users_edit);
+
+        pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+        editName = findViewById(R.id.edit_user_name_field);
+        editEmail = findViewById(R.id.edit_user_email_field);
+        editPassword = findViewById(R.id.edit_user_password_field);
+        editType = findViewById(R.id.edit_user_role_field);
+        updateUser = findViewById(R.id.update_user_button);
+
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null)
+        {
+            id = bundle.getInt("id");
+            get_user(id);
+            Toast.makeText(UsersEdit.this, "id: "+ id, Toast.LENGTH_LONG).show();
+        } else{
+            Toast.makeText(UsersEdit.this, "xD" , Toast.LENGTH_LONG).show();
+        }
+
+        updateUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                update_data(new UserForm(editName.getText().toString(),editEmail.getText().toString(),editPassword.getText().toString(),editType.getText().toString()));
+            }
+        });
+
+    }
+
+    private void get_user(Integer id) {
+        AppCustomService service = RetrofitClient.getClient();
+        Call<User> userCall = service.get_user(getTokenType()+" "+getToken(),id);
+
+        userCall.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if(response.isSuccessful()) {
+                    user = response.body();
+                    editName.setText(user.getName());
+                    editEmail.setText(user.getEmail());
+                    editType.setText(user.getRole());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void update_data(UserForm userForm) {
+        AppCustomService service = RetrofitClient.getClient();
+        Call<User> userCall = service.update_user(getTokenType()+" "+getToken(),id,userForm);
+
+        userCall.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if(response.isSuccessful()) {
+                    Toast.makeText(UsersEdit.this, "Usuario actualizado" , Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(UsersEdit.this , UsersActivity.class);
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    private String getToken(){
+        return pref.getString("token", null);
+    }
+    private String getTokenType(){
+        return pref.getString("token_type",null);
     }
 }

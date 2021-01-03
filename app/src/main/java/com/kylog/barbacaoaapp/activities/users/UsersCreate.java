@@ -62,17 +62,17 @@ public class UsersCreate extends AppCompatActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 if(response.isSuccessful()) {
                     User user = response.body();
-                    Intent intent = new Intent(UsersCreate.this , ProductsActivity.class);
+                    Intent intent = new Intent(UsersCreate.this , UsersActivity.class);
                     startActivity(intent);
                 }
                 else {
-
+                    Toast.makeText(UsersCreate.this, "Error" , Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(UsersCreate.this, "Error", Toast.LENGTH_LONG).show();
+                Toast.makeText(UsersCreate.this, t.getMessage() , Toast.LENGTH_LONG).show();
             }
         });
 
