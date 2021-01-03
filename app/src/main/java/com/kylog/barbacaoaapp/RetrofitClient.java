@@ -25,7 +25,7 @@ public class RetrofitClient {
             httpClient.interceptors().add(logging);
 
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://18.219.178.157/")
+                    .baseUrl("http://192.168.0.14/")
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .client(httpClient.build()).build();
 

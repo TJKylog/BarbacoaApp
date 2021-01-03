@@ -116,7 +116,7 @@ public class UsersActivity extends AppCompatActivity {
             {
                 final CharSequence [] options = {"Eliminar","Cancelar"};
                 final AlertDialog.Builder alertDelete = new AlertDialog.Builder(UsersActivity.this);
-                alertDelete.setTitle("Desea eliminar: "+name);
+                alertDelete.setTitle("Confirmar acción: " + name);
                 alertDelete.setItems(options, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -127,7 +127,7 @@ public class UsersActivity extends AppCompatActivity {
                                 @Override
                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                     if(response.isSuccessful()) {
-                                        Toast.makeText(UsersActivity.this, "Usuario eliminado: "+ name , Toast.LENGTH_LONG).show();
+                                        Toast.makeText(UsersActivity.this, "Usuario eliminado" , Toast.LENGTH_LONG).show();
                                         users.remove(info.position);
                                         userAdapter.notifyDataSetChanged();
                                     }
@@ -135,7 +135,7 @@ public class UsersActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                    Toast.makeText(UsersActivity.this, "No se completo la acción: "+ name , Toast.LENGTH_LONG).show();
+                                    Toast.makeText(UsersActivity.this, "No se completo la acción" , Toast.LENGTH_LONG).show();
                                 }
                             });
                         }
