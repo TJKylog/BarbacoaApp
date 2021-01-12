@@ -3,6 +3,7 @@ package com.kylog.barbacaoaapp;
 import com.kylog.barbacaoaapp.models.Auth;
 import com.kylog.barbacaoaapp.models.Mesa;
 import com.kylog.barbacaoaapp.models.Product;
+import com.kylog.barbacaoaapp.models.ProductType;
 import com.kylog.barbacaoaapp.models.forms.LoginForm;
 import com.kylog.barbacaoaapp.models.User;
 import com.kylog.barbacaoaapp.models.forms.NewMesaForm;
@@ -121,5 +122,12 @@ public interface AppCustomService {
             "X-Requested-With: XMLHttpRequest"
     })
     Call<ResponseBody> delete_user(@Header("Authorization") String authorization,@Path("id") Integer id);
+
+    @GET("api/auth/types")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<List<ProductType>> get_types(@Header("Authorization") String authorization);
 
 }

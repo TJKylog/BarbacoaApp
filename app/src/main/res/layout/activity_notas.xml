@@ -6,4 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".activities.notes.NotesActivity">
 
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list_types"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="-16dp"
+        tools:layout_editor_absoluteY="76dp"
+        tools:ignore="MissingConstraints"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

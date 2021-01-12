@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kylog.barbacaoaapp.activities.mesas.MesasActivity;
+import com.kylog.barbacaoaapp.activities.notes.NotesActivity;
 import com.kylog.barbacaoaapp.activities.products.ProductsActivity;
 import com.kylog.barbacaoaapp.activities.users.UsersActivity;
 import com.kylog.barbacaoaapp.models.User;
@@ -27,6 +28,7 @@ public class MainMenu extends AppCompatActivity {
     private Button products_button;
     private Button mesas_button;
     private Button users_button;
+    private Button notes_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,7 @@ public class MainMenu extends AppCompatActivity {
         products_button = findViewById(R.id.productos_button);
         mesas_button = findViewById(R.id.mesas_button);
         users_button = findViewById(R.id.users_button);
+        notes_button = findViewById(R.id.consumos_button);
 
         products_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,6 +58,13 @@ public class MainMenu extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 show_users();
+            }
+        });
+
+        notes_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                show_notes();
             }
         });
 
@@ -105,6 +115,11 @@ public class MainMenu extends AppCompatActivity {
 
     private void show_users() {
         Intent intent = new Intent(MainMenu.this , UsersActivity.class);
+        startActivity(intent);
+    }
+
+    private void show_notes() {
+        Intent intent = new Intent(MainMenu.this, NotesActivity.class);
         startActivity(intent);
     }
 
