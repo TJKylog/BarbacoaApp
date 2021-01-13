@@ -154,4 +154,12 @@ public interface AppCustomService {
             "X-Requested-With: XMLHttpRequest"
     })
     Call<ResponseBody> add_active(@Header("Authorization") String authorization, @Body FormActive formActive);
+
+    @GET("api/auth/products/type/{type}")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<List<Product>> get_products_by_type(@Header("Authorization") String authorization, @Path("type") String type);
+
 }

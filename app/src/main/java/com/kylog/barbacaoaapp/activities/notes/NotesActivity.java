@@ -2,6 +2,7 @@ package com.kylog.barbacaoaapp.activities.notes;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,6 +25,7 @@ import com.kylog.barbacaoaapp.RetrofitClient;
 import com.kylog.barbacaoaapp.models.ActiveMesa;
 import com.kylog.barbacaoaapp.models.DataAvailable;
 import com.kylog.barbacaoaapp.models.Mesa;
+import com.kylog.barbacaoaapp.models.Product;
 import com.kylog.barbacaoaapp.models.ProductType;
 import com.kylog.barbacaoaapp.models.Waiter;
 import com.kylog.barbacaoaapp.models.forms.FormActive;
@@ -49,6 +51,9 @@ public class NotesActivity extends AppCompatActivity {
     private Button add_active_button;
     private Spinner spinnerMesas;
     private Spinner spinnerWaiters;
+    private ProductsAdapter productsAdapter;
+    private List<Product> products;
+    private RecyclerView productsGrid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +64,7 @@ public class NotesActivity extends AppCompatActivity {
         typesList = findViewById(R.id.list_types);
         activeslist = findViewById(R.id.active_list);
         add_active_button = findViewById(R.id.add_active_button);
+        productsGrid = findViewById(R.id.products_grid);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -66,6 +72,8 @@ public class NotesActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager2 = new LinearLayoutManager(this);
         layoutManager2.setOrientation(LinearLayoutManager.HORIZONTAL);
         activeslist.setLayoutManager(layoutManager2);
+        LinearLayoutManager layoutManager3 = new GridLayoutManager(this,2);
+        productsGrid.setLayoutManager(layoutManager3);
 
         add_active_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,6 +85,32 @@ public class NotesActivity extends AppCompatActivity {
         get_types();
         get_active();
 
+    }
+
+    private void get_products_by_type(String type) {
+        AppCustomService service = RetrofitClient.getClient();
+        Call<List<Product>> listCall = service.get_products_by_type(getTokenType()+" "+getToken(), type );
+
+        listCall.enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                if(response.isSuccessful()) {
+                    products = response.body();
+                    productsAdapter = new ProductsAdapter(products, R.layout.grid_item_produts_layout, new ProductsAdapter.itemClickListener() {
+                        @Override
+                        public void onItemClick(Product product, int position) {
+                            Toast.makeText(NotesActivity.this, product.getName(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    productsGrid.setAdapter(productsAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+
+            }
+        });
     }
 
     private void get_types() {
@@ -96,6 +130,7 @@ public class NotesActivity extends AppCompatActivity {
                             @Override
                             public void onItemClick(ProductType productType, int position) {
                                 Toast.makeText(NotesActivity.this, productType.getType(), Toast.LENGTH_LONG).show();
+                                get_products_by_type(productType.getType());
                             }
                         });
                         typesList.setAdapter(typesAdapter);
@@ -216,19 +251,4 @@ public class NotesActivity extends AppCompatActivity {
         return pref.getString("token_type",null);
     }
 
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-    {
-        Mesa mesa = (Mesa)spinnerMesas.getSelectedItem();
-        Toast.makeText(getApplicationContext() ,mesa.toString() , Toast.LENGTH_LONG).show();
-    }
-
-    public void onNothingSelected(AdapterView<?> arg0) {
-        // TODO Auto-generated method stub
-    }
-
-    public void onClick(View v )
-    {
-        Mesa mesa = (Mesa)spinnerMesas.getSelectedItem();
-        Toast.makeText(getApplicationContext() ,mesa.toString() , Toast.LENGTH_LONG).show();
-    }
 }
