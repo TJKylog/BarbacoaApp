@@ -6,11 +6,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -39,8 +41,7 @@ public class NotesActivity extends AppCompatActivity {
     private ArrayList<ActiveMesa> activeMesas;
     private RecyclerView activeslist;
     private DataAvailable dataAvailable;
-    private Spinner spinnerMesas;
-    private Spinner spinnerWaiters;
+    private Button add_active_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +51,7 @@ public class NotesActivity extends AppCompatActivity {
 
         typesList = findViewById(R.id.list_types);
         activeslist = findViewById(R.id.active_list);
+        add_active_button = findViewById(R.id.add_active_button);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -58,6 +60,12 @@ public class NotesActivity extends AppCompatActivity {
         layoutManager2.setOrientation(LinearLayoutManager.HORIZONTAL);
         activeslist.setLayoutManager(layoutManager2);
 
+        add_active_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAddActive();
+            }
+        });
 
         get_types();
         get_active();
@@ -128,18 +136,24 @@ public class NotesActivity extends AppCompatActivity {
     private void showAddActive(){
         AlertDialog.Builder builder = new AlertDialog.Builder(NotesActivity.this);
         LayoutInflater inflater = getLayoutInflater();
-        View v = inflater.inflate(R.layout.add_mesa, null);
-        builder.setView(v);
+        final View v = inflater.inflate(R.layout.add_mesa, null);
+        final Spinner spinnerMesas = v.findViewById(R.id.spinner_mesas);
+        final Spinner spinnerWaiters = v.findViewById(R.id.spinner_waiters);
 
-        AlertDialog dialog = builder.create();
-        dialog.show();
-        spinnerMesas = findViewById(R.id.spinner_mesas);
-        spinnerWaiters = findViewById(R.id.spinner_waiters);
+        builder.setView(v)
+                .setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-        get_available_data();
-    }
+                    }
+                })
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-    private void get_available_data() {
+                    }
+                });
+
         AppCustomService service = RetrofitClient.getClient();
         Call<DataAvailable> dataAvailableCall = service.get_data_available(getTokenType()+" "+getToken());
 
@@ -148,7 +162,10 @@ public class NotesActivity extends AppCompatActivity {
             public void onResponse(Call<DataAvailable> call, Response<DataAvailable> response) {
                 if(response.isSuccessful()) {
                     dataAvailable = response.body();
-                    //ArrayAdapter spinnerAdapterMesas =  new ArrayAdapter(this,R.layout.support_simple_spinner_dropdown_item , dataAvailable.getMesas());
+                    ArrayAdapter spinnerAdapterMesas =  new ArrayAdapter( v.getContext() ,R.layout.support_simple_spinner_dropdown_item, dataAvailable.getMesas());
+                    spinnerMesas.setAdapter(spinnerAdapterMesas);
+                    ArrayAdapter spinnerAdapterWaiters = new ArrayAdapter(v.getContext(),R.layout.support_simple_spinner_dropdown_item , dataAvailable.getWaiters());
+                    spinnerWaiters.setAdapter(spinnerAdapterWaiters);
                 }
             }
 
@@ -157,6 +174,9 @@ public class NotesActivity extends AppCompatActivity {
 
             }
         });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private String getToken(){

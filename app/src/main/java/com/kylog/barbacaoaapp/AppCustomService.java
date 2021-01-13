@@ -139,7 +139,7 @@ public interface AppCustomService {
     })
     Call<List<ActiveMesa>> get_active(@Header("Authorization") String authorization);
 
-    @GET("get/available/info")
+    @GET("api/auth/get/available/info")
     @Headers({
             "Content-Type: application/json",
             "X-Requested-With: XMLHttpRequest"
