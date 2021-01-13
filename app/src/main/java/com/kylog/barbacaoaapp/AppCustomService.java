@@ -1,6 +1,8 @@
 package com.kylog.barbacaoaapp;
 
+import com.kylog.barbacaoaapp.models.ActiveMesa;
 import com.kylog.barbacaoaapp.models.Auth;
+import com.kylog.barbacaoaapp.models.DataAvailable;
 import com.kylog.barbacaoaapp.models.Mesa;
 import com.kylog.barbacaoaapp.models.Product;
 import com.kylog.barbacaoaapp.models.ProductType;
@@ -130,4 +132,17 @@ public interface AppCustomService {
     })
     Call<List<ProductType>> get_types(@Header("Authorization") String authorization);
 
+    @GET("api/auth/mesas_active")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<List<ActiveMesa>> get_active(@Header("Authorization") String authorization);
+
+    @GET("get/available/info")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<DataAvailable> get_data_available(@Header("Authorization") String authorization);
 }
