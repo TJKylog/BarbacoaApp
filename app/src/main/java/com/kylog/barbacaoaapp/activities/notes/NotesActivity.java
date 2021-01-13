@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,11 +23,15 @@ import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
 import com.kylog.barbacaoaapp.models.ActiveMesa;
 import com.kylog.barbacaoaapp.models.DataAvailable;
+import com.kylog.barbacaoaapp.models.Mesa;
 import com.kylog.barbacaoaapp.models.ProductType;
+import com.kylog.barbacaoaapp.models.Waiter;
+import com.kylog.barbacaoaapp.models.forms.FormActive;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,6 +47,8 @@ public class NotesActivity extends AppCompatActivity {
     private RecyclerView activeslist;
     private DataAvailable dataAvailable;
     private Button add_active_button;
+    private Spinner spinnerMesas;
+    private Spinner spinnerWaiters;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,20 +144,22 @@ public class NotesActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(NotesActivity.this);
         LayoutInflater inflater = getLayoutInflater();
         final View v = inflater.inflate(R.layout.add_mesa, null);
-        final Spinner spinnerMesas = v.findViewById(R.id.spinner_mesas);
-        final Spinner spinnerWaiters = v.findViewById(R.id.spinner_waiters);
+        spinnerMesas = v.findViewById(R.id.spinner_mesas);
+        spinnerWaiters = v.findViewById(R.id.spinner_waiters);
 
         builder.setView(v)
                 .setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        final Mesa mesa = (Mesa) spinnerMesas.getSelectedItem();
+                        final Waiter waiter = (Waiter) spinnerWaiters.getSelectedItem();
+                        add_active(new FormActive(waiter.getId(),mesa.getId()));
                     }
                 })
                 .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        dialog.dismiss();
                     }
                 });
 
@@ -166,6 +175,7 @@ public class NotesActivity extends AppCompatActivity {
                     spinnerMesas.setAdapter(spinnerAdapterMesas);
                     ArrayAdapter spinnerAdapterWaiters = new ArrayAdapter(v.getContext(),R.layout.support_simple_spinner_dropdown_item , dataAvailable.getWaiters());
                     spinnerWaiters.setAdapter(spinnerAdapterWaiters);
+
                 }
             }
 
@@ -179,10 +189,46 @@ public class NotesActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    private void add_active(FormActive formActive) {
+        AppCustomService service = RetrofitClient.getClient();
+        Call<ResponseBody> responseBodyCall = service.add_active(getTokenType()+" "+getToken(), formActive);
+
+        responseBodyCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful())
+                {
+                    get_active();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+    }
+
     private String getToken(){
         return pref.getString("token", null);
     }
     private String getTokenType(){
         return pref.getString("token_type",null);
+    }
+
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+    {
+        Mesa mesa = (Mesa)spinnerMesas.getSelectedItem();
+        Toast.makeText(getApplicationContext() ,mesa.toString() , Toast.LENGTH_LONG).show();
+    }
+
+    public void onNothingSelected(AdapterView<?> arg0) {
+        // TODO Auto-generated method stub
+    }
+
+    public void onClick(View v )
+    {
+        Mesa mesa = (Mesa)spinnerMesas.getSelectedItem();
+        Toast.makeText(getApplicationContext() ,mesa.toString() , Toast.LENGTH_LONG).show();
     }
 }

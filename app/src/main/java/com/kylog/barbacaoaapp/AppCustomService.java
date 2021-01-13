@@ -6,6 +6,7 @@ import com.kylog.barbacaoaapp.models.DataAvailable;
 import com.kylog.barbacaoaapp.models.Mesa;
 import com.kylog.barbacaoaapp.models.Product;
 import com.kylog.barbacaoaapp.models.ProductType;
+import com.kylog.barbacaoaapp.models.forms.FormActive;
 import com.kylog.barbacaoaapp.models.forms.LoginForm;
 import com.kylog.barbacaoaapp.models.User;
 import com.kylog.barbacaoaapp.models.forms.NewMesaForm;
@@ -17,6 +18,7 @@ import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
@@ -145,4 +147,11 @@ public interface AppCustomService {
             "X-Requested-With: XMLHttpRequest"
     })
     Call<DataAvailable> get_data_available(@Header("Authorization") String authorization);
+
+    @POST("api/auth/add/active")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<ResponseBody> add_active(@Header("Authorization") String authorization, @Body FormActive formActive);
 }
