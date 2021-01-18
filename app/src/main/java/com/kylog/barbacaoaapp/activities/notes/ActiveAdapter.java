@@ -25,7 +25,6 @@ public class ActiveAdapter extends RecyclerView.Adapter<ActiveAdapter.ViewHolder
         this.listener = listener;
     }
 
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -61,7 +60,6 @@ public class ActiveAdapter extends RecyclerView.Adapter<ActiveAdapter.ViewHolder
                     listener.onItemClick(activeMesa, getAdapterPosition());
                 }
             });
-
         }
     }
 

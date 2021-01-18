@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -23,8 +24,10 @@ import com.kylog.barbacaoaapp.AppCustomService;
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
 import com.kylog.barbacaoaapp.models.ActiveMesa;
+import com.kylog.barbacaoaapp.models.Consume;
 import com.kylog.barbacaoaapp.models.DataAvailable;
 import com.kylog.barbacaoaapp.models.Mesa;
+import com.kylog.barbacaoaapp.models.Note;
 import com.kylog.barbacaoaapp.models.Product;
 import com.kylog.barbacaoaapp.models.ProductType;
 import com.kylog.barbacaoaapp.models.Waiter;
@@ -46,6 +49,7 @@ public class NotesActivity extends AppCompatActivity {
     private ActiveAdapter activeAdapter;
     private ArrayList<ProductType> productTypes;
     private ArrayList<ActiveMesa> activeMesas;
+    private Note note;
     private RecyclerView activeslist;
     private DataAvailable dataAvailable;
     private Button add_active_button;
@@ -54,6 +58,7 @@ public class NotesActivity extends AppCompatActivity {
     private ProductsAdapter productsAdapter;
     private List<Product> products;
     private RecyclerView productsGrid;
+    private RecyclerView note_product_list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +70,7 @@ public class NotesActivity extends AppCompatActivity {
         activeslist = findViewById(R.id.active_list);
         add_active_button = findViewById(R.id.add_active_button);
         productsGrid = findViewById(R.id.products_grid);
+        note_product_list = findViewById(R.id.note_products_list);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -74,6 +80,9 @@ public class NotesActivity extends AppCompatActivity {
         activeslist.setLayoutManager(layoutManager2);
         LinearLayoutManager layoutManager3 = new GridLayoutManager(this,2);
         productsGrid.setLayoutManager(layoutManager3);
+        LinearLayoutManager layoutManager4 = new LinearLayoutManager(this);
+        layoutManager4.setOrientation(LinearLayoutManager.VERTICAL);
+        note_product_list.setLayoutManager(layoutManager4);
 
         add_active_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,6 +171,7 @@ public class NotesActivity extends AppCompatActivity {
                         @Override
                         public void onItemClick(ActiveMesa activeMesa, int position) {
                             Toast.makeText(NotesActivity.this, activeMesa.getName(), Toast.LENGTH_LONG).show();
+                            get_mesa_consume(activeMesa.getId());
                         }
                     });
                     activeslist.setAdapter(activeAdapter);
@@ -239,6 +249,32 @@ public class NotesActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void get_mesa_consume(Integer id) {
+        AppCustomService service = RetrofitClient.getClient();
+        Call<Note> noteCall = service.get_mesa_consume(getTokenType()+" "+getToken(), id);
+
+        noteCall.enqueue(new Callback<Note>() {
+            @Override
+            public void onResponse(Call<Note> call, Response<Note> response) {
+                if(response.isSuccessful()) {
+                    note = response.body();
+                    ConsumeAdapter consumeAdapter = new ConsumeAdapter(note.getConsumes(), R.layout.consumes_list, new ConsumeAdapter.itemClickListener() {
+                        @Override
+                        public void onItemClick(Consume consume, int position) {
+                            Toast.makeText(NotesActivity.this, consume.getName(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    note_product_list.setAdapter(consumeAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Note> call, Throwable t) {
 
             }
         });

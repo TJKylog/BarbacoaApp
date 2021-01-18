@@ -2,8 +2,10 @@ package com.kylog.barbacaoaapp;
 
 import com.kylog.barbacaoaapp.models.ActiveMesa;
 import com.kylog.barbacaoaapp.models.Auth;
+import com.kylog.barbacaoaapp.models.Consume;
 import com.kylog.barbacaoaapp.models.DataAvailable;
 import com.kylog.barbacaoaapp.models.Mesa;
+import com.kylog.barbacaoaapp.models.Note;
 import com.kylog.barbacaoaapp.models.Product;
 import com.kylog.barbacaoaapp.models.ProductType;
 import com.kylog.barbacaoaapp.models.forms.FormActive;
@@ -161,5 +163,12 @@ public interface AppCustomService {
             "X-Requested-With: XMLHttpRequest"
     })
     Call<List<Product>> get_products_by_type(@Header("Authorization") String authorization, @Path("type") String type);
+
+    @GET("api/auth/mesas/{id}")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<Note> get_mesa_consume(@Header("Authorization") String authorization, @Path("id") Integer id);
 
 }
