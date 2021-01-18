@@ -47,4 +47,9 @@ public class Mesa {
         this.name = name;
     }
 
+    public String toString()
+    {
+        return name;
+    }
+
 }

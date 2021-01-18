@@ -2,16 +2,21 @@ package com.kylog.barbacaoaapp.activities.notes;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -19,12 +24,19 @@ import com.kylog.barbacaoaapp.AppCustomService;
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
 import com.kylog.barbacaoaapp.models.ActiveMesa;
+import com.kylog.barbacaoaapp.models.Consume;
 import com.kylog.barbacaoaapp.models.DataAvailable;
+import com.kylog.barbacaoaapp.models.Mesa;
+import com.kylog.barbacaoaapp.models.Note;
+import com.kylog.barbacaoaapp.models.Product;
 import com.kylog.barbacaoaapp.models.ProductType;
+import com.kylog.barbacaoaapp.models.Waiter;
+import com.kylog.barbacaoaapp.models.forms.FormActive;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,10 +49,16 @@ public class NotesActivity extends AppCompatActivity {
     private ActiveAdapter activeAdapter;
     private ArrayList<ProductType> productTypes;
     private ArrayList<ActiveMesa> activeMesas;
+    private Note note;
     private RecyclerView activeslist;
     private DataAvailable dataAvailable;
+    private Button add_active_button;
     private Spinner spinnerMesas;
     private Spinner spinnerWaiters;
+    private ProductsAdapter productsAdapter;
+    private List<Product> products;
+    private RecyclerView productsGrid;
+    private RecyclerView note_product_list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +68,9 @@ public class NotesActivity extends AppCompatActivity {
 
         typesList = findViewById(R.id.list_types);
         activeslist = findViewById(R.id.active_list);
+        add_active_button = findViewById(R.id.add_active_button);
+        productsGrid = findViewById(R.id.products_grid);
+        note_product_list = findViewById(R.id.note_products_list);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -57,11 +78,48 @@ public class NotesActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager2 = new LinearLayoutManager(this);
         layoutManager2.setOrientation(LinearLayoutManager.HORIZONTAL);
         activeslist.setLayoutManager(layoutManager2);
+        LinearLayoutManager layoutManager3 = new GridLayoutManager(this,2);
+        productsGrid.setLayoutManager(layoutManager3);
+        LinearLayoutManager layoutManager4 = new LinearLayoutManager(this);
+        layoutManager4.setOrientation(LinearLayoutManager.VERTICAL);
+        note_product_list.setLayoutManager(layoutManager4);
 
+        add_active_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAddActive();
+            }
+        });
 
         get_types();
         get_active();
 
+    }
+
+    private void get_products_by_type(String type) {
+        AppCustomService service = RetrofitClient.getClient();
+        Call<List<Product>> listCall = service.get_products_by_type(getTokenType()+" "+getToken(), type );
+
+        listCall.enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                if(response.isSuccessful()) {
+                    products = response.body();
+                    productsAdapter = new ProductsAdapter(products, R.layout.grid_item_produts_layout, new ProductsAdapter.itemClickListener() {
+                        @Override
+                        public void onItemClick(Product product, int position) {
+                            Toast.makeText(NotesActivity.this, product.getName(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    productsGrid.setAdapter(productsAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+
+            }
+        });
     }
 
     private void get_types() {
@@ -81,6 +139,7 @@ public class NotesActivity extends AppCompatActivity {
                             @Override
                             public void onItemClick(ProductType productType, int position) {
                                 Toast.makeText(NotesActivity.this, productType.getType(), Toast.LENGTH_LONG).show();
+                                get_products_by_type(productType.getType());
                             }
                         });
                         typesList.setAdapter(typesAdapter);
@@ -112,6 +171,7 @@ public class NotesActivity extends AppCompatActivity {
                         @Override
                         public void onItemClick(ActiveMesa activeMesa, int position) {
                             Toast.makeText(NotesActivity.this, activeMesa.getName(), Toast.LENGTH_LONG).show();
+                            get_mesa_consume(activeMesa.getId());
                         }
                     });
                     activeslist.setAdapter(activeAdapter);
@@ -128,18 +188,26 @@ public class NotesActivity extends AppCompatActivity {
     private void showAddActive(){
         AlertDialog.Builder builder = new AlertDialog.Builder(NotesActivity.this);
         LayoutInflater inflater = getLayoutInflater();
-        View v = inflater.inflate(R.layout.add_mesa, null);
-        builder.setView(v);
+        final View v = inflater.inflate(R.layout.add_mesa, null);
+        spinnerMesas = v.findViewById(R.id.spinner_mesas);
+        spinnerWaiters = v.findViewById(R.id.spinner_waiters);
 
-        AlertDialog dialog = builder.create();
-        dialog.show();
-        spinnerMesas = findViewById(R.id.spinner_mesas);
-        spinnerWaiters = findViewById(R.id.spinner_waiters);
+        builder.setView(v)
+                .setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        final Mesa mesa = (Mesa) spinnerMesas.getSelectedItem();
+                        final Waiter waiter = (Waiter) spinnerWaiters.getSelectedItem();
+                        add_active(new FormActive(waiter.getId(),mesa.getId()));
+                    }
+                })
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
 
-        get_available_data();
-    }
-
-    private void get_available_data() {
         AppCustomService service = RetrofitClient.getClient();
         Call<DataAvailable> dataAvailableCall = service.get_data_available(getTokenType()+" "+getToken());
 
@@ -148,12 +216,65 @@ public class NotesActivity extends AppCompatActivity {
             public void onResponse(Call<DataAvailable> call, Response<DataAvailable> response) {
                 if(response.isSuccessful()) {
                     dataAvailable = response.body();
-                    //ArrayAdapter spinnerAdapterMesas =  new ArrayAdapter(this,R.layout.support_simple_spinner_dropdown_item , dataAvailable.getMesas());
+                    ArrayAdapter spinnerAdapterMesas =  new ArrayAdapter( v.getContext() ,R.layout.support_simple_spinner_dropdown_item, dataAvailable.getMesas());
+                    spinnerMesas.setAdapter(spinnerAdapterMesas);
+                    ArrayAdapter spinnerAdapterWaiters = new ArrayAdapter(v.getContext(),R.layout.support_simple_spinner_dropdown_item , dataAvailable.getWaiters());
+                    spinnerWaiters.setAdapter(spinnerAdapterWaiters);
+
                 }
             }
 
             @Override
             public void onFailure(Call<DataAvailable> call, Throwable t) {
+
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void add_active(FormActive formActive) {
+        AppCustomService service = RetrofitClient.getClient();
+        Call<ResponseBody> responseBodyCall = service.add_active(getTokenType()+" "+getToken(), formActive);
+
+        responseBodyCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful())
+                {
+                    get_active();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void get_mesa_consume(Integer id) {
+        AppCustomService service = RetrofitClient.getClient();
+        Call<Note> noteCall = service.get_mesa_consume(getTokenType()+" "+getToken(), id);
+
+        noteCall.enqueue(new Callback<Note>() {
+            @Override
+            public void onResponse(Call<Note> call, Response<Note> response) {
+                if(response.isSuccessful()) {
+                    note = response.body();
+                    ConsumeAdapter consumeAdapter = new ConsumeAdapter(note.getConsumes(), R.layout.consumes_list, new ConsumeAdapter.itemClickListener() {
+                        @Override
+                        public void onItemClick(Consume consume, int position) {
+                            Toast.makeText(NotesActivity.this, consume.getName(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    note_product_list.setAdapter(consumeAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Note> call, Throwable t) {
 
             }
         });
@@ -165,4 +286,5 @@ public class NotesActivity extends AppCompatActivity {
     private String getTokenType(){
         return pref.getString("token_type",null);
     }
+
 }
