@@ -94,6 +94,57 @@
                         android:textSize="19sp"
                         android:textStyle="bold"
                         />
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="20"
+                                android:paddingBottom="5dp"
+                                android:paddingTop="5dp"
+                                android:textStyle="bold"
+                                android:text="C"
+                                android:paddingLeft="20dp"
+                                android:paddingRight="20dp"
+                                android:layout_height="wrap_content"/>
+
+                            <TextView
+                                android:paddingBottom="5dp"
+                                android:paddingTop="5dp"
+                                android:paddingLeft="20dp"
+                                android:paddingRight="20dp"
+                                android:layout_width="0dp"
+                                android:textStyle="bold"
+                                android:layout_weight="40"
+                                android:text="Nombre"
+                                android:layout_height="wrap_content"/>
+
+                            <TextView
+                                android:paddingBottom="5dp"
+                                android:paddingTop="5dp"
+                                android:paddingLeft="20dp"
+                                android:textStyle="bold"
+                                android:paddingRight="20dp"
+                                android:layout_width="0dp"
+                                android:layout_weight="20"
+                                android:text="P/U"
+                                android:layout_height="wrap_content"/>
+
+                            <TextView
+                                android:paddingBottom="5dp"
+                                android:paddingTop="5dp"
+                                android:paddingLeft="20dp"
+                                android:textStyle="bold"
+                                android:paddingRight="20dp"
+                                android:layout_width="0dp"
+                                android:text="Importe"
+                                android:layout_weight="20"
+                                android:layout_height="wrap_content"/>
+                        </LinearLayout>
+                    </FrameLayout>
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/note_products_list"
                         android:layout_width="match_parent"

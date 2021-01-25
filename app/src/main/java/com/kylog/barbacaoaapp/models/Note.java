@@ -21,7 +21,7 @@ public class Note {
     private List<Consume> consumes = new ArrayList<Consume>();
     @SerializedName("total")
     @Expose
-    private Integer total;
+    private Double total;
 
     /**
      * No args constructor for use in serialization
@@ -38,7 +38,7 @@ public class Note {
      * @param waiter
      * @param consumes
      */
-    public Note(Integer id, String name, Waiter waiter, List<Consume> consumes, Integer total) {
+    public Note(Integer id, String name, Waiter waiter, List<Consume> consumes, Double total) {
         super();
         this.id = id;
         this.name = name;
@@ -79,11 +79,11 @@ public class Note {
         this.consumes = consumes;
     }
 
-    public Integer getTotal() {
+    public Double getTotal() {
         return total;
     }
 
-    public void setTotal(Integer total) {
+    public void setTotal(Double total) {
         this.total = total;
     }
 }

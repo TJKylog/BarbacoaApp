@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -32,6 +33,7 @@ import com.kylog.barbacaoaapp.models.Note;
 import com.kylog.barbacaoaapp.models.Product;
 import com.kylog.barbacaoaapp.models.ProductType;
 import com.kylog.barbacaoaapp.models.Waiter;
+import com.kylog.barbacaoaapp.models.forms.AddAmount;
 import com.kylog.barbacaoaapp.models.forms.FormActive;
 
 import java.util.ArrayList;
@@ -122,7 +124,10 @@ public class NotesActivity extends AppCompatActivity {
                     productsAdapter = new ProductsAdapter(products, R.layout.grid_item_produts_layout, new ProductsAdapter.itemClickListener() {
                         @Override
                         public void onItemClick(Product product, int position) {
-                            Toast.makeText(NotesActivity.this, product.getName(), Toast.LENGTH_LONG).show();
+                            if(note != null)
+                            {
+                                showDialogProduct(product.getId(),product.getName());
+                            }
                         }
                     });
                     productsGrid.setAdapter(productsAdapter);
@@ -199,6 +204,52 @@ public class NotesActivity extends AppCompatActivity {
         });
     }
 
+    private void showDialogProduct(Integer id, String name){
+        AlertDialog.Builder builder = new AlertDialog.Builder(NotesActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.add_product_amount_note, null);
+        builder.setView(view).setTitle(name);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+        EditText amount = view.findViewById(R.id.add_amount_product);
+        Button cancel = view.findViewById(R.id.cancel_button_add_product);
+        Button save = view.findViewById(R.id.save_button_add_product);
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppCustomService service = RetrofitClient.getClient();
+                Call<ResponseBody> responseBodyCall = service.add_product_mesa(getTokenType()+" "+getToken(), note.getId(),
+                        new AddAmount(id,
+                                Double.parseDouble(String.valueOf(amount.getText())))
+                );
+                responseBodyCall.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if(response.isSuccessful())
+                        {
+                            get_mesa_consume(note.getId());
+                            dialog.dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Toast.makeText(NotesActivity.this, "Ocurrio un error",Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+
+    }
+
     private void showAddActive(){
         AlertDialog.Builder builder = new AlertDialog.Builder(NotesActivity.this);
         LayoutInflater inflater = getLayoutInflater();
@@ -221,6 +272,8 @@ public class NotesActivity extends AppCompatActivity {
                         dialog.dismiss();
                     }
                 });
+        AlertDialog dialog = builder.create();
+        dialog.show();
 
         AppCustomService service = RetrofitClient.getClient();
         Call<DataAvailable> dataAvailableCall = service.get_data_available(getTokenType()+" "+getToken());
@@ -230,11 +283,16 @@ public class NotesActivity extends AppCompatActivity {
             public void onResponse(Call<DataAvailable> call, Response<DataAvailable> response) {
                 if(response.isSuccessful()) {
                     dataAvailable = response.body();
-                    ArrayAdapter spinnerAdapterMesas =  new ArrayAdapter( v.getContext() ,R.layout.support_simple_spinner_dropdown_item, dataAvailable.getMesas());
-                    spinnerMesas.setAdapter(spinnerAdapterMesas);
-                    ArrayAdapter spinnerAdapterWaiters = new ArrayAdapter(v.getContext(),R.layout.support_simple_spinner_dropdown_item , dataAvailable.getWaiters());
-                    spinnerWaiters.setAdapter(spinnerAdapterWaiters);
-
+                    if(dataAvailable.getMesas() == null || dataAvailable.getWaiters() == null)
+                    {
+                        dialog.dismiss();
+                    }
+                    else{
+                        ArrayAdapter spinnerAdapterMesas =  new ArrayAdapter( v.getContext() ,R.layout.support_simple_spinner_dropdown_item, dataAvailable.getMesas());
+                        spinnerMesas.setAdapter(spinnerAdapterMesas);
+                        ArrayAdapter spinnerAdapterWaiters = new ArrayAdapter(v.getContext(),R.layout.support_simple_spinner_dropdown_item , dataAvailable.getWaiters());
+                        spinnerWaiters.setAdapter(spinnerAdapterWaiters);
+                    }
                 }
             }
 
@@ -244,8 +302,7 @@ public class NotesActivity extends AppCompatActivity {
             }
         });
 
-        AlertDialog dialog = builder.create();
-        dialog.show();
+
     }
 
     private void add_active(FormActive formActive) {
@@ -283,7 +340,7 @@ public class NotesActivity extends AppCompatActivity {
                     ConsumeAdapter consumeAdapter = new ConsumeAdapter(note.getConsumes(), R.layout.consumes_list, new ConsumeAdapter.itemClickListener() {
                         @Override
                         public void onItemClick(Consume consume, int position) {
-                            Toast.makeText(NotesActivity.this, consume.getName(), Toast.LENGTH_LONG).show();
+                            showDialogProduct(consume.getId(),consume.getName());
                         }
                     });
                     note_product_list.setAdapter(consumeAdapter);
