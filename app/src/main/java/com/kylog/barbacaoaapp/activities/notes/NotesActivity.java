@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kylog.barbacaoaapp.AppCustomService;
@@ -43,6 +44,13 @@ import retrofit2.Response;
 
 public class NotesActivity extends AppCompatActivity {
 
+    public static final int MESSAGE_STATE_CHANGE = 1;
+    public static final int MESSAGE_DEVICE_NAME = 4;
+    public static final String DEVICE_NAME = "device_name";
+    public static final int MESSAGE_TOAST = 5;
+    public static final String TOAST = "toast";
+    public static final int MESSAGE_READ = 2;
+    public static final int MESSAGE_WRITE = 3;
     private SharedPreferences pref;
     private RecyclerView typesList;
     private TypesAdapter typesAdapter;
@@ -59,6 +67,9 @@ public class NotesActivity extends AppCompatActivity {
     private List<Product> products;
     private RecyclerView productsGrid;
     private RecyclerView note_product_list;
+    private TextView total_consume_price;
+    private TextView note_mesa_name;
+    private TextView note_waiter_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +82,9 @@ public class NotesActivity extends AppCompatActivity {
         add_active_button = findViewById(R.id.add_active_button);
         productsGrid = findViewById(R.id.products_grid);
         note_product_list = findViewById(R.id.note_products_list);
+        total_consume_price = findViewById(R.id.consume_total_price);
+        note_mesa_name = findViewById(R.id.note_mesa_name);
+        note_waiter_name = findViewById(R.id.note_waiter_name);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -263,6 +277,9 @@ public class NotesActivity extends AppCompatActivity {
             public void onResponse(Call<Note> call, Response<Note> response) {
                 if(response.isSuccessful()) {
                     note = response.body();
+                    note_mesa_name.setText(note.getName());
+                    note_waiter_name.setText("Mesero: "+note.getWaiter());
+                    total_consume_price.setText("Total: "+note.getTotal().toString()+" $");
                     ConsumeAdapter consumeAdapter = new ConsumeAdapter(note.getConsumes(), R.layout.consumes_list, new ConsumeAdapter.itemClickListener() {
                         @Override
                         public void onItemClick(Consume consume, int position) {
