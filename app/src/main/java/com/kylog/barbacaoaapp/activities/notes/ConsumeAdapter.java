@@ -60,8 +60,8 @@ public class ConsumeAdapter extends RecyclerView.Adapter<ConsumeAdapter.ViewHold
         public void bind(final Consume consume,final itemClickListener listener) {
             this.product_amount.setText(consume.getAmount().toString());
             this.product_name.setText(consume.getName());
-            this.product_price.setText(consume.getPrice().toString()+"$");
-            this.amount_price.setText(consume.getAmountPrice().toString()+"$");
+            this.product_price.setText(consume.getPrice().toString()+" $");
+            this.amount_price.setText(consume.getAmountPrice().toString()+" $");
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

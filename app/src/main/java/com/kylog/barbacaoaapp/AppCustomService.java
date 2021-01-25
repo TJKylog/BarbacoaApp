@@ -94,6 +94,30 @@ public interface AppCustomService {
     })
     Call<Mesa> create_mesa(@Header("Authorization") String authorization, @Body NewMesaForm newMesaForm);
 
+    @GET("api/auth/mesas/{id}")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<Mesa> get_mesa(@Header("Authorization") String authorization,@Path("id") Integer id);
+
+    @PUT("api/auth/mesas/{id}")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<ResponseBody> update_mesa(
+            @Header("Authorization") String authorization,
+            @Path("id") Integer id,
+            @Body NewMesaForm newMesaForm);
+
+    @DELETE("api/auth/mesas/{id}")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<ResponseBody> delete_mesa(@Header("Authorization") String authorization, @Path("id") Integer id);
+
     @GET("api/auth/users")
     @Headers({
             "Content-Type: application/json",
