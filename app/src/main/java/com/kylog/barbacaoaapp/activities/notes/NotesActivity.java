@@ -59,6 +59,7 @@ public class NotesActivity extends AppCompatActivity {
     private ActiveAdapter activeAdapter;
     private ArrayList<ProductType> productTypes;
     private ArrayList<ActiveMesa> activeMesas;
+    private ConsumeAdapter consumeAdapter;
     private Note note;
     private RecyclerView activeslist;
     private DataAvailable dataAvailable;
@@ -107,6 +108,48 @@ public class NotesActivity extends AppCompatActivity {
             }
         });
 
+        /*Product types list */
+        productTypes = new ArrayList<ProductType>();
+        typesAdapter = new TypesAdapter(productTypes, R.layout.types_item_list_layout, new TypesAdapter.onItemClickListener() {
+            @Override
+            public void onItemClick(ProductType productType, int position) {
+                Toast.makeText(NotesActivity.this, productType.getType(), Toast.LENGTH_LONG).show();
+                get_products_by_type(productType.getType());
+            }
+        });
+        typesList.setAdapter(typesAdapter);
+
+        /* Mesa activas */
+        activeMesas = new ArrayList<ActiveMesa>();
+        activeAdapter = new ActiveAdapter(activeMesas, R.layout.mesas_actives_layout, new ActiveAdapter.itemClickListener() {
+            @Override
+            public void onItemClick(ActiveMesa activeMesa, int position) {
+                Toast.makeText(NotesActivity.this, activeMesa.getName(), Toast.LENGTH_LONG).show();
+                get_mesa_consume(activeMesa.getId());
+            }
+        });
+        activeslist.setAdapter(activeAdapter);
+
+        /* lista de consumos del cliente */
+        consumeAdapter = new ConsumeAdapter( new ArrayList<Consume>(), R.layout.consumes_list, new ConsumeAdapter.itemClickListener() {
+            @Override
+            public void onItemClick(Consume consume, int position) {
+                showDialogProduct(consume.getId(),consume.getName());
+            }
+        });
+        note_product_list.setAdapter(consumeAdapter);
+
+        productsAdapter = new ProductsAdapter(new ArrayList<Product>(), R.layout.grid_item_produts_layout, new ProductsAdapter.itemClickListener() {
+            @Override
+            public void onItemClick(Product product, int position) {
+                if(note != null)
+                {
+                    showDialogProduct(product.getId(),product.getName());
+                }
+            }
+        });
+        productsGrid.setAdapter(productsAdapter);
+
         get_types();
         get_active();
 
@@ -121,16 +164,7 @@ public class NotesActivity extends AppCompatActivity {
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 if(response.isSuccessful()) {
                     products = response.body();
-                    productsAdapter = new ProductsAdapter(products, R.layout.grid_item_produts_layout, new ProductsAdapter.itemClickListener() {
-                        @Override
-                        public void onItemClick(Product product, int position) {
-                            if(note != null)
-                            {
-                                showDialogProduct(product.getId(),product.getName());
-                            }
-                        }
-                    });
-                    productsGrid.setAdapter(productsAdapter);
+                    productsAdapter.updateList(products);
                 }
             }
 
@@ -150,20 +184,7 @@ public class NotesActivity extends AppCompatActivity {
             public void onResponse(Call<List<ProductType>> call, Response<List<ProductType>> response) {
                 if(response.isSuccessful()) {
                     productTypes = (ArrayList<ProductType>) response.body();
-                    if (productTypes.isEmpty()) {
-
-                    }
-                    else {
-                        typesAdapter = new TypesAdapter(productTypes, R.layout.types_item_list_layout, new TypesAdapter.onItemClickListener() {
-                            @Override
-                            public void onItemClick(ProductType productType, int position) {
-                                Toast.makeText(NotesActivity.this, productType.getType(), Toast.LENGTH_LONG).show();
-                                get_products_by_type(productType.getType());
-                            }
-                        });
-                        typesList.setAdapter(typesAdapter);
-                    }
-
+                    typesAdapter.updateList(productTypes);
                 }
                 else {
 
@@ -186,14 +207,7 @@ public class NotesActivity extends AppCompatActivity {
             public void onResponse(Call<List<ActiveMesa>> call, Response<List<ActiveMesa>> response) {
                 if(response.isSuccessful()){
                     activeMesas = (ArrayList<ActiveMesa>) response.body();
-                    activeAdapter = new ActiveAdapter(activeMesas, R.layout.mesas_actives_layout, new ActiveAdapter.itemClickListener() {
-                        @Override
-                        public void onItemClick(ActiveMesa activeMesa, int position) {
-                            Toast.makeText(NotesActivity.this, activeMesa.getName(), Toast.LENGTH_LONG).show();
-                            get_mesa_consume(activeMesa.getId());
-                        }
-                    });
-                    activeslist.setAdapter(activeAdapter);
+                    activeAdapter.updateList(activeMesas);
                 }
             }
 
@@ -337,13 +351,7 @@ public class NotesActivity extends AppCompatActivity {
                     note_mesa_name.setText(note.getName());
                     note_waiter_name.setText("Mesero: "+note.getWaiter());
                     total_consume_price.setText("Total: "+note.getTotal().toString()+" $");
-                    ConsumeAdapter consumeAdapter = new ConsumeAdapter(note.getConsumes(), R.layout.consumes_list, new ConsumeAdapter.itemClickListener() {
-                        @Override
-                        public void onItemClick(Consume consume, int position) {
-                            showDialogProduct(consume.getId(),consume.getName());
-                        }
-                    });
-                    note_product_list.setAdapter(consumeAdapter);
+                    consumeAdapter.updateList(note.getConsumes());
                 }
             }
 

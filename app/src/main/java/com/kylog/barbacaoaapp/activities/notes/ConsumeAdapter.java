@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kylog.barbacaoaapp.R;
+import com.kylog.barbacaoaapp.models.ActiveMesa;
 import com.kylog.barbacaoaapp.models.Consume;
 
 import java.util.List;
@@ -74,5 +75,10 @@ public class ConsumeAdapter extends RecyclerView.Adapter<ConsumeAdapter.ViewHold
 
     public interface itemClickListener{
         void onItemClick(Consume consume, int position);
+    }
+    public void updateList(List<Consume> consumes) {
+        this.consumes.clear();
+        this.consumes.addAll(consumes);
+        this.notifyDataSetChanged();
     }
 }

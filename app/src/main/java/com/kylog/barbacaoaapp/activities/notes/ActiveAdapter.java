@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.models.ActiveMesa;
+import com.kylog.barbacaoaapp.models.ProductType;
 
 import java.util.List;
 
@@ -65,5 +66,11 @@ public class ActiveAdapter extends RecyclerView.Adapter<ActiveAdapter.ViewHolder
 
     public interface itemClickListener{
         void onItemClick(ActiveMesa activeMesa, int position);
+    }
+
+    public void updateList(List<ActiveMesa> activeMesas) {
+        this.activeMesaList.clear();
+        this.activeMesaList.addAll(activeMesas);
+        this.notifyDataSetChanged();
     }
 }
