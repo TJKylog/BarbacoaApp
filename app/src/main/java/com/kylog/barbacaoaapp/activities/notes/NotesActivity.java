@@ -6,6 +6,10 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,8 +27,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kylog.barbacaoaapp.AppCustomService;
+import com.kylog.barbacaoaapp.BluetoothService;
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
+import com.kylog.barbacaoaapp.command.Command;
+import com.kylog.barbacaoaapp.command.PrinterCommand;
 import com.kylog.barbacaoaapp.models.ActiveMesa;
 import com.kylog.barbacaoaapp.models.Consume;
 import com.kylog.barbacaoaapp.models.DataAvailable;
@@ -37,6 +44,9 @@ import com.kylog.barbacaoaapp.models.forms.AddAmount;
 import com.kylog.barbacaoaapp.models.forms.DeleteProduct;
 import com.kylog.barbacaoaapp.models.forms.FormActive;
 
+import java.io.UnsupportedEncodingException;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,6 +84,11 @@ public class NotesActivity extends AppCompatActivity {
     private TextView total_consume_price;
     private TextView note_mesa_name;
     private TextView note_waiter_name;
+    private BluetoothService mService;
+    private Button print_ticket;
+    BluetoothAdapter mBluetoothAdapter;
+    private ArrayAdapter<String> mPairedDevicesArrayAdapter;
+    private ArrayAdapter<String> mNewDevicesArrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +104,7 @@ public class NotesActivity extends AppCompatActivity {
         total_consume_price = findViewById(R.id.consume_total_price);
         note_mesa_name = findViewById(R.id.note_mesa_name);
         note_waiter_name = findViewById(R.id.note_waiter_name);
+        print_ticket = findViewById(R.id.print_note);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -168,6 +184,15 @@ public class NotesActivity extends AppCompatActivity {
             }
         });
         productsGrid.setAdapter(productsAdapter);
+
+        print_ticket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SendDataByte(Command.ESC_Init);
+                SendDataByte(Command.LF);
+                Print_Ex();
+            }
+        });
 
         get_types();
         get_active();
@@ -464,6 +489,122 @@ public class NotesActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void SendDataString(String data) {
+
+        if (mService.getState() != BluetoothService.STATE_CONNECTED) {
+            Toast.makeText(this, "R.string.not_connected", Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
+        if (data.length() > 0) {
+            try {
+                mService.write(data.getBytes("GBK"));
+            } catch (UnsupportedEncodingException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void SendDataByte(byte[] data) {
+
+        if (mService.getState() != BluetoothService.STATE_CONNECTED) {
+            Toast.makeText(this, "R.string.not_connected", Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
+        mService.write(data);
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private void Print_Ex(){
+
+
+            SimpleDateFormat formatter = new SimpleDateFormat ("yyyy/MM/dd/ HH:mm:ss ");
+            Date curDate = new Date(System.currentTimeMillis());//获取当前时间
+            String str = formatter.format(curDate);
+            String date = str + "\n\n\n\n\n\n";
+
+
+                try {
+                    byte[] qrcode = PrinterCommand.getBarCommand("Zijiang Electronic Thermal Receipt Printer!", 0, 3, 6);//
+                    Command.ESC_Align[2] = 0x01;
+                    SendDataByte(Command.ESC_Align);
+                    SendDataByte(qrcode);
+
+                    SendDataByte(Command.ESC_Align);
+                    Command.GS_ExclamationMark[2] = 0x11;
+                    SendDataByte(Command.GS_ExclamationMark);
+                    SendDataByte("NIKE Shop\n".getBytes("GBK"));
+                    Command.ESC_Align[2] = 0x00;
+                    SendDataByte(Command.ESC_Align);
+                    Command.GS_ExclamationMark[2] = 0x00;
+                    SendDataByte(Command.GS_ExclamationMark);
+                    SendDataByte("Number:  888888\nReceipt  S00003333\nCashier：1001\nDate：xxxx-xx-xx\nPrint Time：xxxx-xx-xx  xx:xx:xx\n".getBytes("GBK"));
+                    SendDataByte("Name    Quantity    price  Money\nShoes   10.00       899     8990\nBall    10.00       1599    15990\n".getBytes("GBK"));
+                    SendDataByte("Quantity：             20.00\ntotal：                16889.00\npayment：              17000.00\nKeep the change：      111.00\n".getBytes("GBK"));
+                    SendDataByte("company name：NIKE\nSite：www.xxx.xxx\naddress：ShenzhenxxAreaxxnumber\nphone number：0755-11111111\nHelpline：400-xxx-xxxx\n================================\n".getBytes("GBK"));
+                    Command.ESC_Align[2] = 0x01;
+                    SendDataByte(Command.ESC_Align);
+                    Command.GS_ExclamationMark[2] = 0x11;
+                    SendDataByte(Command.GS_ExclamationMark);
+                    SendDataByte("Welcome again!\n".getBytes("GBK"));
+                    Command.ESC_Align[2] = 0x00;
+                    SendDataByte(Command.ESC_Align);
+                    Command.GS_ExclamationMark[2] = 0x00;
+                    SendDataByte(Command.GS_ExclamationMark);
+
+                    SendDataByte("(The above information is for testing template, if agree, is purely coincidental!)\n".getBytes("GBK"));
+                    Command.ESC_Align[2] = 0x02;
+                    SendDataByte(Command.ESC_Align);
+                    SendDataString(date);
+                    SendDataByte(PrinterCommand.POS_Set_PrtAndFeedPaper(48));
+                    SendDataByte(Command.GS_V_m_n);
+                } catch (UnsupportedEncodingException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+
+    }
+
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+
+            // When discovery finds a device
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                // Get the BluetoothDevice object from the Intent
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                // If it's already paired, skip it, because it's been listed already
+                if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
+                    mNewDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
+                }
+                // When discovery is finished, change the Activity title
+            } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+                setProgressBarIndeterminateVisibility(false);
+                setTitle("R.string.select_device");
+                if (mNewDevicesArrayAdapter.getCount() == 0) {
+                    String noDevices = "getResources().getText(R.string.none_found).toString()";
+                    mNewDevicesArrayAdapter.add(noDevices);
+                }
+            }
+        }
+    };
+
+    public String getLocalBluetoothName(){
+        if(mBluetoothAdapter == null){
+            mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        }
+        String name = mBluetoothAdapter.getName();
+        if(name == null){
+            System.out.println("Name is null!");
+            name = mBluetoothAdapter.getAddress();
+        }
+        return name;
     }
 
     private String getToken(){
