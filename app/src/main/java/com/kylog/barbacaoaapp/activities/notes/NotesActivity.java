@@ -34,6 +34,7 @@ import com.kylog.barbacaoaapp.models.Product;
 import com.kylog.barbacaoaapp.models.ProductType;
 import com.kylog.barbacaoaapp.models.Waiter;
 import com.kylog.barbacaoaapp.models.forms.AddAmount;
+import com.kylog.barbacaoaapp.models.forms.DeleteProduct;
 import com.kylog.barbacaoaapp.models.forms.FormActive;
 
 import java.util.ArrayList;
@@ -127,16 +128,31 @@ public class NotesActivity extends AppCompatActivity {
                 Toast.makeText(NotesActivity.this, activeMesa.getName(), Toast.LENGTH_LONG).show();
                 get_mesa_consume(activeMesa.getId());
             }
+        }, new ActiveAdapter.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClicked(ActiveMesa activeMesa, int position) {
+                showDialogDeleteMesa(activeMesa.getId(),activeMesa.getName());
+                return false;
+            }
         });
         activeslist.setAdapter(activeAdapter);
 
         /* lista de consumos del cliente */
-        consumeAdapter = new ConsumeAdapter( new ArrayList<Consume>(), R.layout.consumes_list, new ConsumeAdapter.itemClickListener() {
-            @Override
-            public void onItemClick(Consume consume, int position) {
-                showDialogProduct(consume.getId(),consume.getName());
-            }
-        });
+        consumeAdapter = new ConsumeAdapter(new ArrayList<Consume>(), R.layout.consumes_list,
+                new ConsumeAdapter.itemClickListener() {
+                    @Override
+                    public void onItemClick(Consume consume, int position) {
+                        showDialogProduct(consume.getId(), consume.getName());
+                    }
+                },
+                new ConsumeAdapter.OnItemLongClickListener() {
+                    @Override
+                    public boolean onItemLongClicked(Consume consume, int position) {
+                        showDialogDeleteProduct(consume.getId(),consume.getName());
+                        return false;
+                    }
+                }
+        );
         note_product_list.setAdapter(consumeAdapter);
 
         productsAdapter = new ProductsAdapter(new ArrayList<Product>(), R.layout.grid_item_produts_layout, new ProductsAdapter.itemClickListener() {
@@ -145,6 +161,9 @@ public class NotesActivity extends AppCompatActivity {
                 if(note != null)
                 {
                     showDialogProduct(product.getId(),product.getName());
+                }
+                else {
+                    Toast.makeText(NotesActivity.this, "Seleccione una mesa primero", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -218,6 +237,92 @@ public class NotesActivity extends AppCompatActivity {
         });
     }
 
+    private void showDialogDeleteMesa(Integer id, String name) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(NotesActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.delete_active_mesa_dialog, null);
+        builder.setView(view).setTitle(name);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+        TextView mesa_name = view.findViewById(R.id.delete_active_mesa_name);
+        Button cancel = view.findViewById(R.id.cancel_button_delete_product);
+        Button save = view.findViewById(R.id.save_button_delete_product);
+
+        mesa_name.setText("Borrar: "+name);
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppCustomService service = RetrofitClient.getClient();
+                Call<ResponseBody> responseBodyCall = service.delete_active(getTokenType()+" "+getToken(), id);
+                responseBodyCall.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if(response.isSuccessful())
+                        {
+                            get_active();
+                            dialog.dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Toast.makeText(NotesActivity.this, "Ocurrio un error",Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+    }
+
+    private void showDialogDeleteProduct(Integer id, String name) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(NotesActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.delete_active_mesa_dialog, null);
+        builder.setView(view);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+        TextView mesa_name = view.findViewById(R.id.delete_active_mesa_name);
+        Button cancel = view.findViewById(R.id.cancel_button_delete_product);
+        Button save = view.findViewById(R.id.save_button_delete_product);
+
+        mesa_name.setText("Borrar: "+name);
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppCustomService service = RetrofitClient.getClient();
+                Call<ResponseBody> responseBodyCall = service.delete_product_mesa(getTokenType()+" "+getToken(), note.getId(), new DeleteProduct(id));
+                responseBodyCall.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if(response.isSuccessful())
+                        {
+                            get_mesa_consume(note.getId());
+                            dialog.dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Toast.makeText(NotesActivity.this, "Ocurrio un error",Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+    }
+
     private void showDialogProduct(Integer id, String name){
         AlertDialog.Builder builder = new AlertDialog.Builder(NotesActivity.this);
         LayoutInflater inflater = getLayoutInflater();
@@ -260,8 +365,6 @@ public class NotesActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-
-
     }
 
     private void showAddActive(){
@@ -297,8 +400,9 @@ public class NotesActivity extends AppCompatActivity {
             public void onResponse(Call<DataAvailable> call, Response<DataAvailable> response) {
                 if(response.isSuccessful()) {
                     dataAvailable = response.body();
-                    if(dataAvailable.getMesas() == null || dataAvailable.getWaiters() == null)
+                    if(dataAvailable.getMesas().isEmpty() || dataAvailable.getWaiters().isEmpty() )
                     {
+                        Toast.makeText(NotesActivity.this, "No hay mesas disponibles", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                     }
                     else{

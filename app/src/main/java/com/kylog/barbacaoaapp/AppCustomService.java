@@ -9,6 +9,7 @@ import com.kylog.barbacaoaapp.models.Note;
 import com.kylog.barbacaoaapp.models.Product;
 import com.kylog.barbacaoaapp.models.ProductType;
 import com.kylog.barbacaoaapp.models.forms.AddAmount;
+import com.kylog.barbacaoaapp.models.forms.DeleteProduct;
 import com.kylog.barbacaoaapp.models.forms.FormActive;
 import com.kylog.barbacaoaapp.models.forms.LoginForm;
 import com.kylog.barbacaoaapp.models.User;
@@ -182,6 +183,13 @@ public interface AppCustomService {
     })
     Call<ResponseBody> add_active(@Header("Authorization") String authorization, @Body FormActive formActive);
 
+    @DELETE("api/auth/delete/active/{id}")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<ResponseBody> delete_active(@Header("Authorization") String authorization, @Path("id") Integer id);
+
     @GET("api/auth/products/type/{type}")
     @Headers({
             "Content-Type: application/json",
@@ -202,5 +210,12 @@ public interface AppCustomService {
             "X-Requested-With: XMLHttpRequest"
     })
     Call<ResponseBody> add_product_mesa(@Header("Authorization") String authorization, @Path("id") Integer id,@Body AddAmount addAmount);
+
+    @PUT("api/auth/mesa/delete_product/{id}")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<ResponseBody> delete_product_mesa(@Header("Authorization") String authorization, @Path("id") Integer id,@Body DeleteProduct deleteProduct);
 
 }
