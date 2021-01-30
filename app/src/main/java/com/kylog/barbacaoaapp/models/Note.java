@@ -86,4 +86,24 @@ public class Note {
     public void setTotal(Double total) {
         this.total = total;
     }
+
+    public String toString() {
+        String note_string;
+        note_string = "Mesa: "+name+"\n";
+        note_string = note_string+"Mesero: "+waiter+"\n================================\n";
+        note_string = note_string+"CANT PLATILLO        P/U  IMP"+"\n================================\n";
+
+        for (Consume consume: this.consumes) {
+            String con_name;
+            if(consume.getName().length() > 13)
+                con_name = consume.getName().substring(0, 14);
+            else {
+                con_name = consume.getName();
+            }
+            note_string = note_string+consume.getAmount().toString()+"  "+con_name+"  "+ consume.getPrice().toString()+"  "+consume.getAmountPrice().toString();
+        }
+        note_string = note_string+"\n================================\n"+"Total: "+this.total+"\n================================\n";
+
+        return note_string;
+    }
 }

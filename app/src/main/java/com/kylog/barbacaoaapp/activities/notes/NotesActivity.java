@@ -207,9 +207,22 @@ public class NotesActivity extends AppCompatActivity {
                     startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
                 }
                 else {
-                    SendDataByte(Command.ESC_Init);
-                    SendDataByte(Command.LF);
-                    Print_Ex();
+                    if(note != null)
+                    {
+                        if(note.getConsumes().isEmpty())
+                        {
+                            Toast.makeText(NotesActivity.this,"No ha consumido nada",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        else {
+                            SendDataByte(Command.ESC_Init);
+                            SendDataByte(Command.LF);
+                            Print_Ex();
+                        }
+                    }
+                    else {
+                        Toast.makeText(NotesActivity.this, "No ha seleccionado una mesa",Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -663,44 +676,29 @@ public class NotesActivity extends AppCompatActivity {
      */
     @SuppressLint("SimpleDateFormat")
     private void Print_Ex(){
-        SimpleDateFormat formatter = new SimpleDateFormat ("yyyy/MM/dd HH:mm:ss ");
-        Date curDate = new Date(System.currentTimeMillis());
-        String str = formatter.format(curDate);
-        String date = str + "\n\n\n\n\n\n";
-        try {
 
-            SendDataByte(Command.ESC_Align);
-            Command.GS_ExclamationMark[2] = 0x11;
-            SendDataByte(Command.GS_ExclamationMark);
-            SendDataByte("D'TOÑO\n".getBytes("GBK"));
-            Command.ESC_Align[2] = 0x00;
-            SendDataByte(Command.ESC_Align);
-            Command.GS_ExclamationMark[2] = 0x00;
-            SendDataByte(Command.GS_ExclamationMark);
-            SendDataByte("Receipt  S00003333\nCashier：1001\nDate：xxxx-xx-xx\nPrint Time：xxxx-xx-xx  xx:xx:xx\n".getBytes("GBK"));
-            SendDataByte("Name    Quantity    price  Money\nShoes   10.00       899     8990\nBall    10.00       1599    15990\n".getBytes("GBK"));
-            SendDataByte("Quantity：             20.00\ntotal：                16889.00\npayment：              17000.00\nKeep the change：      111.00\n".getBytes("GBK"));
-            SendDataByte("company name：NIKE\nSite：www.xxx.xxx\naddress：ShenzhenxxAreaxxnumber\nphone number：0755-11111111\nHelpline：400-xxx-xxxx\n================================\n".getBytes("GBK"));
-            Command.ESC_Align[2] = 0x01;
-            SendDataByte(Command.ESC_Align);
-            Command.GS_ExclamationMark[2] = 0x11;
-            SendDataByte(Command.GS_ExclamationMark);
-            SendDataByte("Welcome again!\n".getBytes("GBK"));
-            Command.ESC_Align[2] = 0x00;
-            SendDataByte(Command.ESC_Align);
-            Command.GS_ExclamationMark[2] = 0x00;
-            SendDataByte(Command.GS_ExclamationMark);
-
-            SendDataByte("(The above information is for testing template, if agree, is purely coincidental!)\n".getBytes("GBK"));
-            Command.ESC_Align[2] = 0x02;
-            SendDataByte(Command.ESC_Align);
-            SendDataString(date);
-            SendDataByte(PrinterCommand.POS_Set_PrtAndFeedPaper(48));
-            SendDataByte(Command.GS_V_m_n);
-        } catch (UnsupportedEncodingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+            SimpleDateFormat formatter = new SimpleDateFormat ("yyyy/MM/dd HH:mm:ss ");
+            Date curDate = new Date(System.currentTimeMillis());
+            String str = formatter.format(curDate);
+            String date = str + "\n";
+            try {
+                Command.ESC_Align[2] = 0x01;
+                SendDataByte(Command.ESC_Align);
+                SendDataByte("Ticket de venta\n".getBytes("GBK"));
+                SendDataString(date);
+                Command.ESC_Align[2] = 0x00;
+                SendDataByte(Command.ESC_Align);
+                Command.GS_ExclamationMark[2] = 0x00;
+                SendDataByte(Command.GS_ExclamationMark);
+                SendDataByte(PrinterCommand.POS_Print_Text(note.toString(), "GBK", 0, 0, 0, 0));
+                SendDataByte(Command.LF);
+                SendDataByte("Este documento no tiene validez fiscal\n\n\n\n\n".getBytes("GBK"));
+                SendDataByte(PrinterCommand.POS_Set_PrtAndFeedPaper(48));
+                SendDataByte(Command.GS_V_m_n);
+            } catch (UnsupportedEncodingException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
     }
 
     private void KeyListenerInit() {
