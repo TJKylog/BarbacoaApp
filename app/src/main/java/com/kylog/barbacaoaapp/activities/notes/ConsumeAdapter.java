@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kylog.barbacaoaapp.R;
+import com.kylog.barbacaoaapp.models.ActiveMesa;
 import com.kylog.barbacaoaapp.models.Consume;
 
 import java.util.List;
@@ -17,11 +18,13 @@ public class ConsumeAdapter extends RecyclerView.Adapter<ConsumeAdapter.ViewHold
     private List<Consume> consumes;
     private int layout;
     private itemClickListener listener;
+    private OnItemLongClickListener listener1;
 
-    public ConsumeAdapter(List<Consume> consumes, int layout, itemClickListener listener){
+    public ConsumeAdapter(List<Consume> consumes, int layout, itemClickListener listener, OnItemLongClickListener listener1){
         this.consumes = consumes;
         this.layout = layout;
         this.listener = listener;
+        this.listener1 = listener1;
     }
 
     @NonNull
@@ -34,7 +37,7 @@ public class ConsumeAdapter extends RecyclerView.Adapter<ConsumeAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(consumes.get(position),listener);
+        holder.bind(consumes.get(position),listener,listener1);
     }
 
     @Override
@@ -57,11 +60,11 @@ public class ConsumeAdapter extends RecyclerView.Adapter<ConsumeAdapter.ViewHold
             this.amount_price = v.findViewById(R.id.product_amount_price_consume_item);
         }
 
-        public void bind(final Consume consume,final itemClickListener listener) {
+        public void bind(final Consume consume,final itemClickListener listener, final OnItemLongClickListener listener1) {
             this.product_amount.setText(consume.getAmount().toString());
             this.product_name.setText(consume.getName());
-            this.product_price.setText(consume.getPrice().toString()+"$");
-            this.amount_price.setText(consume.getAmountPrice().toString()+"$");
+            this.product_price.setText(consume.getPrice().toString()+" $");
+            this.amount_price.setText(consume.getAmountPrice().toString()+" $");
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -69,10 +72,27 @@ public class ConsumeAdapter extends RecyclerView.Adapter<ConsumeAdapter.ViewHold
                     listener.onItemClick(consume,getAdapterPosition());
                 }
             });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    listener1.onItemLongClicked(consume,getAdapterPosition());
+                    return false;
+                }
+            });
         }
     }
 
     public interface itemClickListener{
         void onItemClick(Consume consume, int position);
+    }
+
+    public interface OnItemLongClickListener {
+        boolean onItemLongClicked(Consume consume, int position);
+    }
+
+    public void updateList(List<Consume> consumes) {
+        this.consumes.clear();
+        this.consumes.addAll(consumes);
+        this.notifyDataSetChanged();
     }
 }

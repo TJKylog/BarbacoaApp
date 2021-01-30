@@ -19,7 +19,7 @@ public class Consume {
     private Double price;
     @SerializedName("amount")
     @Expose
-    private Integer amount;
+    private Double amount;
     @SerializedName("amount_price")
     @Expose
     private Double amountPrice;
@@ -40,7 +40,7 @@ public class Consume {
      * @param id
      * @param amountPrice
      */
-    public Consume(Integer id, String name, String measure, Double price, Integer amount, Double amountPrice) {
+    public Consume(Integer id, String name, String measure, Double price, Double amount, Double amountPrice) {
         super();
         this.id = id;
         this.name = name;
@@ -82,11 +82,11 @@ public class Consume {
         this.price = price;
     }
 
-    public Integer getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(Integer amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 

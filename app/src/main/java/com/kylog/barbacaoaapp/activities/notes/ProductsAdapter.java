@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.models.ActiveMesa;
+import com.kylog.barbacaoaapp.models.Consume;
 import com.kylog.barbacaoaapp.models.Product;
 
 import java.util.List;
@@ -76,5 +77,11 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 
     public interface itemClickListener{
         void onItemClick(Product product, int position);
+    }
+
+    public void updateList(List<Product> products) {
+        this.productList.clear();
+        this.productList.addAll(products);
+        this.notifyDataSetChanged();
     }
 }

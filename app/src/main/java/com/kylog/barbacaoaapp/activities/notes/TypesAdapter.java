@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kylog.barbacaoaapp.R;
+import com.kylog.barbacaoaapp.models.Product;
 import com.kylog.barbacaoaapp.models.ProductType;
 
 import java.util.List;
@@ -65,5 +66,11 @@ public class TypesAdapter extends RecyclerView.Adapter<TypesAdapter.ViewHolder> 
 
     public interface onItemClickListener {
         void onItemClick(ProductType productType, int position);
+    }
+
+    public void updateList(List<ProductType> productTypes) {
+        this.productTypes.clear();
+        this.productTypes.addAll(productTypes);
+        this.notifyDataSetChanged();
     }
 }

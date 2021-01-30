@@ -21,7 +21,7 @@ public class Note {
     private List<Consume> consumes = new ArrayList<Consume>();
     @SerializedName("total")
     @Expose
-    private Integer total;
+    private Double total;
 
     /**
      * No args constructor for use in serialization
@@ -38,7 +38,7 @@ public class Note {
      * @param waiter
      * @param consumes
      */
-    public Note(Integer id, String name, Waiter waiter, List<Consume> consumes, Integer total) {
+    public Note(Integer id, String name, Waiter waiter, List<Consume> consumes, Double total) {
         super();
         this.id = id;
         this.name = name;
@@ -79,11 +79,31 @@ public class Note {
         this.consumes = consumes;
     }
 
-    public Integer getTotal() {
+    public Double getTotal() {
         return total;
     }
 
-    public void setTotal(Integer total) {
+    public void setTotal(Double total) {
         this.total = total;
+    }
+
+    public String toString() {
+        String note_string;
+        note_string = "Mesa: "+name+"\n";
+        note_string = note_string+"Mesero: "+waiter+"\n================================\n";
+        note_string = note_string+"CANT PLATILLO        P/U  IMP"+"\n================================\n";
+
+        for (Consume consume: this.consumes) {
+            String con_name;
+            if(consume.getName().length() > 13)
+                con_name = consume.getName().substring(0, 14);
+            else {
+                con_name = consume.getName();
+            }
+            note_string = note_string+consume.getAmount().toString()+"  "+con_name+"  "+ consume.getPrice().toString()+"  "+consume.getAmountPrice().toString();
+        }
+        note_string = note_string+"\n================================\n"+"Total: "+this.total+"\n================================\n";
+
+        return note_string;
     }
 }
