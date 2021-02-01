@@ -33,12 +33,7 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface AppCustomService {
-    @POST("api/auth/login")
-    @Headers({
-            "Content-Type: application/json",
-            "X-Requested-With: XMLHttpRequest"
-    })
-    Call<Auth> login(@Body LoginForm loginForm);
+
 
     @GET("api/auth/user")
     @Headers({
