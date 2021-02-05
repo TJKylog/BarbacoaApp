@@ -15,19 +15,49 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BarcaoaApp.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.notes.DeviceListActivity"></activity>
-        <activity android:name=".activities.mesas.MesasEdit" />
-        <activity android:name=".activities.notes.NotesActivity" />
-        <activity android:name=".activities.users.UsersEdit" />
-        <activity android:name=".activities.users.UsersCreate" />
-        <activity android:name=".activities.users.UsersActivity" />
-        <activity android:name=".activities.products.ProductsEdit" />
-        <activity android:name=".activities.mesas.MesasCreate" />
-        <activity android:name=".activities.mesas.MesasActivity" />
-        <activity android:name=".activities.products.ProductsCreate" />
-        <activity android:name=".activities.products.ProductsActivity" />
-        <activity android:name=".MainMenu" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".activities.reset.password.PasswordActivity"></activity>
+        <activity android:name=".activities.reset.password.CodeActivity" />
+        <activity android:name=".activities.reset.password.EmailActivity" />
+        <activity android:name=".activities.reset.password.ResetPasswordActivity" />
+        <activity
+            android:name=".activities.notes.DeviceListActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".activities.mesas.MesasEdit"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".activities.notes.NotesActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".activities.users.UsersEdit"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".activities.users.UsersCreate"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".activities.users.UsersActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".activities.products.ProductsEdit"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".activities.mesas.MesasCreate"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".activities.mesas.MesasActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".activities.products.ProductsCreate"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".activities.products.ProductsActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".MainMenu"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
