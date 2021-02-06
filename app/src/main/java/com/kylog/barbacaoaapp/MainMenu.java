@@ -1,11 +1,14 @@
 package com.kylog.barbacaoaapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -17,6 +20,7 @@ import com.kylog.barbacaoaapp.activities.products.ProductsActivity;
 import com.kylog.barbacaoaapp.activities.users.UsersActivity;
 import com.kylog.barbacaoaapp.models.User;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,6 +44,9 @@ public class MainMenu extends AppCompatActivity {
         mesas_button = findViewById(R.id.mesas_button);
         users_button = findViewById(R.id.users_button);
         notes_button = findViewById(R.id.consumos_button);
+
+        Toolbar toolbar = findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
 
         products_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,6 +78,42 @@ public class MainMenu extends AppCompatActivity {
         pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
 
         getUser();
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.user_menu_actions,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.log_out: {
+                AppCustomService service = RetrofitClient.getClient();
+                Call<ResponseBody> responseBodyCall = service.logout(getTokenType()+" "+getToken());
+                responseBodyCall.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if(response.isSuccessful()) {
+                            pref.edit().clear().apply();
+                            Intent intent = new Intent(MainMenu.this , MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Toast.makeText(MainMenu.this, "Error", Toast.LENGTH_LONG).show();
+                    }
+                });
+                Toast.makeText(MainMenu.this, "Cerrando sessión" , Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 
     private void getUser(){
