@@ -48,8 +48,9 @@ public class EmailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if(response.isSuccessful()) {
-                    Toast.makeText(EmailActivity.this, "Se envio el correo con el código de recupreación",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EmailActivity.this, "Se envio el correo con el código de recuperación",Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(EmailActivity.this, CodeActivity.class);
+                    intent.putExtra("email", editEmail.getText().toString());
                     startActivity(intent);
                 } else {
                     Toast.makeText(EmailActivity.this, "No se encontro el correo electornico",Toast.LENGTH_SHORT).show();
