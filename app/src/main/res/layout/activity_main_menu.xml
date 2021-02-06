@@ -1,89 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainMenu"
-    >
+    android:padding="41dp"
+    tools:context=".MainMenu">
 
+    <Button
+        android:id="@+id/productos_button"
+        android:layout_width="184dp"
+        android:layout_height="137dp"
+        android:text="Productos"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.074"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <include android:id="@+id/main_toolbar"
-            layout="@layout/toolbar"/>
+    <TextView
+        android:id="@+id/token_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.066" />
 
-        <TextView
-            android:id="@+id/token_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:layout_marginTop="10dp"
-            android:textAlignment="center"/>
+    <Button
+        android:id="@+id/consumos_button"
+        android:layout_width="184dp"
+        android:layout_height="137dp"
+        android:text="Consumos"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.073"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.226" />
 
-        <Button
-            android:id="@+id/consumos_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Consumos"
-            android:layout_marginTop="30dp"
-            android:layout_marginLeft="41dp"
-            android:layout_marginRight="41dp"/>
+    <Button
+        android:id="@+id/egresos_button"
+        android:layout_width="184dp"
+        android:layout_height="137dp"
+        android:text="Egresos"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.526"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.226" />
 
-        <Button
-            android:id="@+id/productos_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Productos"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="41dp"
-            android:layout_marginRight="41dp"/>
+    <Button
+        android:id="@+id/envetos_button"
+        android:layout_width="184dp"
+        android:layout_height="137dp"
+        android:text="Eventos"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.97"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.226" />
 
+    <Button
+        android:id="@+id/mesas_button"
+        android:layout_width="184dp"
+        android:layout_height="137dp"
+        android:text="Mesas"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.531"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
+    <Button
+        android:id="@+id/users_button"
+        android:layout_width="184dp"
+        android:layout_height="137dp"
+        android:text="Usuarios"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.97"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
-
-
-        <Button
-            android:id="@+id/egresos_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Egresos"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="41dp"
-            android:layout_marginRight="41dp"/>
-
-        <Button
-            android:id="@+id/envetos_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Eventos"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="41dp"
-            android:layout_marginRight="41dp"/>
-
-        <Button
-            android:id="@+id/mesas_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Mesas"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="41dp"
-            android:layout_marginRight="41dp"/>
-
-        <Button
-            android:id="@+id/users_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Usuarios"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="41dp"
-            android:layout_marginRight="41dp"/>
-
-
-
-    </LinearLayout>
-
-
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
