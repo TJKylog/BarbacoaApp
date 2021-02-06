@@ -9,13 +9,16 @@ import com.kylog.barbacaoaapp.models.Note;
 import com.kylog.barbacaoaapp.models.Product;
 import com.kylog.barbacaoaapp.models.ProductType;
 import com.kylog.barbacaoaapp.models.forms.AddAmount;
+import com.kylog.barbacaoaapp.models.forms.CodeForm;
 import com.kylog.barbacaoaapp.models.forms.DeleteProduct;
 import com.kylog.barbacaoaapp.models.forms.FormActive;
 import com.kylog.barbacaoaapp.models.forms.LoginForm;
 import com.kylog.barbacaoaapp.models.User;
 import com.kylog.barbacaoaapp.models.forms.NewMesaForm;
+import com.kylog.barbacaoaapp.models.forms.NewPasswordForm;
 import com.kylog.barbacaoaapp.models.forms.NewProductForm;
 import com.kylog.barbacaoaapp.models.forms.ProductsFrom;
+import com.kylog.barbacaoaapp.models.forms.SendEmailForm;
 import com.kylog.barbacaoaapp.models.forms.UserForm;
 
 import java.util.List;
@@ -40,12 +43,40 @@ public interface AppCustomService {
     })
     Call<Auth> login(@Body LoginForm loginForm);
 
+    @POST("api/auth/send/reset/password")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<ResponseBody> reset_password(@Body SendEmailForm sendEmailForm);
+
+    @POST("api/auth/reset/password")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<ResponseBody> send_code(@Body CodeForm codeForm);
+
+    @POST("api/auth/change/password")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<ResponseBody> send_new_password(@Body NewPasswordForm newPasswordForm);
+
     @GET("api/auth/user")
     @Headers({
             "Content-Type: application/json",
             "X-Requested-With: XMLHttpRequest"
     })
     Call<User> user(@Header("Authorization") String authorization);
+
+    @GET("api/auth/logout")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<ResponseBody> logout(@Header("Authorization") String authorization);
 
     @GET("api/auth/products")
     @Headers({

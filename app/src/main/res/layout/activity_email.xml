@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.reset.password.EmailActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:layout_margin="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:textColor="@color/primaryColor"
+            android:textStyle="bold"
+            android:text="Restablecer contraseña"
+            android:textAlignment="center"
+            />
+        <EditText
+            android:id="@+id/reset_password_email_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="correo"
+            android:layout_margin="30dp"/>
+        <Button
+            android:id="@+id/send_email_reset_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enviar código"
+            android:layout_margin="30dp"
+            />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,11 +9,13 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.kylog.barbacaoaapp.activities.reset.password.EmailActivity;
 import com.kylog.barbacaoaapp.models.Auth;
 import com.kylog.barbacaoaapp.models.forms.LoginForm;
 
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText passwordEdit;
     private Boolean remember_me = true;
     private Button login_button;
+    private TextView reset_password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +41,18 @@ public class MainActivity extends AppCompatActivity {
         emailEdit = findViewById(R.id.user_email);
         passwordEdit = findViewById(R.id.user_password);
         login_button = findViewById(R.id.login_button);
+        reset_password = findViewById(R.id.password_recovery_view);
         pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
 
         setCredentialsIfExist();
+
+        reset_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, EmailActivity.class);
+                startActivity(intent);
+            }
+        });
 
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
