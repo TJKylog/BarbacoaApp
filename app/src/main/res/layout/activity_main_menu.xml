@@ -7,6 +7,9 @@
     android:padding="41dp"
     tools:context=".MainMenu">
 
+    <include android:id="@+id/main_toolbar"
+        layout="@layout/toolbar"/>
+
     <Button
         android:id="@+id/productos_button"
         android:layout_width="184dp"
