@@ -99,8 +99,9 @@ public class NotesActivity extends AppCompatActivity {
     private TextView note_mesa_name;
     private TextView note_waiter_name;
     private BluetoothService mService;
-    private Button print_ticket;
+    private Button print_ticket, done_tikcet;
     private String mConnectedDeviceName = null;
+    private Double payment,change;
     BluetoothAdapter mBluetoothAdapter;
 
     @Override
@@ -118,6 +119,7 @@ public class NotesActivity extends AppCompatActivity {
         note_mesa_name = findViewById(R.id.note_mesa_name);
         note_waiter_name = findViewById(R.id.note_waiter_name);
         print_ticket = findViewById(R.id.print_note);
+        done_tikcet = findViewById(R.id.print_done_note);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -227,6 +229,35 @@ public class NotesActivity extends AppCompatActivity {
             }
         });
 
+        done_tikcet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mConnectedDeviceName == null) {
+                    Intent serverIntent = new Intent(NotesActivity.this, DeviceListActivity.class);
+                    startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
+                }
+                else {
+                    if(note != null)
+                    {
+                        if(note.getConsumes().isEmpty())
+                        {
+                            Toast.makeText(NotesActivity.this,"No ha consumido nada",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        else {
+
+                            SendDataByte(Command.ESC_Init);
+                            SendDataByte(Command.LF);
+                            Print_Ex2();
+                        }
+                    }
+                    else {
+                        Toast.makeText(NotesActivity.this, "No ha seleccionado una mesa",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         // If the adapter is null, then Bluetooth is not supported
@@ -303,6 +334,8 @@ public class NotesActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
     private void showDialogDeleteMesa(Integer id, String name) {
         AlertDialog.Builder builder = new AlertDialog.Builder(NotesActivity.this);
@@ -699,6 +732,38 @@ public class NotesActivity extends AppCompatActivity {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private void Print_Ex2(){
+
+        SimpleDateFormat formatter = new SimpleDateFormat ("yyyy/MM/dd HH:mm:ss ");
+        Date curDate = new Date(System.currentTimeMillis());
+        String str = formatter.format(curDate);
+        String date = str + "\n";
+        String pago = "Pago: "+String.valueOf(payment)+"\n";
+        String cambio = "Cambio: "+String.valueOf(change)+"\n";
+
+        try {
+            Command.ESC_Align[2] = 0x01;
+            SendDataByte(Command.ESC_Align);
+            SendDataByte("Ticket de venta\n".getBytes("GBK"));
+            SendDataString(date);
+            Command.ESC_Align[2] = 0x00;
+            SendDataByte(Command.ESC_Align);
+            Command.GS_ExclamationMark[2] = 0x00;
+            SendDataByte(Command.GS_ExclamationMark);
+            SendDataByte(PrinterCommand.POS_Print_Text(note.toString(), "GBK", 0, 0, 0, 0));
+            SendDataByte(pago.getBytes("GBK"));
+            SendDataByte(cambio.getBytes("GBK"));
+            SendDataByte(Command.LF);
+            SendDataByte("Este documento no tiene validez fiscal\n\n\n\n\n".getBytes("GBK"));
+            SendDataByte(PrinterCommand.POS_Set_PrtAndFeedPaper(48));
+            SendDataByte(Command.GS_V_m_n);
+        } catch (UnsupportedEncodingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     private void KeyListenerInit() {
