@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.kylog.barbacaoaapp.AppCustomService;
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
+import com.kylog.barbacaoaapp.activities.notes.NotesActivity;
 import com.kylog.barbacaoaapp.models.Mesa;
 import com.kylog.barbacaoaapp.models.forms.NewMesaForm;
 
@@ -55,6 +56,7 @@ public class MesasCreate extends AppCompatActivity {
                 if(response.isSuccessful())
                 {
                     Mesa mesa = response.body();
+                    Toast.makeText(MesasCreate.this, "Se guardó correctamente", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(MesasCreate.this , MesasActivity.class);
                     startActivity(intent);
                 }

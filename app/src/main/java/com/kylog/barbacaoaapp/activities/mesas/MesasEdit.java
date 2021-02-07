@@ -76,7 +76,7 @@ public class MesasEdit extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+                Toast.makeText(MesasEdit.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -96,7 +96,7 @@ public class MesasEdit extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Mesa> call, Throwable t) {
-
+                Toast.makeText(MesasEdit.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
             }
         });
     }

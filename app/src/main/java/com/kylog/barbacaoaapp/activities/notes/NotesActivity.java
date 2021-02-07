@@ -461,7 +461,7 @@ public class NotesActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
-
+                Toast.makeText(NotesActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -484,7 +484,7 @@ public class NotesActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<ProductType>> call, Throwable t) {
-
+                Toast.makeText(NotesActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -504,7 +504,7 @@ public class NotesActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<ActiveMesa>> call, Throwable t) {
-
+                Toast.makeText(NotesActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -534,6 +534,7 @@ public class NotesActivity extends AppCompatActivity {
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if(response.isSuccessful())
                         {
+                            Toast.makeText(NotesActivity.this, "Se eliminó correctamente el consumo de la mesa ", Toast.LENGTH_LONG).show();
                             get_active();
                             dialog.dismiss();
                         }
@@ -541,7 +542,7 @@ public class NotesActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Toast.makeText(NotesActivity.this, "Ocurrio un error",Toast.LENGTH_LONG).show();
+                        Toast.makeText(NotesActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
                     }
                 });
             }
@@ -577,6 +578,7 @@ public class NotesActivity extends AppCompatActivity {
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if(response.isSuccessful())
                         {
+                            Toast.makeText(NotesActivity.this, "Se eliminó correctamente el producto", Toast.LENGTH_LONG).show();
                             get_mesa_consume(note.getId());
                             dialog.dismiss();
                         }
@@ -584,7 +586,7 @@ public class NotesActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Toast.makeText(NotesActivity.this, "Ocurrio un error",Toast.LENGTH_LONG).show();
+                        Toast.makeText(NotesActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
                     }
                 });
             }
@@ -628,7 +630,7 @@ public class NotesActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Toast.makeText(NotesActivity.this, "Ocurrio un error",Toast.LENGTH_LONG).show();
+                        Toast.makeText(NotesActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
                     }
                 });
             }
@@ -690,7 +692,7 @@ public class NotesActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<DataAvailable> call, Throwable t) {
-
+                Toast.makeText(NotesActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -712,7 +714,7 @@ public class NotesActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+                Toast.makeText(NotesActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -735,7 +737,7 @@ public class NotesActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Note> call, Throwable t) {
-
+                Toast.makeText(NotesActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
             }
         });
     }
