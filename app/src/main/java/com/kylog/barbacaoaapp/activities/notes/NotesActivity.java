@@ -99,7 +99,7 @@ public class NotesActivity extends AppCompatActivity {
     private Note note;
     private RecyclerView activeslist;
     private DataAvailable dataAvailable;
-    private Button add_active_button;
+    private ImageButton add_active_button;
     private Spinner spinnerMesas;
     private Spinner spinnerWaiters;
     private ProductsAdapter productsAdapter;

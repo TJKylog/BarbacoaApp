@@ -12,23 +12,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             >
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/active_list"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
                 />
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="?android:windowBackground"
                 android:id="@+id/add_active_button"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_baseline_add_circle_outline_24"
                 />
-        </LinearLayout>
+        </RelativeLayout>
     </FrameLayout>
 
     <FrameLayout
