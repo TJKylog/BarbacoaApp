@@ -48,6 +48,7 @@ import com.kylog.barbacaoaapp.models.ProductType;
 import com.kylog.barbacaoaapp.models.Waiter;
 import com.kylog.barbacaoaapp.models.forms.AddAmount;
 import com.kylog.barbacaoaapp.models.forms.DeleteProduct;
+import com.kylog.barbacaoaapp.models.forms.DoneTicketForm;
 import com.kylog.barbacaoaapp.models.forms.FormActive;
 
 import java.io.UnsupportedEncodingException;
@@ -232,6 +233,7 @@ public class NotesActivity extends AppCompatActivity {
         done_tikcet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //showDialogDoneTicket();
                 if(mConnectedDeviceName == null) {
                     Intent serverIntent = new Intent(NotesActivity.this, DeviceListActivity.class);
                     startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
@@ -245,10 +247,7 @@ public class NotesActivity extends AppCompatActivity {
                             return;
                         }
                         else {
-
-                            SendDataByte(Command.ESC_Init);
-                            SendDataByte(Command.LF);
-                            Print_Ex2();
+                            showDialogDoneTicket();
                         }
                     }
                     else {
@@ -270,6 +269,63 @@ public class NotesActivity extends AppCompatActivity {
         get_types();
         get_active();
 
+    }
+
+    private void showDialogDoneTicket(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(NotesActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.add_product_amount_note, null);
+        builder.setView(view).setTitle("Cantidad del pago");
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+        EditText amount = view.findViewById(R.id.add_amount_product);
+        Button cancel = view.findViewById(R.id.cancel_button_add_product);
+        Button save = view.findViewById(R.id.save_button_add_product);
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                payment = Double.parseDouble(String.valueOf(amount.getText()));
+                if(payment >= note.getTotal())
+                {
+                    change = note.getTotal() - payment;
+                    AppCustomService service = RetrofitClient.getClient();
+                    Call<ResponseBody> responseBodyCall = service.done_ticket(getTokenType()+" "+getToken(), note.getId(),
+                            new DoneTicketForm(payment,change)
+                    );
+                    responseBodyCall.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if(response.isSuccessful())
+                            {
+                                dialog.dismiss();
+                                Toast.makeText(NotesActivity.this, "La venta se guardó correctamente",Toast.LENGTH_LONG).show();
+                                SendDataByte(Command.ESC_Init);
+                                SendDataByte(Command.LF);
+                                Print_Ex2();
+                                Intent intent = getIntent();
+                                finish();
+                                startActivity(intent);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            Toast.makeText(NotesActivity.this, "Ocurrió un error al conectarse al servidor",Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+                else {
+                    Toast.makeText(NotesActivity.this, "El pago debe ser mayor o igual al total",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
     }
 
     private void get_products_by_type(String type) {
