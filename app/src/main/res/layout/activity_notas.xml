@@ -6,10 +6,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:fillViewport="true"
     tools:context=".activities.notes.NotesActivity">
-
+    <include android:id="@+id/toolbar_consumes"
+        layout="@layout/toolbar_consumes"/>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

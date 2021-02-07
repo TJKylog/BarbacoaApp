@@ -8,6 +8,7 @@ import com.kylog.barbacaoaapp.models.Mesa;
 import com.kylog.barbacaoaapp.models.Note;
 import com.kylog.barbacaoaapp.models.Product;
 import com.kylog.barbacaoaapp.models.ProductType;
+import com.kylog.barbacaoaapp.models.SalesDay;
 import com.kylog.barbacaoaapp.models.forms.AddAmount;
 import com.kylog.barbacaoaapp.models.forms.CodeForm;
 import com.kylog.barbacaoaapp.models.forms.DeleteProduct;
@@ -256,4 +257,12 @@ public interface AppCustomService {
             "X-Requested-With: XMLHttpRequest"
     })
     Call<ResponseBody> done_ticket(@Header("Authorization") String authorization, @Path("id") Integer id, @Body DoneTicketForm doneTicketForm);
+
+    @GET("api/auth/day/sales")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<SalesDay> sale_day(@Header("Authorization") String authorization);
+
 }
