@@ -6,10 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".activities.users.UsersActivity">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+        <include layout="@layout/toolbar_general"
+            android:id="@+id/main_toolbar"/>
         <TextView
             android:id="@+id/activity_name_view_users"
             android:layout_width="match_parent"

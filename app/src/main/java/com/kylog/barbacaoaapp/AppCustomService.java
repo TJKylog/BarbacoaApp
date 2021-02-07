@@ -8,9 +8,11 @@ import com.kylog.barbacaoaapp.models.Mesa;
 import com.kylog.barbacaoaapp.models.Note;
 import com.kylog.barbacaoaapp.models.Product;
 import com.kylog.barbacaoaapp.models.ProductType;
+import com.kylog.barbacaoaapp.models.SalesDay;
 import com.kylog.barbacaoaapp.models.forms.AddAmount;
 import com.kylog.barbacaoaapp.models.forms.CodeForm;
 import com.kylog.barbacaoaapp.models.forms.DeleteProduct;
+import com.kylog.barbacaoaapp.models.forms.DoneTicketForm;
 import com.kylog.barbacaoaapp.models.forms.FormActive;
 import com.kylog.barbacaoaapp.models.forms.LoginForm;
 import com.kylog.barbacaoaapp.models.User;
@@ -248,5 +250,19 @@ public interface AppCustomService {
             "X-Requested-With: XMLHttpRequest"
     })
     Call<ResponseBody> delete_product_mesa(@Header("Authorization") String authorization, @Path("id") Integer id,@Body DeleteProduct deleteProduct);
+
+    @PUT("api/auth/save/ticket/{id}")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<ResponseBody> done_ticket(@Header("Authorization") String authorization, @Path("id") Integer id, @Body DoneTicketForm doneTicketForm);
+
+    @GET("api/auth/day/sales")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<SalesDay> sale_day(@Header("Authorization") String authorization);
 
 }

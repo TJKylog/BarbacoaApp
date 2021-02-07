@@ -1,4 +1,4 @@
-package com.kylog.barbacaoaapp.activities.mesas;
+package com.kylog.barbacaoaapp.activities.expenses;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -10,8 +10,6 @@ import android.os.Bundle;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -21,40 +19,24 @@ import com.kylog.barbacaoaapp.AppCustomService;
 import com.kylog.barbacaoaapp.MainActivity;
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
-import com.kylog.barbacaoaapp.activities.expenses.ExpensesActivity;
-import com.kylog.barbacaoaapp.activities.notes.NotesActivity;
-import com.kylog.barbacaoaapp.models.Mesa;
-import com.kylog.barbacaoaapp.models.forms.NewMesaForm;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MesasCreate extends AppCompatActivity {
+public class ExpensesActivity extends AppCompatActivity {
 
     private SharedPreferences pref;
-    private EditText edit_name;
-    private Button save_mesa;
     private ImageButton userActionsButton,backButton;
     private TextView user_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mesas_create);
-
-        edit_name = findViewById(R.id.mesa_name_field);
-        save_mesa = findViewById(R.id.save_mesa_button);
-
+        setContentView(R.layout.activity_expenses);
         pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
 
-        save_mesa.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveMesa(new NewMesaForm(edit_name.getText().toString()));
-            }
-        });
         userActionsButton = findViewById(R.id.user_actions_button);
         backButton = findViewById(R.id.back_button);
         user_name = findViewById(R.id.user_name_view);
@@ -81,32 +63,7 @@ public class MesasCreate extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
-    }
 
-    private void saveMesa(NewMesaForm newMesaForm) {
-        AppCustomService service = RetrofitClient.getClient();
-        Call<Mesa> mesaCall = service.create_mesa(getTokenType()+" "+getToken(), newMesaForm);
-
-        mesaCall.enqueue(new Callback<Mesa>() {
-            @Override
-            public void onResponse(Call<Mesa> call, Response<Mesa> response) {
-                if(response.isSuccessful())
-                {
-                    Mesa mesa = response.body();
-                    Toast.makeText(MesasCreate.this, "Se guardó correctamente", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(MesasCreate.this , MesasActivity.class);
-                    startActivity(intent);
-                }
-                else{
-                    response.errorBody();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Mesa> call, Throwable t) {
-                Toast.makeText(MesasCreate.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
-            }
-        });
     }
 
     public void showPopup(View v) {
@@ -126,9 +83,9 @@ public class MesasCreate extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if(response.isSuccessful()) {
-                            Toast.makeText(MesasCreate.this, "Cerrando sessión" , Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ExpensesActivity.this, "Cerrando sessión" , Toast.LENGTH_SHORT).show();
                             pref.edit().clear().apply();
-                            Intent intent = new Intent(MesasCreate.this , MainActivity.class);
+                            Intent intent = new Intent(ExpensesActivity.this , MainActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
                         }
@@ -136,7 +93,7 @@ public class MesasCreate extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Toast.makeText(MesasCreate.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ExpensesActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
                     }
                 });
                 return true;
@@ -150,7 +107,6 @@ public class MesasCreate extends AppCompatActivity {
     private String getUseName(){
         return pref.getString("user_name", null);
     }
-
     private String getToken(){
         return pref.getString("token", null);
     }
