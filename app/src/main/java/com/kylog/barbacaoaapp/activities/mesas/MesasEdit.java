@@ -47,8 +47,6 @@ public class MesasEdit extends AppCompatActivity {
             id = bundle.getInt("id");
             get_mesa();
             Toast.makeText(MesasEdit.this, "id: "+ id, Toast.LENGTH_LONG).show();
-        } else{
-            Toast.makeText(MesasEdit.this, "xD" , Toast.LENGTH_LONG).show();
         }
 
         update_mesa.setOnClickListener(new View.OnClickListener() {

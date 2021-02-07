@@ -16,6 +16,7 @@ import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
 import com.kylog.barbacaoaapp.activities.products.ProductsActivity;
 import com.kylog.barbacaoaapp.activities.products.ProductsCreate;
+import com.kylog.barbacaoaapp.activities.products.ProductsEdit;
 import com.kylog.barbacaoaapp.models.User;
 import com.kylog.barbacaoaapp.models.forms.UserForm;
 
@@ -61,18 +62,19 @@ public class UsersCreate extends AppCompatActivity {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if(response.isSuccessful()) {
+                    Toast.makeText(UsersCreate.this, "Se guardó el usuario correctamente" , Toast.LENGTH_LONG).show();
                     User user = response.body();
                     Intent intent = new Intent(UsersCreate.this , UsersActivity.class);
                     startActivity(intent);
                 }
                 else {
-                    Toast.makeText(UsersCreate.this, "Error" , Toast.LENGTH_LONG).show();
+                    Toast.makeText(UsersCreate.this, "Ocurrio un error al guardar" , Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(UsersCreate.this, t.getMessage() , Toast.LENGTH_LONG).show();
+                Toast.makeText(UsersCreate.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
             }
         });
 

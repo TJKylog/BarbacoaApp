@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.kylog.barbacaoaapp.AppCustomService;
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
+import com.kylog.barbacaoaapp.activities.mesas.MesasEdit;
 import com.kylog.barbacaoaapp.models.Product;
 import com.kylog.barbacaoaapp.models.forms.NewProductForm;
 
@@ -54,8 +55,6 @@ public class ProductsEdit extends AppCompatActivity {
             id = bundle.getInt("id");
             getProduct();
             Toast.makeText(ProductsEdit.this, "id: "+ id, Toast.LENGTH_LONG).show();
-        } else{
-            Toast.makeText(ProductsEdit.this, "xD" , Toast.LENGTH_LONG).show();
         }
 
         updateProductButton.setOnClickListener(new View.OnClickListener() {
@@ -117,13 +116,13 @@ public class ProductsEdit extends AppCompatActivity {
                     startActivity(intent);
                 }
                 else{
-
+                    Toast.makeText(ProductsEdit.this, "Ocurrio un error al guardar" , Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<Product> call, Throwable t) {
-
+                Toast.makeText(ProductsEdit.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
             }
         });
     }

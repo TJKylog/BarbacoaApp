@@ -4,13 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="41dp"
+
     tools:context=".activities.users.UsersEdit">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <include layout="@layout/toolbar_general"
+            android:id="@+id/main_toolbar"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,6 +33,7 @@
             android:id="@+id/edit_user_name_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="20dp"
             android:hint="Nombre"
             android:ems="10"
             android:importantForAutofill="no"
@@ -40,6 +45,7 @@
             android:id="@+id/edit_user_email_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="20dp"
             android:ems="10"
             android:hint="Email"
             android:importantForAutofill="no"
@@ -50,6 +56,7 @@
             android:id="@+id/edit_user_password_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="20dp"
             android:ems="10"
             android:importantForAutofill="no"
             android:inputType="textPassword"
@@ -61,6 +68,7 @@
             android:id="@+id/edit_user_role_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="20dp"
             android:ems="10"
             android:importantForAutofill="no"
             android:inputType="text"
@@ -71,6 +79,7 @@
             android:id="@+id/update_user_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="20dp"
             android:text="Guardar"
             android:layout_marginTop="30dp" />
     </LinearLayout>

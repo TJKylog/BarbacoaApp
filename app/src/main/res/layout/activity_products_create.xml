@@ -5,13 +5,14 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="41dp"
     tools:context=".activities.products.ProductsCreate">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+        <include layout="@layout/toolbar_general"
+            android:id="@+id/main_toolbar"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -22,6 +23,7 @@
             android:textColor="@color/purple_200"
             android:textColorHighlight="@color/purple_200"
             android:textAlignment="center"
+            android:layout_margin="20dp"
             android:textSize="30sp" />
 
 
@@ -30,6 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Nombre"
+            android:layout_margin="20dp"
             android:ems="10"
             android:importantForAutofill="no"
             android:inputType="text"
@@ -39,6 +42,7 @@
             android:id="@+id/product_price_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="20dp"
             android:ems="10"
             android:hint="Precio"
             android:importantForAutofill="no"
@@ -49,6 +53,7 @@
             android:id="@+id/product_measure_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="20dp"
             android:ems="10"
             android:importantForAutofill="no"
             android:inputType="text"
@@ -59,6 +64,7 @@
             android:id="@+id/product_type_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="20dp"
             android:ems="10"
             android:importantForAutofill="no"
             android:inputType="text"
@@ -69,6 +75,7 @@
             android:id="@+id/save_product_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="20dp"
             android:text="Guardar"
             android:layout_marginTop="40dp" />
 

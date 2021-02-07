@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="41dp"
     tools:context=".activities.products.ProductsEdit">
 
     <LinearLayout
@@ -12,10 +11,14 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <include layout="@layout/toolbar_general"
+            android:id="@+id/main_toolbar"/>
+
         <TextView
             android:id="@+id/edit_product_view_id"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="20dp"
             android:fontFamily="sans-serif-medium"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textColor="@color/purple_200"
@@ -33,6 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Nombre"
+            android:layout_margin="20dp"
             android:ems="10"
             android:importantForAutofill="no"
             android:inputType="text"
@@ -46,6 +50,7 @@
             android:id="@+id/edit_product_price_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="20dp"
             android:ems="10"
             android:hint="Precio"
             android:importantForAutofill="no"
@@ -60,6 +65,7 @@
             android:id="@+id/edit_product_measure_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="20dp"
             android:ems="10"
             android:importantForAutofill="no"
             android:inputType="text"
@@ -74,6 +80,7 @@
             android:id="@+id/edit_product_type_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="20dp"
             android:ems="10"
             android:importantForAutofill="no"
             android:inputType="text"
@@ -89,6 +96,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Guardar"
+            android:layout_margin="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

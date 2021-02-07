@@ -5,15 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="20dp"
     tools:context=".activities.mesas.MesasEdit">
+
+    <include layout="@layout/toolbar_general"
+        android:id="@+id/main_toolbar"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-medium"
         android:textAlignment="center"
-        android:text="Crear mesa"
+        android:text="Editar mesa"
         android:layout_margin="20dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@color/purple_200"
