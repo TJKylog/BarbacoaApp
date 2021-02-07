@@ -33,11 +33,11 @@ import retrofit2.Response;
 public class MainMenu extends AppCompatActivity {
 
     private SharedPreferences pref;
-    private TextView tokenview,user_name;
+    private TextView user_name;
     private Button products_button;
     private Button mesas_button;
     private Button users_button;
-    private Button notes_button;
+    private ImageButton notes_button;
     private Button expenses_button;
     private ImageButton userActionsButton;
 
@@ -45,8 +45,6 @@ public class MainMenu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-
-        tokenview = findViewById(R.id.token_view);
         products_button = findViewById(R.id.productos_button);
         mesas_button = findViewById(R.id.mesas_button);
         users_button = findViewById(R.id.users_button);
@@ -159,7 +157,6 @@ public class MainMenu extends AppCompatActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
                     User user = response.body();
-                    tokenview.setText(user.getEmail());
                     user_name.setText(user.getName());
                     if(getUseName()==null && getUserEmail() == null)
                         saveOnPreferences(user.getName(),user.getEmail());
