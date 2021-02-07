@@ -429,7 +429,7 @@ public class NotesActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(Call<ResponseBody> call, Throwable t) {
-                            Toast.makeText(NotesActivity.this, "Ocurrió un error al conectarse al servidor",Toast.LENGTH_LONG).show();
+                            Toast.makeText(NotesActivity.this, "No se pudo conectar con el servidor, revise su conexión",Toast.LENGTH_LONG).show();
                         }
                     });
                 }

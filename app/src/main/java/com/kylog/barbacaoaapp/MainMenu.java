@@ -18,6 +18,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kylog.barbacaoaapp.activities.expenses.ExpensesActivity;
 import com.kylog.barbacaoaapp.activities.mesas.MesasActivity;
 import com.kylog.barbacaoaapp.activities.notes.NotesActivity;
 import com.kylog.barbacaoaapp.activities.products.ProductsActivity;
@@ -37,6 +38,7 @@ public class MainMenu extends AppCompatActivity {
     private Button mesas_button;
     private Button users_button;
     private Button notes_button;
+    private Button expenses_button;
     private ImageButton userActionsButton;
 
     @Override
@@ -51,6 +53,7 @@ public class MainMenu extends AppCompatActivity {
         notes_button = findViewById(R.id.consumos_button);
         userActionsButton = findViewById(R.id.user_actions_button);
         user_name = findViewById(R.id.user_name_view);
+        expenses_button = findViewById(R.id.egresos_button);
 
         Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
@@ -95,6 +98,13 @@ public class MainMenu extends AppCompatActivity {
             }
         });
 
+        expenses_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                show_expenses();
+            }
+        });
+
         pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
 
         getUser();
@@ -126,7 +136,7 @@ public class MainMenu extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Toast.makeText(MainMenu.this, "Error", Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainMenu.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
                     }
                 });
                 Toast.makeText(MainMenu.this, "Cerrando sessión" , Toast.LENGTH_SHORT).show();
@@ -165,7 +175,7 @@ public class MainMenu extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(MainMenu.this, "Error", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainMenu.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -175,6 +185,11 @@ public class MainMenu extends AppCompatActivity {
         editor.putString("user_name",user_name);
         editor.putString("user_email",user_email);
         editor.apply();
+    }
+
+    private void show_expenses() {
+        Intent intent = new Intent(MainMenu.this , ExpensesActivity.class);
+        startActivity(intent);
     }
 
     private void show_products()

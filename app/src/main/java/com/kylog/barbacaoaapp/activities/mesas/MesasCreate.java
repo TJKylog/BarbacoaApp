@@ -65,7 +65,7 @@ public class MesasCreate extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Mesa> call, Throwable t) {
-                Toast.makeText(MesasCreate.this, "Error", Toast.LENGTH_LONG).show();
+                Toast.makeText(MesasCreate.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
             }
         });
     }
