@@ -288,7 +288,7 @@ public class NotesActivity extends AppCompatActivity {
                 payment = Double.parseDouble(String.valueOf(amount.getText()));
                 if(payment >= note.getTotal())
                 {
-                    change = note.getTotal() - payment;
+                    change = payment - note.getTotal();
                     AppCustomService service = RetrofitClient.getClient();
                     Call<ResponseBody> responseBodyCall = service.done_ticket(getTokenType()+" "+getToken(), note.getId(),
                             new DoneTicketForm(payment,change)
