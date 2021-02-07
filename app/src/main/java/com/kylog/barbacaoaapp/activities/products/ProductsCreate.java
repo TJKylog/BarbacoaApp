@@ -61,6 +61,7 @@ public class ProductsCreate extends AppCompatActivity {
             @Override
             public void onResponse(Call<Product> call, Response<Product> response) {
                 if (response.isSuccessful()) {
+                    Toast.makeText(ProductsCreate.this, "Se guardó el producto correctamente", Toast.LENGTH_LONG).show();
                     Product product = response.body();
                     Intent intent = new Intent(ProductsCreate.this , ProductsActivity.class);
                     startActivity(intent);
@@ -71,7 +72,7 @@ public class ProductsCreate extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Product> call, Throwable t) {
-                Toast.makeText(ProductsCreate.this, "Error", Toast.LENGTH_LONG).show();
+                Toast.makeText(ProductsCreate.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
             }
         });
     }

@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.kylog.barbacaoaapp.AppCustomService;
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
+import com.kylog.barbacaoaapp.activities.notes.NotesActivity;
 import com.kylog.barbacaoaapp.models.Mesa;
 import com.kylog.barbacaoaapp.models.forms.NewMesaForm;
 
@@ -55,6 +56,7 @@ public class MesasCreate extends AppCompatActivity {
                 if(response.isSuccessful())
                 {
                     Mesa mesa = response.body();
+                    Toast.makeText(MesasCreate.this, "Se guardó correctamente", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(MesasCreate.this , MesasActivity.class);
                     startActivity(intent);
                 }
@@ -65,7 +67,7 @@ public class MesasCreate extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Mesa> call, Throwable t) {
-                Toast.makeText(MesasCreate.this, "Error", Toast.LENGTH_LONG).show();
+                Toast.makeText(MesasCreate.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
             }
         });
     }

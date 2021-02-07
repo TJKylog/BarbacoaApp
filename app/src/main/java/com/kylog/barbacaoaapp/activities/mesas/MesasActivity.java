@@ -91,7 +91,7 @@ public class MesasActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Mesa>> call, Throwable t) {
-                Toast.makeText(MesasActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(MesasActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -131,11 +131,14 @@ public class MesasActivity extends AppCompatActivity {
                                         mesas.remove(info.position);
                                         adapter.notifyDataSetChanged();
                                     }
+                                    else {
+                                        Toast.makeText(MesasActivity.this, "Se produjo un error al eliminar: "+ name , Toast.LENGTH_LONG).show();
+                                    }
                                 }
 
                                 @Override
                                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                    Toast.makeText(MesasActivity.this, "Se produjo un error al eliminar: "+ name , Toast.LENGTH_LONG).show();
+                                    Toast.makeText(MesasActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
                                 }
                             });
 

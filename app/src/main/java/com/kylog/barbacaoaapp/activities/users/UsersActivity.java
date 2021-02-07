@@ -22,6 +22,7 @@ import com.kylog.barbacaoaapp.AppCustomService;
 import com.kylog.barbacaoaapp.MainActivity;
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
+import com.kylog.barbacaoaapp.activities.products.ProductsEdit;
 import com.kylog.barbacaoaapp.models.User;
 
 import java.util.ArrayList;
@@ -86,7 +87,7 @@ public class UsersActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<User>> call, Throwable t) {
-                Toast.makeText(UsersActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(UsersActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -131,11 +132,14 @@ public class UsersActivity extends AppCompatActivity {
                                         users.remove(info.position);
                                         userAdapter.notifyDataSetChanged();
                                     }
+                                    else {
+                                        Toast.makeText(UsersActivity.this, "No se completo la acción" , Toast.LENGTH_LONG).show();
+                                    }
                                 }
 
                                 @Override
                                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                    Toast.makeText(UsersActivity.this, "No se completo la acción" , Toast.LENGTH_LONG).show();
+                                    Toast.makeText(UsersActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
                                 }
                             });
                         }

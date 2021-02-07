@@ -52,8 +52,6 @@ public class UsersEdit extends AppCompatActivity {
             id = bundle.getInt("id");
             get_user(id);
             Toast.makeText(UsersEdit.this, "id: "+ id, Toast.LENGTH_LONG).show();
-        } else{
-            Toast.makeText(UsersEdit.this, "xD" , Toast.LENGTH_LONG).show();
         }
 
         updateUser.setOnClickListener(new View.OnClickListener() {
@@ -82,7 +80,7 @@ public class UsersEdit extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-
+                Toast.makeText(UsersEdit.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -103,7 +101,7 @@ public class UsersEdit extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-
+                Toast.makeText(UsersEdit.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
             }
         });
 

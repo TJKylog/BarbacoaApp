@@ -2,6 +2,7 @@ package com.kylog.barbacaoaapp.activities.notes;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,19 +22,25 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kylog.barbacaoaapp.AppCustomService;
 import com.kylog.barbacaoaapp.BluetoothService;
+import com.kylog.barbacaoaapp.MainActivity;
+import com.kylog.barbacaoaapp.MainMenu;
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
 import com.kylog.barbacaoaapp.command.Command;
@@ -45,10 +52,14 @@ import com.kylog.barbacaoaapp.models.Mesa;
 import com.kylog.barbacaoaapp.models.Note;
 import com.kylog.barbacaoaapp.models.Product;
 import com.kylog.barbacaoaapp.models.ProductType;
+import com.kylog.barbacaoaapp.models.SalesDay;
 import com.kylog.barbacaoaapp.models.Waiter;
 import com.kylog.barbacaoaapp.models.forms.AddAmount;
 import com.kylog.barbacaoaapp.models.forms.DeleteProduct;
+import com.kylog.barbacaoaapp.models.forms.DoneTicketForm;
 import com.kylog.barbacaoaapp.models.forms.FormActive;
+
+import org.w3c.dom.Text;
 
 import java.io.UnsupportedEncodingException;
 import java.sql.Date;
@@ -88,19 +99,21 @@ public class NotesActivity extends AppCompatActivity {
     private Note note;
     private RecyclerView activeslist;
     private DataAvailable dataAvailable;
-    private Button add_active_button;
+    private ImageButton add_active_button;
     private Spinner spinnerMesas;
     private Spinner spinnerWaiters;
     private ProductsAdapter productsAdapter;
     private List<Product> products;
     private RecyclerView productsGrid;
     private RecyclerView note_product_list;
-    private TextView total_consume_price;
+    private TextView total_consume_price,user_name;
     private TextView note_mesa_name;
     private TextView note_waiter_name;
     private BluetoothService mService;
-    private Button print_ticket;
+    private Button print_ticket, done_tikcet;
     private String mConnectedDeviceName = null;
+    private Double payment,change;
+    private ImageButton userActionsButton,backButton;
     BluetoothAdapter mBluetoothAdapter;
 
     @Override
@@ -118,6 +131,15 @@ public class NotesActivity extends AppCompatActivity {
         note_mesa_name = findViewById(R.id.note_mesa_name);
         note_waiter_name = findViewById(R.id.note_waiter_name);
         print_ticket = findViewById(R.id.print_note);
+        done_tikcet = findViewById(R.id.print_done_note);
+        user_name = findViewById(R.id.user_name_view);
+        userActionsButton = findViewById(R.id.user_actions_button);
+        backButton = findViewById(R.id.back_button);
+
+        user_name.setText(getUseName());
+
+        Toolbar toolbar = findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -227,6 +249,52 @@ public class NotesActivity extends AppCompatActivity {
             }
         });
 
+        done_tikcet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //showDialogDoneTicket();
+                if(mConnectedDeviceName == null) {
+                    Intent serverIntent = new Intent(NotesActivity.this, DeviceListActivity.class);
+                    startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
+                }
+                else {
+                    if(note != null)
+                    {
+                        if(note.getConsumes().isEmpty())
+                        {
+                            Toast.makeText(NotesActivity.this,"No ha consumido nada",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        else {
+                            showDialogDoneTicket();
+                        }
+                    }
+                    else {
+                        Toast.makeText(NotesActivity.this, "No ha seleccionado una mesa",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+
+        userActionsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopup(v);
+            }
+        });
+        user_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopup(v);
+            }
+        });
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         // If the adapter is null, then Bluetooth is not supported
@@ -239,6 +307,143 @@ public class NotesActivity extends AppCompatActivity {
         get_types();
         get_active();
 
+    }
+
+    public void showPopup(View v) {
+        PopupMenu popup = new PopupMenu(this, v);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.user_menu_actions_consumes, popup.getMenu());
+        popup.setOnMenuItemClickListener(this::onMenuItemClick);
+        popup.show();
+    }
+
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.log_out: {
+                AppCustomService service = RetrofitClient.getClient();
+                Call<ResponseBody> responseBodyCall = service.logout(getTokenType()+" "+getToken());
+                responseBodyCall.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if(response.isSuccessful()) {
+                            Toast.makeText(NotesActivity.this, "Cerrando sessión" , Toast.LENGTH_SHORT).show();
+                            pref.edit().clear().apply();
+                            Intent intent = new Intent(NotesActivity.this , MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Toast.makeText(NotesActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
+                    }
+                });
+                return true;
+            }
+            case R.id.sales_day: {
+                showDialogDoneDaySales();
+            }
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+    private void showDialogDoneDaySales(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(NotesActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.sales_day_dialog, null);
+        builder.setView(view).setTitle("Venta del día");
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        TextView sale_date_total = view.findViewById(R.id.sales_day_total);
+        Button close_dialog = view.findViewById(R.id.close_dialog_sales_day);
+
+        AppCustomService service = RetrofitClient.getClient();
+        Call<SalesDay> salesDayCall = service.sale_day(getTokenType()+" "+getToken());
+
+        salesDayCall.enqueue(new Callback<SalesDay>() {
+            @Override
+            public void onResponse(Call<SalesDay> call, Response<SalesDay> response) {
+                if(response.isSuccessful())
+                {
+                    SalesDay salesDay = response.body();
+                    sale_date_total.setText(salesDay.getTotal().toString()+" $");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SalesDay> call, Throwable t) {
+                Toast.makeText(NotesActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        close_dialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+    }
+
+    private void showDialogDoneTicket(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(NotesActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.add_product_amount_note, null);
+        builder.setView(view).setTitle("Cantidad del pago");
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+        EditText amount = view.findViewById(R.id.add_amount_product);
+        Button cancel = view.findViewById(R.id.cancel_button_add_product);
+        Button save = view.findViewById(R.id.save_button_add_product);
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                payment = Double.parseDouble(String.valueOf(amount.getText()));
+                if(payment >= note.getTotal())
+                {
+                    change = payment - note.getTotal();
+                    AppCustomService service = RetrofitClient.getClient();
+                    Call<ResponseBody> responseBodyCall = service.done_ticket(getTokenType()+" "+getToken(), note.getId(),
+                            new DoneTicketForm(payment,change)
+                    );
+                    responseBodyCall.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if(response.isSuccessful())
+                            {
+                                dialog.dismiss();
+                                Toast.makeText(NotesActivity.this, "La venta se guardó correctamente",Toast.LENGTH_LONG).show();
+                                SendDataByte(Command.ESC_Init);
+                                SendDataByte(Command.LF);
+                                Print_Ex2();
+                                Intent intent = getIntent();
+                                finish();
+                                startActivity(intent);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            Toast.makeText(NotesActivity.this, "No se pudo conectar con el servidor, revise su conexión",Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+                else {
+                    Toast.makeText(NotesActivity.this, "El pago debe ser mayor o igual al total",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
     }
 
     private void get_products_by_type(String type) {
@@ -256,7 +461,7 @@ public class NotesActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
-
+                Toast.makeText(NotesActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -279,7 +484,7 @@ public class NotesActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<ProductType>> call, Throwable t) {
-
+                Toast.makeText(NotesActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -299,10 +504,12 @@ public class NotesActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<ActiveMesa>> call, Throwable t) {
-
+                Toast.makeText(NotesActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
             }
         });
     }
+
+
 
     private void showDialogDeleteMesa(Integer id, String name) {
         AlertDialog.Builder builder = new AlertDialog.Builder(NotesActivity.this);
@@ -327,6 +534,7 @@ public class NotesActivity extends AppCompatActivity {
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if(response.isSuccessful())
                         {
+                            Toast.makeText(NotesActivity.this, "Se eliminó correctamente el consumo de la mesa ", Toast.LENGTH_LONG).show();
                             get_active();
                             dialog.dismiss();
                         }
@@ -334,7 +542,7 @@ public class NotesActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Toast.makeText(NotesActivity.this, "Ocurrio un error",Toast.LENGTH_LONG).show();
+                        Toast.makeText(NotesActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
                     }
                 });
             }
@@ -370,6 +578,7 @@ public class NotesActivity extends AppCompatActivity {
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if(response.isSuccessful())
                         {
+                            Toast.makeText(NotesActivity.this, "Se eliminó correctamente el producto", Toast.LENGTH_LONG).show();
                             get_mesa_consume(note.getId());
                             dialog.dismiss();
                         }
@@ -377,7 +586,7 @@ public class NotesActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Toast.makeText(NotesActivity.this, "Ocurrio un error",Toast.LENGTH_LONG).show();
+                        Toast.makeText(NotesActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
                     }
                 });
             }
@@ -421,7 +630,7 @@ public class NotesActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Toast.makeText(NotesActivity.this, "Ocurrio un error",Toast.LENGTH_LONG).show();
+                        Toast.makeText(NotesActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
                     }
                 });
             }
@@ -483,7 +692,7 @@ public class NotesActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<DataAvailable> call, Throwable t) {
-
+                Toast.makeText(NotesActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -505,7 +714,7 @@ public class NotesActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+                Toast.makeText(NotesActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -528,7 +737,7 @@ public class NotesActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Note> call, Throwable t) {
-
+                Toast.makeText(NotesActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -701,10 +910,45 @@ public class NotesActivity extends AppCompatActivity {
             }
     }
 
+    @SuppressLint("SimpleDateFormat")
+    private void Print_Ex2(){
+
+        SimpleDateFormat formatter = new SimpleDateFormat ("yyyy/MM/dd HH:mm:ss ");
+        Date curDate = new Date(System.currentTimeMillis());
+        String str = formatter.format(curDate);
+        String date = str + "\n";
+        String pago = "Pago: "+String.valueOf(payment)+"\n";
+        String cambio = "Cambio: "+String.valueOf(change)+"\n";
+
+        try {
+            Command.ESC_Align[2] = 0x01;
+            SendDataByte(Command.ESC_Align);
+            SendDataByte("Ticket de venta\n".getBytes("GBK"));
+            SendDataString(date);
+            Command.ESC_Align[2] = 0x00;
+            SendDataByte(Command.ESC_Align);
+            Command.GS_ExclamationMark[2] = 0x00;
+            SendDataByte(Command.GS_ExclamationMark);
+            SendDataByte(PrinterCommand.POS_Print_Text(note.toString(), "GBK", 0, 0, 0, 0));
+            SendDataByte(pago.getBytes("GBK"));
+            SendDataByte(cambio.getBytes("GBK"));
+            SendDataByte(Command.LF);
+            SendDataByte("Este documento no tiene validez fiscal\n\n\n\n\n".getBytes("GBK"));
+            SendDataByte(PrinterCommand.POS_Set_PrtAndFeedPaper(48));
+            SendDataByte(Command.GS_V_m_n);
+        } catch (UnsupportedEncodingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
     private void KeyListenerInit() {
         mService = new BluetoothService(this, mHandler);
     }
 
+    private String getUseName(){
+        return pref.getString("user_name", null);
+    }
     private String getToken(){
         return pref.getString("token", null);
     }

@@ -7,13 +7,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kylog.barbacaoaapp.activities.expenses.ExpensesActivity;
 import com.kylog.barbacaoaapp.activities.mesas.MesasActivity;
 import com.kylog.barbacaoaapp.activities.notes.NotesActivity;
 import com.kylog.barbacaoaapp.activities.products.ProductsActivity;
@@ -28,11 +33,13 @@ import retrofit2.Response;
 public class MainMenu extends AppCompatActivity {
 
     private SharedPreferences pref;
-    private TextView tokenview;
+    private TextView tokenview,user_name;
     private Button products_button;
     private Button mesas_button;
     private Button users_button;
     private Button notes_button;
+    private Button expenses_button;
+    private ImageButton userActionsButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +51,25 @@ public class MainMenu extends AppCompatActivity {
         mesas_button = findViewById(R.id.mesas_button);
         users_button = findViewById(R.id.users_button);
         notes_button = findViewById(R.id.consumos_button);
+        userActionsButton = findViewById(R.id.user_actions_button);
+        user_name = findViewById(R.id.user_name_view);
+        expenses_button = findViewById(R.id.egresos_button);
 
         Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
+
+        userActionsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopup(v);
+            }
+        });
+        user_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopup(v);
+            }
+        });
 
         products_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,18 +98,27 @@ public class MainMenu extends AppCompatActivity {
             }
         });
 
+        expenses_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                show_expenses();
+            }
+        });
+
         pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
 
         getUser();
     }
 
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.user_menu_actions,menu);
-        return super.onCreateOptionsMenu(menu);
+    public void showPopup(View v) {
+        PopupMenu popup = new PopupMenu(this, v);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.user_menu_actions, popup.getMenu());
+        popup.setOnMenuItemClickListener(this::onMenuItemClick);
+        popup.show();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.log_out: {
                 AppCustomService service = RetrofitClient.getClient();
@@ -104,7 +136,7 @@ public class MainMenu extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Toast.makeText(MainMenu.this, "Error", Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainMenu.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
                     }
                 });
                 Toast.makeText(MainMenu.this, "Cerrando sessión" , Toast.LENGTH_SHORT).show();
@@ -128,6 +160,9 @@ public class MainMenu extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     User user = response.body();
                     tokenview.setText(user.getEmail());
+                    user_name.setText(user.getName());
+                    if(getUseName()==null && getUserEmail() == null)
+                        saveOnPreferences(user.getName(),user.getEmail());
                     Toast.makeText(MainMenu.this, user.getName() , Toast.LENGTH_LONG);
                 } else { //this returns you to the login activity if your session is invalid or has expired
                     response.errorBody();
@@ -140,9 +175,21 @@ public class MainMenu extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(MainMenu.this, "Error", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainMenu.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void saveOnPreferences(String user_name, String user_email) {
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("user_name",user_name);
+        editor.putString("user_email",user_email);
+        editor.apply();
+    }
+
+    private void show_expenses() {
+        Intent intent = new Intent(MainMenu.this , ExpensesActivity.class);
+        startActivity(intent);
     }
 
     private void show_products()
@@ -166,6 +213,12 @@ public class MainMenu extends AppCompatActivity {
         startActivity(intent);
     }
 
+    private String getUserEmail(){
+        return pref.getString("user_email", null);
+    }
+    private String getUseName(){
+        return pref.getString("user_name", null);
+    }
     private String getToken(){
         return pref.getString("token", null);
     }
