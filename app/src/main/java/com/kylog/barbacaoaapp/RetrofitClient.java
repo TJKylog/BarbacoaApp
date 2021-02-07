@@ -25,10 +25,9 @@ public class RetrofitClient {
             httpClient.interceptors().add(logging);
 
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://192.168.0.14/")
+                    .baseUrl("https://api.encuadrenoticias.com.mx/")
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .client(httpClient.build()).build();
-
             service = retrofit.create(AppCustomService.class);
         }
         return service;
