@@ -13,10 +13,7 @@ import com.kylog.barbacaoaapp.AppCustomService;
 import com.kylog.barbacaoaapp.MainActivity;
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
-import com.kylog.barbacaoaapp.activities.products.ProductsActivity;
 import com.kylog.barbacaoaapp.models.forms.NewPasswordForm;
-
-import java.util.stream.Stream;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;

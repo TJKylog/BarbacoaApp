@@ -42,7 +42,7 @@
                     android:layout_weight="30"
                     android:layout_margin="30dp"
                     android:layout_height="match_parent"
-                    android:text="Productos"/>
+                    android:text="Catálogos"/>
 
 
                 <Button
@@ -69,24 +69,6 @@
                     android:layout_height="match_parent"
                     android:layout_margin="30dp"
                     android:text="Eventos"
-                    />
-
-                <Button
-                    android:id="@+id/mesas_button"
-                    android:layout_width="0dp"
-                    android:layout_weight="30"
-                    android:layout_height="match_parent"
-                    android:layout_margin="30dp"
-                    android:text="Mesas"
-                    />
-
-                <Button
-                    android:id="@+id/users_button"
-                    android:layout_width="0dp"
-                    android:layout_weight="30"
-                    android:layout_height="match_parent"
-                    android:layout_margin="30dp"
-                    android:text="Usuarios"
                     />
 
             </LinearLayout>

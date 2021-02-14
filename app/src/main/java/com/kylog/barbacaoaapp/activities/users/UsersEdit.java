@@ -21,8 +21,7 @@ import com.kylog.barbacaoaapp.AppCustomService;
 import com.kylog.barbacaoaapp.MainActivity;
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
-import com.kylog.barbacaoaapp.activities.products.ProductsActivity;
-import com.kylog.barbacaoaapp.activities.products.ProductsEdit;
+import com.kylog.barbacaoaapp.activities.catalogs.CatalogsActivity;
 import com.kylog.barbacaoaapp.models.User;
 import com.kylog.barbacaoaapp.models.forms.UserForm;
 
@@ -131,7 +130,7 @@ public class UsersEdit extends AppCompatActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 if(response.isSuccessful()) {
                     Toast.makeText(UsersEdit.this, "Usuario actualizado" , Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(UsersEdit.this , UsersActivity.class);
+                    Intent intent = new Intent(UsersEdit.this , CatalogsActivity.class);
                     startActivity(intent);
                 }
             }

@@ -21,6 +21,7 @@ import com.kylog.barbacaoaapp.AppCustomService;
 import com.kylog.barbacaoaapp.MainActivity;
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
+import com.kylog.barbacaoaapp.activities.catalogs.CatalogsActivity;
 import com.kylog.barbacaoaapp.models.Product;
 import com.kylog.barbacaoaapp.models.forms.NewProductForm;
 
@@ -100,7 +101,7 @@ public class ProductsCreate extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     Toast.makeText(ProductsCreate.this, "Se guardó el producto correctamente", Toast.LENGTH_LONG).show();
                     Product product = response.body();
-                    Intent intent = new Intent(ProductsCreate.this , ProductsActivity.class);
+                    Intent intent = new Intent(ProductsCreate.this , CatalogsActivity.class);
                     startActivity(intent);
                 } else {
                     response.errorBody(); // do something with that

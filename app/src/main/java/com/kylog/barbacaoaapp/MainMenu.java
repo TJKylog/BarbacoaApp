@@ -7,8 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,11 +16,9 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kylog.barbacaoaapp.activities.catalogs.CatalogsActivity;
 import com.kylog.barbacaoaapp.activities.expenses.ExpensesActivity;
-import com.kylog.barbacaoaapp.activities.mesas.MesasActivity;
 import com.kylog.barbacaoaapp.activities.notes.NotesActivity;
-import com.kylog.barbacaoaapp.activities.products.ProductsActivity;
-import com.kylog.barbacaoaapp.activities.users.UsersActivity;
 import com.kylog.barbacaoaapp.models.User;
 
 import okhttp3.ResponseBody;
@@ -35,8 +31,6 @@ public class MainMenu extends AppCompatActivity {
     private SharedPreferences pref;
     private TextView user_name;
     private Button products_button;
-    private Button mesas_button;
-    private Button users_button;
     private ImageButton notes_button;
     private Button expenses_button;
     private ImageButton userActionsButton;
@@ -46,8 +40,6 @@ public class MainMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
         products_button = findViewById(R.id.productos_button);
-        mesas_button = findViewById(R.id.mesas_button);
-        users_button = findViewById(R.id.users_button);
         notes_button = findViewById(R.id.consumos_button);
         userActionsButton = findViewById(R.id.user_actions_button);
         user_name = findViewById(R.id.user_name_view);
@@ -73,19 +65,6 @@ public class MainMenu extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 show_products();
-            }
-        });
-        mesas_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                show_mesas();
-            }
-        });
-
-        users_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                show_users();
             }
         });
 
@@ -191,17 +170,7 @@ public class MainMenu extends AppCompatActivity {
 
     private void show_products()
     {
-        Intent intent = new Intent(MainMenu.this , ProductsActivity.class);
-        startActivity(intent);
-    }
-
-    private void show_mesas(){
-        Intent intent = new Intent(MainMenu.this , MesasActivity.class);
-        startActivity(intent);
-    }
-
-    private void show_users() {
-        Intent intent = new Intent(MainMenu.this , UsersActivity.class);
+        Intent intent = new Intent(MainMenu.this , CatalogsActivity.class);
         startActivity(intent);
     }
 

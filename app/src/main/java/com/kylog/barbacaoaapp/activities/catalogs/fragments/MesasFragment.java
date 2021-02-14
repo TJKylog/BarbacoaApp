@@ -1,25 +1,23 @@
-package com.kylog.barbacaoaapp.activities.mesas;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+package com.kylog.barbacaoaapp.activities.catalogs.fragments;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Adapter;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.PopupMenu;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -27,8 +25,9 @@ import com.kylog.barbacaoaapp.AppCustomService;
 import com.kylog.barbacaoaapp.MainActivity;
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
-import com.kylog.barbacaoaapp.activities.expenses.ExpensesActivity;
-import com.kylog.barbacaoaapp.activities.products.ProductsActivity;
+import com.kylog.barbacaoaapp.activities.mesas.MesaAdapter;
+import com.kylog.barbacaoaapp.activities.mesas.MesasCreate;
+import com.kylog.barbacaoaapp.activities.mesas.MesasEdit;
 import com.kylog.barbacaoaapp.models.Mesa;
 
 import java.util.ArrayList;
@@ -39,105 +38,46 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MesasActivity extends AppCompatActivity {
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link MesasFragment} factory method to
+ * create an instance of this fragment.
+ */
+public class MesasFragment extends Fragment {
 
     private SharedPreferences pref;
     private List<Mesa> mesas;
     private MesaAdapter adapter;
     private ListView mesas_list_view;
     private FloatingActionButton create_mesa;
-    private ImageButton userActionsButton,backButton;
-    private TextView user_name;
+
+    public MesasFragment() {
+        // Required empty public constructor
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mesas);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View v = inflater.inflate(R.layout.fragment_mesas, container, false);
 
-        mesas_list_view = findViewById(R.id.list_mesas_labels);
-        create_mesa = findViewById(R.id.float_button_create_mesa);
+        mesas_list_view = v.findViewById(R.id.list_mesas_labels);
+        create_mesa = v.findViewById(R.id.float_button_create_mesa);
 
-        pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+        pref = getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
 
         get_mesas();
 
         create_mesa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MesasActivity.this, MesasCreate.class);
+                Intent intent = new Intent(getContext(), MesasCreate.class);
                 startActivity(intent);
             }
         });
         registerForContextMenu(mesas_list_view);
 
-        userActionsButton = findViewById(R.id.user_actions_button);
-        backButton = findViewById(R.id.back_button);
-        user_name = findViewById(R.id.user_name_view);
-        user_name.setText(getUseName());
-
-        userActionsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPopup(v);
-            }
-        });
-        user_name.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPopup(v);
-            }
-        });
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
-        Toolbar toolbar = findViewById(R.id.main_toolbar);
-        setSupportActionBar(toolbar);
-    }
-
-    public void showPopup(View v) {
-        PopupMenu popup = new PopupMenu(this, v);
-        MenuInflater inflater = popup.getMenuInflater();
-        inflater.inflate(R.menu.user_menu_actions, popup.getMenu());
-        popup.setOnMenuItemClickListener(this::onMenuItemClick);
-        popup.show();
-    }
-
-    public boolean onMenuItemClick(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.log_out: {
-                AppCustomService service = RetrofitClient.getClient();
-                Call<ResponseBody> responseBodyCall = service.logout(getTokenType()+" "+getToken());
-                responseBodyCall.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if(response.isSuccessful()) {
-                            Toast.makeText(MesasActivity.this, "Cerrando sessión" , Toast.LENGTH_SHORT).show();
-                            pref.edit().clear().apply();
-                            Intent intent = new Intent(MesasActivity.this , MainActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Toast.makeText(MesasActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
-                    }
-                });
-                return true;
-            }
-            default:
-                return super.onOptionsItemSelected(item);
-
-        }
-    }
-
-    private String getUseName(){
-        return pref.getString("user_name", null);
+        return v;
     }
 
     private void get_mesas(){
@@ -152,14 +92,14 @@ public class MesasActivity extends AppCompatActivity {
                     mesas = new ArrayList<Mesa>();
                     mesas = (List<Mesa>) response.body();
 
-                    adapter = new MesaAdapter(MesasActivity.this, 0 , (ArrayList<Mesa>) mesas);
+                    adapter = new MesaAdapter(getActivity(), 0 , (ArrayList<Mesa>) mesas);
                     mesas_list_view.setAdapter(adapter);
 
                 }
                 else {
                     response.errorBody();
                     pref.edit().clear().apply();
-                    Intent intent = new Intent(MesasActivity.this , MainActivity.class);
+                    Intent intent = new Intent(getContext() , MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 }
@@ -167,16 +107,16 @@ public class MesasActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Mesa>> call, Throwable t) {
-                Toast.makeText(MesasActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
             }
         });
 
     }
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu,View v, ContextMenu.ContextMenuInfo menuInfo) {
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater inflater = getMenuInflater();
+        MenuInflater inflater = getActivity().getMenuInflater();
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
         menu.setHeaderTitle(this.mesas.get(info.position).getId().toString()+" "+mesas.get(info.position).getName());
         inflater.inflate(R.menu.context_menu, menu);
@@ -191,7 +131,7 @@ public class MesasActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.delete_option: {
                 final CharSequence [] options = {"Eliminar", "Cancelar"};
-                final AlertDialog.Builder alertDelete = new AlertDialog.Builder(MesasActivity.this);
+                final AlertDialog.Builder alertDelete = new AlertDialog.Builder(getContext());
                 alertDelete.setTitle("Desea eliminar: "+name);
                 alertDelete.setItems(options, new DialogInterface.OnClickListener() {
                     @Override
@@ -203,18 +143,18 @@ public class MesasActivity extends AppCompatActivity {
                                 @Override
                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                     if(response.isSuccessful()) {
-                                        Toast.makeText(MesasActivity.this, "Mesa eliminada: "+ name , Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getContext(), "Mesa eliminada: "+ name , Toast.LENGTH_LONG).show();
                                         mesas.remove(info.position);
                                         adapter.notifyDataSetChanged();
                                     }
                                     else {
-                                        Toast.makeText(MesasActivity.this, "Se produjo un error al eliminar: "+ name , Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getContext(), "Se produjo un error al eliminar: "+ name , Toast.LENGTH_LONG).show();
                                     }
                                 }
 
                                 @Override
                                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                    Toast.makeText(MesasActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getContext(), "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
                                 }
                             });
 
@@ -228,7 +168,7 @@ public class MesasActivity extends AppCompatActivity {
                 return true;
             }
             case R.id.edit_option: {
-                Intent intent = new Intent(MesasActivity.this, MesasEdit.class);
+                Intent intent = new Intent(getContext(), MesasEdit.class);
                 intent.putExtra("id",id);
                 startActivity(intent);
             }
@@ -243,4 +183,5 @@ public class MesasActivity extends AppCompatActivity {
     private String getTokenType(){
         return pref.getString("token_type",null);
     }
+
 }

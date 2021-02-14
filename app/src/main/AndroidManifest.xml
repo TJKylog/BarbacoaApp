@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BarcaoaApp.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.expenses.ExpensesActivity"></activity>
+        <activity android:name=".activities.catalogs.CatalogsActivity"></activity>
+        <activity android:name=".activities.expenses.ExpensesActivity" />
         <activity android:name=".activities.reset.password.PasswordActivity" />
         <activity android:name=".activities.reset.password.CodeActivity" />
         <activity android:name=".activities.reset.password.EmailActivity" />
@@ -36,22 +37,13 @@
             android:name=".activities.users.UsersCreate"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".activities.users.UsersActivity"
-            android:screenOrientation="landscape" />
-        <activity
             android:name=".activities.products.ProductsEdit"
             android:screenOrientation="landscape" />
         <activity
             android:name=".activities.mesas.MesasCreate"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".activities.mesas.MesasActivity"
-            android:screenOrientation="landscape" />
-        <activity
             android:name=".activities.products.ProductsCreate"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name=".activities.products.ProductsActivity"
             android:screenOrientation="landscape" />
         <activity
             android:name=".MainMenu"

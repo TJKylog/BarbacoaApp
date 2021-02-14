@@ -21,6 +21,7 @@ import com.kylog.barbacaoaapp.AppCustomService;
 import com.kylog.barbacaoaapp.MainActivity;
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
+import com.kylog.barbacaoaapp.activities.catalogs.CatalogsActivity;
 import com.kylog.barbacaoaapp.activities.expenses.ExpensesActivity;
 import com.kylog.barbacaoaapp.activities.notes.NotesActivity;
 import com.kylog.barbacaoaapp.models.Mesa;
@@ -94,7 +95,7 @@ public class MesasCreate extends AppCompatActivity {
                 {
                     Mesa mesa = response.body();
                     Toast.makeText(MesasCreate.this, "Se guardó correctamente", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(MesasCreate.this , MesasActivity.class);
+                    Intent intent = new Intent(MesasCreate.this , CatalogsActivity.class);
                     startActivity(intent);
                 }
                 else{

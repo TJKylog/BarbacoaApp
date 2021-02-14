@@ -21,6 +21,7 @@ import com.kylog.barbacaoaapp.AppCustomService;
 import com.kylog.barbacaoaapp.MainActivity;
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
+import com.kylog.barbacaoaapp.activities.catalogs.CatalogsActivity;
 import com.kylog.barbacaoaapp.activities.mesas.MesasEdit;
 import com.kylog.barbacaoaapp.models.Product;
 import com.kylog.barbacaoaapp.models.forms.NewProductForm;
@@ -148,7 +149,7 @@ public class ProductsEdit extends AppCompatActivity {
                 if(response.isSuccessful())
                 {
                     Toast.makeText(ProductsEdit.this, "Producto actualizado" , Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(ProductsEdit.this , ProductsActivity.class);
+                    Intent intent = new Intent(ProductsEdit.this , CatalogsActivity.class);
                     startActivity(intent);
                 }
                 else{

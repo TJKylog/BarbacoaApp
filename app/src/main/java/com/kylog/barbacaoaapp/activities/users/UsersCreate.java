@@ -21,9 +21,7 @@ import com.kylog.barbacaoaapp.AppCustomService;
 import com.kylog.barbacaoaapp.MainActivity;
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
-import com.kylog.barbacaoaapp.activities.products.ProductsActivity;
-import com.kylog.barbacaoaapp.activities.products.ProductsCreate;
-import com.kylog.barbacaoaapp.activities.products.ProductsEdit;
+import com.kylog.barbacaoaapp.activities.catalogs.CatalogsActivity;
 import com.kylog.barbacaoaapp.models.User;
 import com.kylog.barbacaoaapp.models.forms.UserForm;
 
@@ -100,7 +98,7 @@ public class UsersCreate extends AppCompatActivity {
                 if(response.isSuccessful()) {
                     Toast.makeText(UsersCreate.this, "Se guardó el usuario correctamente" , Toast.LENGTH_LONG).show();
                     User user = response.body();
-                    Intent intent = new Intent(UsersCreate.this , UsersActivity.class);
+                    Intent intent = new Intent(UsersCreate.this , CatalogsActivity.class);
                     startActivity(intent);
                 }
                 else {
