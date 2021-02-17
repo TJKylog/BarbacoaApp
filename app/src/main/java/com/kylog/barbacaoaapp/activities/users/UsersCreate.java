@@ -10,10 +10,12 @@ import android.os.Bundle;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,10 +35,8 @@ import retrofit2.Response;
 public class UsersCreate extends AppCompatActivity {
 
     private SharedPreferences pref;
-    private EditText editName;
-    private EditText editEmail;
-    private EditText editUserType;
-    private EditText editPassword;
+    private EditText editName, editEmail, editPassword, firstLastname,secondLastname;
+    private Spinner editUserType;
     private Button saveUser;
     private ImageButton userActionsButton,backButton;
     private TextView user_name;
@@ -51,13 +51,29 @@ public class UsersCreate extends AppCompatActivity {
         editUserType = findViewById(R.id.user_role_field);
         editPassword = findViewById(R.id.user_password_field);
         saveUser = findViewById(R.id.save_user_button);
+        firstLastname = findViewById(R.id.user_first_lastname);
+        secondLastname = findViewById(R.id.user_second_lastname);
+        editUserType = findViewById(R.id.user_role_field);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.roles_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        editUserType.setAdapter(adapter);
+
 
         pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
 
         saveUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                save_user(new UserForm(editName.getText().toString(),editEmail.getText().toString(),editPassword.getText().toString(),editUserType.getText().toString()));
+
+                save_user(new UserForm(
+                        editName.getText().toString(),
+                        editEmail.getText().toString(),
+                        firstLastname.getText().toString(),
+                        secondLastname.getText().toString(),
+                        editPassword.getText().toString(),
+                        editUserType.getSelectedItem().toString()
+                ));
             }
         });
         userActionsButton = findViewById(R.id.user_actions_button);
