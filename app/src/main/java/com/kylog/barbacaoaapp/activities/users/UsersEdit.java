@@ -10,10 +10,13 @@ import android.os.Bundle;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,15 +36,14 @@ import retrofit2.Response;
 public class UsersEdit extends AppCompatActivity {
 
     private SharedPreferences pref;
-    private EditText editName;
-    private EditText editEmail;
-    private EditText editPassword;
-    private EditText editType;
+    private EditText editName, editEmail, editPassword, firstLastname,secondLastname;
+    private Spinner editType;
     private Button updateUser;
     private Integer id;
     private User user;
     private ImageButton userActionsButton,backButton;
     private TextView user_name;
+    ArrayAdapter<CharSequence> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +55,33 @@ public class UsersEdit extends AppCompatActivity {
         editEmail = findViewById(R.id.edit_user_email_field);
         editPassword = findViewById(R.id.edit_user_password_field);
         editType = findViewById(R.id.edit_user_role_field);
+        firstLastname = findViewById(R.id.edit_user_first_lastname);
+        secondLastname = findViewById(R.id.edit_user_second_lastname);
         updateUser = findViewById(R.id.update_user_button);
+
+        adapter = ArrayAdapter.createFromResource(this,
+                R.array.roles_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        editType.setAdapter(adapter);
+
+        editType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String text = parent.getItemAtPosition(position).toString();
+                if(position == 3){
+                    editPassword.setEnabled(false);
+                    Toast.makeText(UsersEdit.this,text ,Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    editPassword.setEnabled(true);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         Bundle bundle = getIntent().getExtras();
         if(bundle != null)
@@ -66,7 +94,13 @@ public class UsersEdit extends AppCompatActivity {
         updateUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                update_data(new UserForm(editName.getText().toString(),editEmail.getText().toString(),editPassword.getText().toString(),editType.getText().toString()));
+                update_data(new UserForm(editName.getText().toString(),
+                        firstLastname.getText().toString(),
+                        secondLastname.getText().toString(),
+                        editEmail.getText().toString(),
+                        editPassword.getText().toString(),
+                        editType.getSelectedItem().toString()
+                ));
             }
         });
 
@@ -109,8 +143,10 @@ public class UsersEdit extends AppCompatActivity {
                 if(response.isSuccessful()) {
                     user = response.body();
                     editName.setText(user.getName());
+                    firstLastname.setText(user.getFirstLastname());
+                    secondLastname.setText(user.getSecondLastname());
                     editEmail.setText(user.getEmail());
-                    editType.setText(user.getRole());
+                    editType.setSelection(adapter.getPosition(user.getRole()));
                 }
             }
 
