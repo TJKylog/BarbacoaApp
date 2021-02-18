@@ -1,11 +1,8 @@
 package com.kylog.barbacaoaapp.activities.notes;
 
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.models.ActiveMesa;
-import com.kylog.barbacaoaapp.models.ProductType;
 
 import java.util.List;
 

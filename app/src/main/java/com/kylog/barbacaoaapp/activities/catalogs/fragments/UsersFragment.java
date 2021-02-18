@@ -116,7 +116,7 @@ public class UsersFragment extends Fragment {
         MenuInflater inflater = getActivity().getMenuInflater();
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
         menu.setHeaderTitle(this.users.get(info.position).getId().toString()+" "+users.get(info.position).getName());
-        inflater.inflate(R.menu.context_menu, menu);
+        inflater.inflate(R.menu.context_menu_users, menu);
     }
 
     private void add_user() {
@@ -131,7 +131,7 @@ public class UsersFragment extends Fragment {
         id = this.users.get(info.position).getId();
         String name = this.users.get(info.position).getName();
         switch (item.getItemId()){
-            case R.id.delete_option:
+            case R.id.delete_user_option:
             {
                 final CharSequence [] options = {"Eliminar","Cancelar"};
                 final AlertDialog.Builder alertDelete = new AlertDialog.Builder(getContext());
@@ -169,7 +169,7 @@ public class UsersFragment extends Fragment {
                 alertDelete.show();
                 return true;
             }
-            case R.id.edit_option:{
+            case R.id.edit_user_option:{
                 Intent intent = new  Intent(getContext(), UsersEdit.class);
                 intent.putExtra("id", id);
                 startActivity(intent);

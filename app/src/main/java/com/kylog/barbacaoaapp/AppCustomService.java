@@ -2,7 +2,6 @@ package com.kylog.barbacaoaapp;
 
 import com.kylog.barbacaoaapp.models.ActiveMesa;
 import com.kylog.barbacaoaapp.models.Auth;
-import com.kylog.barbacaoaapp.models.Consume;
 import com.kylog.barbacaoaapp.models.DataAvailable;
 import com.kylog.barbacaoaapp.models.Mesa;
 import com.kylog.barbacaoaapp.models.Note;
@@ -19,7 +18,6 @@ import com.kylog.barbacaoaapp.models.User;
 import com.kylog.barbacaoaapp.models.forms.NewMesaForm;
 import com.kylog.barbacaoaapp.models.forms.NewPasswordForm;
 import com.kylog.barbacaoaapp.models.forms.NewProductForm;
-import com.kylog.barbacaoaapp.models.forms.ProductsFrom;
 import com.kylog.barbacaoaapp.models.forms.SendEmailForm;
 import com.kylog.barbacaoaapp.models.forms.UserForm;
 
@@ -27,7 +25,6 @@ import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;

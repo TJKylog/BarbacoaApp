@@ -119,7 +119,7 @@ public class MesasFragment extends Fragment {
         MenuInflater inflater = getActivity().getMenuInflater();
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
         menu.setHeaderTitle(this.mesas.get(info.position).getId().toString()+" "+mesas.get(info.position).getName());
-        inflater.inflate(R.menu.context_menu, menu);
+        inflater.inflate(R.menu.context_menu_mesas, menu);
     }
 
     @Override
@@ -129,7 +129,7 @@ public class MesasFragment extends Fragment {
         id = this.mesas.get(info.position).getId();
         String name = this.mesas.get(info.position).getName();
         switch (item.getItemId()) {
-            case R.id.delete_option: {
+            case R.id.delete_mesa_option: {
                 final CharSequence [] options = {"Eliminar", "Cancelar"};
                 final AlertDialog.Builder alertDelete = new AlertDialog.Builder(getContext());
                 alertDelete.setTitle("Desea eliminar: "+name);
@@ -167,7 +167,7 @@ public class MesasFragment extends Fragment {
                 alertDelete.show();
                 return true;
             }
-            case R.id.edit_option: {
+            case R.id.edit_mesa_option: {
                 Intent intent = new Intent(getContext(), MesasEdit.class);
                 intent.putExtra("id",id);
                 startActivity(intent);
