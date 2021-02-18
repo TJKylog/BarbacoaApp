@@ -1,9 +1,11 @@
 package com.kylog.barbacaoaapp.activities.notes;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,6 +21,7 @@ public class ActiveAdapter extends RecyclerView.Adapter<ActiveAdapter.ViewHolder
     private int layout;
     private itemClickListener listener;
     private OnItemLongClickListener listener1;
+    private int selected_position = -1;
 
     public ActiveAdapter(List<ActiveMesa> activeMesas, int layout, itemClickListener listener, OnItemLongClickListener listener1) {
         this.activeMesaList = activeMesas;
@@ -45,8 +48,7 @@ public class ActiveAdapter extends RecyclerView.Adapter<ActiveAdapter.ViewHolder
         return activeMesaList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        private static final int NONE = 0;
+    public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView mesa_name;
 
         public ViewHolder(View v) {
@@ -56,10 +58,12 @@ public class ActiveAdapter extends RecyclerView.Adapter<ActiveAdapter.ViewHolder
 
         public void bind(final ActiveMesa activeMesa, final itemClickListener listener, final OnItemLongClickListener listener1){
             this.mesa_name.setText(activeMesa.getName());
-
+            itemView.setBackgroundColor(getSelected() == getAdapterPosition() ? Color.GREEN : Color.TRANSPARENT);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    updateSelectedPosition(getAdapterPosition());
+                    notifyDataSetChanged();
                     listener.onItemClick(activeMesa, getAdapterPosition());
                 }
             });
@@ -71,7 +75,16 @@ public class ActiveAdapter extends RecyclerView.Adapter<ActiveAdapter.ViewHolder
                     return true;
                 }
             });
+
         }
+    }
+
+    public void updateSelectedPosition(int position){
+        this.selected_position = position;
+    }
+
+    private int getSelected(){
+        return this.selected_position;
     }
 
     public interface itemClickListener{

@@ -177,6 +177,7 @@ public class NotesActivity extends AppCompatActivity {
             @Override
             public void onItemClick(ActiveMesa activeMesa, int position) {
                 Toast.makeText(NotesActivity.this, activeMesa.getName(), Toast.LENGTH_LONG).show();
+
                 get_mesa_consume(activeMesa.getId());
             }
         }, new ActiveAdapter.OnItemLongClickListener() {
