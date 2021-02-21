@@ -1,5 +1,6 @@
 package com.kylog.barbacaoaapp.activities.notes;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -17,6 +18,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -28,11 +30,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -112,7 +116,7 @@ public class NotesActivity extends AppCompatActivity {
     private BluetoothService mService;
     private Button print_ticket, done_tikcet;
     private String mConnectedDeviceName = null;
-    private Double payment,change;
+    private Double payment_amount,change;
     private ImageButton userActionsButton,backButton;
     BluetoothAdapter mBluetoothAdapter;
 
@@ -390,38 +394,45 @@ public class NotesActivity extends AppCompatActivity {
 
     }
 
+
     private void showDialogDoneTicket(){
         AlertDialog.Builder builder = new AlertDialog.Builder(NotesActivity.this);
         LayoutInflater inflater = getLayoutInflater();
-        View view = inflater.inflate(R.layout.add_product_amount_note, null);
+        View view = inflater.inflate(R.layout.payment_note_layout, null);
         builder.setView(view).setTitle("Cantidad del pago");
         final AlertDialog dialog = builder.create();
         dialog.show();
-        EditText amount = view.findViewById(R.id.add_amount_product);
-        Button cancel = view.findViewById(R.id.cancel_button_add_product);
-        Button save = view.findViewById(R.id.save_button_add_product);
+        RadioButton paymentCard = view.findViewById(R.id.radio_payment_card);
+        RadioButton paymentCash = view.findViewById(R.id.radio_payment_cash);
+        EditText amount = view.findViewById(R.id.amount_cash_payment);
+        Button cancel = view.findViewById(R.id.cancel_done_ticket);
+        Button save = view.findViewById(R.id.done_ticket);
+
+        paymentCard.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                amount.setEnabled(isChecked);
+            }
+        });
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                payment = Double.parseDouble(String.valueOf(amount.getText()));
-                if(payment >= note.getTotal())
-                {
-                    change = payment - note.getTotal();
+                if(paymentCard.isChecked()) {
+                    payment_amount = 0.0;
                     AppCustomService service = RetrofitClient.getClient();
-                    Call<ResponseBody> responseBodyCall = service.done_ticket(getTokenType()+" "+getToken(), note.getId(),
-                            new DoneTicketForm(payment,change)
+                    Call<ResponseBody> responseBodyCall = service.done_ticket(getTokenType() + " " + getToken(), note.getId(),
+                                new DoneTicketForm("Tarjeta" ,payment_amount, change)
                     );
                     responseBodyCall.enqueue(new Callback<ResponseBody>() {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            if(response.isSuccessful())
-                            {
+                            if (response.isSuccessful()) {
                                 dialog.dismiss();
-                                Toast.makeText(NotesActivity.this, "La venta se guardó correctamente",Toast.LENGTH_LONG).show();
+                                Toast.makeText(NotesActivity.this, "La venta se guardó correctamente", Toast.LENGTH_LONG).show();
                                 SendDataByte(Command.ESC_Init);
                                 SendDataByte(Command.LF);
-                                Print_Ex2();
+                                Print_Ex2("Tarjeta");
                                 Intent intent = getIntent();
                                 finish();
                                 startActivity(intent);
@@ -430,12 +441,41 @@ public class NotesActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(Call<ResponseBody> call, Throwable t) {
-                            Toast.makeText(NotesActivity.this, "No se pudo conectar con el servidor, revise su conexión",Toast.LENGTH_LONG).show();
+                            Toast.makeText(NotesActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
                         }
                     });
                 }
-                else {
-                    Toast.makeText(NotesActivity.this, "El pago debe ser mayor o igual al total",Toast.LENGTH_SHORT).show();
+                if(paymentCash.isChecked()){
+                    payment_amount = Double.parseDouble(String.valueOf(amount.getText()));
+                    if (payment_amount >= note.getTotal()) {
+                        change = payment_amount - note.getTotal();
+                        AppCustomService service = RetrofitClient.getClient();
+                        Call<ResponseBody> responseBodyCall = service.done_ticket(getTokenType() + " " + getToken(), note.getId(),
+                                new DoneTicketForm("Efectivo" ,payment_amount, change)
+                        );
+                        responseBodyCall.enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                if (response.isSuccessful()) {
+                                    dialog.dismiss();
+                                    Toast.makeText(NotesActivity.this, "La venta se guardó correctamente", Toast.LENGTH_LONG).show();
+                                    SendDataByte(Command.ESC_Init);
+                                    SendDataByte(Command.LF);
+                                    Print_Ex2("Efectivo");
+                                    Intent intent = getIntent();
+                                    finish();
+                                    startActivity(intent);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                Toast.makeText(NotesActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    } else {
+                        Toast.makeText(NotesActivity.this, "El pago debe ser mayor o igual al total", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -912,14 +952,15 @@ public class NotesActivity extends AppCompatActivity {
     }
 
     @SuppressLint("SimpleDateFormat")
-    private void Print_Ex2(){
+    private void Print_Ex2(String payment_method){
 
         SimpleDateFormat formatter = new SimpleDateFormat ("yyyy/MM/dd HH:mm:ss ");
         Date curDate = new Date(System.currentTimeMillis());
         String str = formatter.format(curDate);
         String date = str + "\n";
-        String pago = "Pago: "+String.valueOf(payment)+"\n";
+        String pago = "Pago: "+String.valueOf(payment_amount)+"\n";
         String cambio = "Cambio: "+String.valueOf(change)+"\n";
+        payment_method = "Forma de pago: "+ payment_method+"\n";
 
         try {
             Command.ESC_Align[2] = 0x01;
@@ -933,6 +974,7 @@ public class NotesActivity extends AppCompatActivity {
             SendDataByte(PrinterCommand.POS_Print_Text(note.toString(), "GBK", 0, 0, 0, 0));
             SendDataByte(pago.getBytes("GBK"));
             SendDataByte(cambio.getBytes("GBK"));
+            SendDataByte(payment_method.getBytes("GBK"));
             SendDataByte(Command.LF);
             SendDataByte("Este documento no tiene validez fiscal\n\n\n\n\n".getBytes("GBK"));
             SendDataByte(PrinterCommand.POS_Set_PrtAndFeedPaper(48));
