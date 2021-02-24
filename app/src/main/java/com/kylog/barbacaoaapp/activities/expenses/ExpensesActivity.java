@@ -244,32 +244,6 @@ public class ExpensesActivity extends AppCompatActivity {
 
     }
 
-    public boolean deleteExpense(Expense expense){
-        final boolean[] isDeleted = {false};
-        AppCustomService service = RetrofitClient.getClient();
-        Call<ResponseBody> responseBodyCall = service.delete_expense(  getTokenType()+" "+getToken() , expense.getId());
-        responseBodyCall.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if(response.isSuccessful())
-                {
-                    isDeleted[0] = true;
-                    Toast.makeText(ExpensesActivity.this, "Se elimino correctamente", Toast.LENGTH_LONG).show();
-                }
-                else {
-                     isDeleted[0] = false;
-                    Toast.makeText(ExpensesActivity.this, "Ocurrio un error al eliminar", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(ExpensesActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
-            }
-        });
-        return isDeleted[0];
-    }
-
     public void setExpense(Expense expense) {
         this.editExpense = expense;
         this.isEdit = true;
