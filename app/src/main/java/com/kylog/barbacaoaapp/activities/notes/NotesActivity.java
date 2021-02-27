@@ -199,7 +199,7 @@ public class NotesActivity extends AppCompatActivity {
                 new ConsumeAdapter.itemClickListener() {
                     @Override
                     public void onItemClick(Consume consume, int position) {
-                        showDialogProduct(consume.getId(), consume.getName());
+                        showDialogProduct(consume.getId(), consume.getName(),consume.getMeasure());
                     }
                 },
                 new ConsumeAdapter.OnItemLongClickListener() {
@@ -217,7 +217,7 @@ public class NotesActivity extends AppCompatActivity {
             public void onItemClick(Product product, int position) {
                 if(note != null)
                 {
-                    showDialogProduct(product.getId(),product.getName());
+                    showDialogProduct(product.getId(),product.getName(),product.getMeasure());
                 }
                 else {
                     Toast.makeText(NotesActivity.this, "Seleccione una mesa primero", Toast.LENGTH_SHORT).show();
@@ -641,7 +641,7 @@ public class NotesActivity extends AppCompatActivity {
         });
     }
 
-    private void showDialogProduct(Integer id, String name){
+    private void showDialogProduct(Integer id, String name,String measure_label_input){
         AlertDialog.Builder builder = new AlertDialog.Builder(NotesActivity.this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.add_product_amount_note, null);
@@ -649,8 +649,10 @@ public class NotesActivity extends AppCompatActivity {
         final AlertDialog dialog = builder.create();
         dialog.show();
         EditText amount = view.findViewById(R.id.add_amount_product);
+        TextView measure_label = view.findViewById(R.id.measure_label_note);
         Button cancel = view.findViewById(R.id.cancel_button_add_product);
         Button save = view.findViewById(R.id.save_button_add_product);
+        measure_label.setText(measure_label_input);
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override

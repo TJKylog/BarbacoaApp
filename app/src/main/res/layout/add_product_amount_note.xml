@@ -9,7 +9,8 @@
         android:orientation="horizontal">
         <EditText
             android:id="@+id/add_amount_product"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight=".70"
             android:layout_height="wrap_content"
             android:layout_margin="30dp"
             android:maxLength="6"
@@ -17,10 +18,11 @@
             android:importantForAutofill="no"
             android:inputType="numberDecimal" />
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/measure_label_note"
+            android:layout_width="0dp"
+            android:layout_weight=".30"
             android:layout_height="wrap_content"
-            android:layout_margin="30dp"
-            android:text="gramos"/>
+            android:layout_margin="30dp"/>
 
     </LinearLayout>
 
