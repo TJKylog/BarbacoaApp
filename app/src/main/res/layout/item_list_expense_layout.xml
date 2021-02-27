@@ -6,30 +6,35 @@
 
     <TextView
         android:id="@+id/item_expense_approved_by"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight=".20"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"/>
     <TextView
         android:id="@+id/item_expense_reason"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight=".20"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"/>
 
     <TextView
         android:id="@+id/item_expense_amount"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight=".20"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"/>
 
     <TextView
         android:id="@+id/item_expense_created_by_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight=".20"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"/>
 
     <TextView
         android:id="@+id/item_expense_created_at"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight=".20"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"/>
 </LinearLayout>
