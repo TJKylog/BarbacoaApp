@@ -1,5 +1,6 @@
 package com.kylog.barbacaoaapp.activities.users;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -16,25 +17,25 @@ import java.util.ArrayList;
 public class UserAdapter extends ArrayAdapter<User> {
 
     private Activity activity;
-    private ArrayList<User> lusers;
+    private ArrayList<User> listUsers;
     private static LayoutInflater inflater = null;
 
     public UserAdapter(Activity activity, int resource, ArrayList<User> lusers) {
         super(activity, resource,lusers);
         try {
             this.activity = activity;
-            this.lusers = lusers;
+            this.listUsers = lusers;
 
             inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
-        catch (Exception $e) {
+        catch (Exception ignored) {
 
         }
 
     }
 
     public int getCount() {
-        return lusers.size();
+        return listUsers.size();
     }
 
     public User getItem(User item) {
@@ -51,6 +52,7 @@ public class UserAdapter extends ArrayAdapter<User> {
         public TextView user_role_item;
     }
 
+    @SuppressLint("InflateParams")
     public View getView(int position, View convertView, ViewGroup parent) {
         View vi = convertView;
         final viewHolder holder;
@@ -59,20 +61,20 @@ public class UserAdapter extends ArrayAdapter<User> {
                 vi = inflater.inflate(R.layout.list_item_users_layout, null);
                 holder = new viewHolder();
 
-                holder.user_name_item = (TextView) vi.findViewById(R.id.user_name_text_list);
-                holder.user_email_item = (TextView) vi.findViewById(R.id.user_email_text_list);
-                holder.user_role_item = (TextView) vi.findViewById(R.id.user_role_text_list);
+                holder.user_name_item = vi.findViewById(R.id.user_name_text_list);
+                holder.user_email_item = vi.findViewById(R.id.user_email_text_list);
+                holder.user_role_item = vi.findViewById(R.id.user_role_text_list);
 
                 vi.setTag(holder);
             } else {
                 holder = (viewHolder) vi.getTag();
             }
 
-            holder.user_name_item.setText(lusers.get(position).getName());
-            holder.user_email_item.setText(lusers.get(position).getEmail());
-            holder.user_role_item.setText(lusers.get(position).getRole());
+            holder.user_name_item.setText(listUsers.get(position).getName());
+            holder.user_email_item.setText(listUsers.get(position).getEmail());
+            holder.user_role_item.setText(listUsers.get(position).getRole());
 
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
         return vi;
