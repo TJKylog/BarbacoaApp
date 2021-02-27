@@ -3,6 +3,7 @@ package com.kylog.barbacaoaapp;
 import com.kylog.barbacaoaapp.models.ActiveMesa;
 import com.kylog.barbacaoaapp.models.Auth;
 import com.kylog.barbacaoaapp.models.DataAvailable;
+import com.kylog.barbacaoaapp.models.Expense;
 import com.kylog.barbacaoaapp.models.Mesa;
 import com.kylog.barbacaoaapp.models.Note;
 import com.kylog.barbacaoaapp.models.Product;
@@ -12,6 +13,7 @@ import com.kylog.barbacaoaapp.models.forms.AddAmount;
 import com.kylog.barbacaoaapp.models.forms.CodeForm;
 import com.kylog.barbacaoaapp.models.forms.DeleteProduct;
 import com.kylog.barbacaoaapp.models.forms.DoneTicketForm;
+import com.kylog.barbacaoaapp.models.forms.ExpenseForm;
 import com.kylog.barbacaoaapp.models.forms.FormActive;
 import com.kylog.barbacaoaapp.models.forms.LoginForm;
 import com.kylog.barbacaoaapp.models.User;
@@ -149,6 +151,34 @@ public interface AppCustomService {
             "X-Requested-With: XMLHttpRequest"
     })
     Call<ResponseBody> delete_mesa(@Header("Authorization") String authorization, @Path("id") Integer id);
+
+    @GET("api/auth/expenses")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<List<Expense>> expenses(@Header("Authorization") String authorization);
+
+    @POST("api/auth/expenses")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<ResponseBody> save_expense(@Header("Authorization") String authorization, @Body ExpenseForm expenseForm);
+
+    @PUT("api/auth/expenses/{id}")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<ResponseBody> update_expense(@Header("Authorization") String authorization ,@Path("id") Integer id , @Body ExpenseForm expenseForm);
+
+    @DELETE("api/auth/expenses/{id}")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<ResponseBody> delete_expense(@Header("Authorization") String authorization ,@Path("id") Integer id);
 
     @GET("api/auth/users")
     @Headers({

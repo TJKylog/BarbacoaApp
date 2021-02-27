@@ -22,15 +22,13 @@
                 android:background="@color/primaryColor"
                 android:src="@drawable/ic_baseline_arrow_back_24"/>
 
-            <TextView
+            <ImageButton
                 android:id="@+id/to_main_menu_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
                 android:layout_marginStart="30dp"
-                android:text="@string/to_main_menu"
-                android:textColor="@color/white"
-                android:textSize="19sp"
+                android:background="@color/primaryColor"
+                android:src="@drawable/ic_baseline_menu_open_24"
                 />
 
         </LinearLayout>

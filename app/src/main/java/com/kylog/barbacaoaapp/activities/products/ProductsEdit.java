@@ -10,18 +10,22 @@ import android.os.Bundle;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kylog.barbacaoaapp.AppCustomService;
 import com.kylog.barbacaoaapp.MainActivity;
+import com.kylog.barbacaoaapp.MainMenu;
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
 import com.kylog.barbacaoaapp.activities.catalogs.CatalogsActivity;
+import com.kylog.barbacaoaapp.activities.expenses.ExpensesActivity;
 import com.kylog.barbacaoaapp.activities.mesas.MesasEdit;
 import com.kylog.barbacaoaapp.models.Product;
 import com.kylog.barbacaoaapp.models.forms.NewProductForm;
@@ -38,12 +42,13 @@ public class ProductsEdit extends AppCompatActivity {
     private TextView editingProduct;
     private EditText editName;
     private EditText editPrice;
-    private EditText editType;
-    private EditText editMeasure;
+    private Spinner editType;
+    private Spinner editMeasure;
     private Button updateProductButton;
     private Product product;
-    private ImageButton userActionsButton,backButton;
+    private ImageButton userActionsButton,backButton,mainMenu;
     private TextView user_name;
+    private ArrayAdapter<CharSequence> adapterMeasure,adapterType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +63,16 @@ public class ProductsEdit extends AppCompatActivity {
         editType = findViewById(R.id.edit_product_type_field);
         editMeasure = findViewById(R.id.edit_product_measure_field);
         updateProductButton = findViewById(R.id.update_product_button);
+
+        adapterType = ArrayAdapter.createFromResource(this,
+                R.array.product_types_array, android.R.layout.simple_spinner_item);
+        adapterType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        editType.setAdapter(adapterType);
+
+        adapterMeasure = ArrayAdapter.createFromResource(this,
+                R.array.product_measures_array, android.R.layout.simple_spinner_item);
+        adapterMeasure.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        editMeasure.setAdapter(adapterMeasure);
 
         Bundle bundle = getIntent().getExtras();
         if(bundle != null)
@@ -75,8 +90,10 @@ public class ProductsEdit extends AppCompatActivity {
         });
 
         userActionsButton = findViewById(R.id.user_actions_button);
+        mainMenu = findViewById(R.id.to_main_menu_view);
         backButton = findViewById(R.id.back_button);
         user_name = findViewById(R.id.user_name_view);
+
         user_name.setText(getUseName());
 
         userActionsButton.setOnClickListener(new View.OnClickListener() {
@@ -95,6 +112,14 @@ public class ProductsEdit extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+            }
+        });
+        mainMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProductsEdit.this , MainMenu.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
             }
         });
 
@@ -123,8 +148,8 @@ public class ProductsEdit extends AppCompatActivity {
                     editingProduct.setText("Editar: "+product.getName());
                     editName.setText(product.getName());
                     editPrice.setText(product.getPrice().toString());
-                    editType.setText(product.getType());
-                    editMeasure.setText(product.getMeasure());
+                    editType.setSelection(adapterType.getPosition(product.getType()));
+                    editMeasure.setSelection(adapterMeasure.getPosition(product.getMeasure()));
                 }
                 else {
 
@@ -141,7 +166,7 @@ public class ProductsEdit extends AppCompatActivity {
     private void updateProduct(){
         AppCustomService service = RetrofitClient.getClient();
 
-        Call<Product> productCall = service.update_product(getTokenType()+" "+getToken(),id,new NewProductForm(editName.getText().toString() , Double.parseDouble(String.valueOf(editPrice.getText())), editMeasure.getText().toString(), editType.getText().toString()));
+        Call<Product> productCall = service.update_product(getTokenType()+" "+getToken(),id,new NewProductForm(editName.getText().toString() , Double.parseDouble(String.valueOf(editPrice.getText())), editMeasure.getSelectedItem().toString(), editType.getSelectedItem().toString()));
 
         productCall.enqueue(new Callback<Product>() {
             @Override

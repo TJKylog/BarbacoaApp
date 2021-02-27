@@ -3,16 +3,16 @@ package com.kylog.barbacaoaapp.models.forms;
 public class UserForm {
     private String name;
     private String email;
-    private String firstLastname;
-    private String secondLastname;
+    private String first_lastname;
+    private String second_lastname;
     private String password;
     private String role;
 
-    public UserForm(String name, String email, String firstLastname, String secondLastname, String password, String role) {
+    public UserForm(String name, String email, String first_lastname, String second_lastname, String password, String role) {
         this.name = name;
         this.email = email;
-        this.firstLastname = firstLastname;
-        this.secondLastname = secondLastname;
+        this.first_lastname = first_lastname;
+        this.second_lastname = second_lastname;
         this.password = password;
         this.role = role;
     }
@@ -33,20 +33,20 @@ public class UserForm {
         this.email = email;
     }
 
-    public String getFirstLastname() {
-        return firstLastname;
+    public String getFirst_lastname() {
+        return first_lastname;
     }
 
-    public void setFirstLastname(String firstLastname) {
-        this.firstLastname = firstLastname;
+    public void setFirst_lastname(String first_lastname) {
+        this.first_lastname = first_lastname;
     }
 
-    public String getSecondLastname() {
-        return secondLastname;
+    public String getSecond_lastname() {
+        return second_lastname;
     }
 
-    public void setSecondLastname(String secondLastname) {
-        this.secondLastname = secondLastname;
+    public void setSecond_lastname(String second_lastname) {
+        this.second_lastname = second_lastname;
     }
 
     public String getPassword() {

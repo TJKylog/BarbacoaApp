@@ -65,11 +65,27 @@
                 <Button
                     android:id="@+id/envetos_button"
                     android:layout_width="0dp"
-                    android:layout_weight="30"
+                    android:layout_weight=".30"
                     android:layout_height="match_parent"
                     android:layout_margin="30dp"
                     android:text="Eventos"
                     />
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_weight=".30"
+                    android:layout_height="match_parent"
+                    android:layout_margin="30dp"
+                    android:visibility="invisible"
+                    android:text="button"/>
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_weight=".30"
+                    android:layout_height="match_parent"
+                    android:layout_margin="30dp"
+                    android:visibility="invisible"
+                    android:text="button"/>
 
             </LinearLayout>
 

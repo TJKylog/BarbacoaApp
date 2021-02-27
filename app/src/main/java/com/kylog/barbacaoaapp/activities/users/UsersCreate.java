@@ -21,9 +21,11 @@ import android.widget.Toast;
 
 import com.kylog.barbacaoaapp.AppCustomService;
 import com.kylog.barbacaoaapp.MainActivity;
+import com.kylog.barbacaoaapp.MainMenu;
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
 import com.kylog.barbacaoaapp.activities.catalogs.CatalogsActivity;
+import com.kylog.barbacaoaapp.activities.expenses.ExpensesActivity;
 import com.kylog.barbacaoaapp.models.User;
 import com.kylog.barbacaoaapp.models.forms.UserForm;
 
@@ -38,7 +40,7 @@ public class UsersCreate extends AppCompatActivity {
     private EditText editName, editEmail, editPassword, firstLastname,secondLastname;
     private Spinner editUserType;
     private Button saveUser;
-    private ImageButton userActionsButton,backButton;
+    private ImageButton userActionsButton,backButton,mainMenu;
     private TextView user_name;
 
     @Override
@@ -79,6 +81,7 @@ public class UsersCreate extends AppCompatActivity {
         userActionsButton = findViewById(R.id.user_actions_button);
         backButton = findViewById(R.id.back_button);
         user_name = findViewById(R.id.user_name_view);
+        mainMenu = findViewById(R.id.to_main_menu_view);
         user_name.setText(getUseName());
 
         userActionsButton.setOnClickListener(new View.OnClickListener() {
@@ -97,6 +100,14 @@ public class UsersCreate extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+            }
+        });
+        mainMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UsersCreate.this , MainMenu.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
             }
         });
 

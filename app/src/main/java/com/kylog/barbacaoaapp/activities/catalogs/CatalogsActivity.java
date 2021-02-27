@@ -2,7 +2,6 @@ package com.kylog.barbacaoaapp.activities.catalogs;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,16 +10,20 @@ import android.os.Bundle;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.tabs.TabLayout;
 import com.kylog.barbacaoaapp.AppCustomService;
 import com.kylog.barbacaoaapp.MainActivity;
+import com.kylog.barbacaoaapp.MainMenu;
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
+import com.kylog.barbacaoaapp.activities.mesas.MesasActivity;
+import com.kylog.barbacaoaapp.activities.products.ProductsActivity;
+import com.kylog.barbacaoaapp.activities.users.UsersActivity;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -30,7 +33,8 @@ import retrofit2.Response;
 public class CatalogsActivity extends AppCompatActivity {
 
     private SharedPreferences pref;
-    private ImageButton userActionsButton,backButton;
+    private Button usersButton,mesasButton, productsButton;
+    private ImageButton userActionsButton,backButton, mainMenu;
     private TextView user_name;
 
     @Override
@@ -41,8 +45,36 @@ public class CatalogsActivity extends AppCompatActivity {
         pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         userActionsButton = findViewById(R.id.user_actions_button);
         backButton = findViewById(R.id.back_button);
+        mainMenu = findViewById(R.id.to_main_menu_view);
         user_name = findViewById(R.id.user_name_view);
+        usersButton = findViewById(R.id.show_users_button);
+        mesasButton = findViewById(R.id.show_mesas_button);
+        productsButton = findViewById(R.id.show_products_button);
         user_name.setText(getUseName());
+
+        usersButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CatalogsActivity.this , UsersActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        mesasButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CatalogsActivity.this , MesasActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        productsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CatalogsActivity.this , ProductsActivity.class);
+                startActivity(intent);
+            }
+        });
 
         userActionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,6 +88,14 @@ public class CatalogsActivity extends AppCompatActivity {
                 showPopup(v);
             }
         });
+        mainMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CatalogsActivity.this , MainMenu.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        });
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,35 +105,6 @@ public class CatalogsActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
-
-        TabLayout tabLayout = findViewById(R.id.catalogs_tabs_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Usuarios"));
-        tabLayout.addTab(tabLayout.newTab().setText("Mesas"));
-        tabLayout.addTab(tabLayout.newTab().setText("Productos"));
-        tabLayout.setTabGravity(TabLayout.GRAVITY_CENTER);
-
-        ViewPager viewPager = findViewById(R.id.view_pager_catalogs);
-        PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(),tabLayout.getTabCount());
-
-        viewPager.setAdapter(adapter);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                int position = tab.getPosition();
-                viewPager.setCurrentItem(position);
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
 
     }
 
