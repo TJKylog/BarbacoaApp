@@ -41,7 +41,7 @@ public class ExpensesActivity extends AppCompatActivity {
     private SharedPreferences pref;
     private ImageButton userActionsButton,backButton, mainMenu;
     private Button saveButton;
-    private TextView user_name;
+    private TextView user_name, actionView;
     private EditText editAmount, editReason, editApprovedBy;
     private RecyclerView expensesList;
     private List<Expense> expenses;
@@ -59,6 +59,7 @@ public class ExpensesActivity extends AppCompatActivity {
         backButton = findViewById(R.id.back_button);
         mainMenu = findViewById(R.id.to_main_menu_view);
         user_name = findViewById(R.id.user_name_view);
+        actionView = findViewById(R.id.expenses_action);
         user_name.setText(getUseName());
 
         mainMenu.setOnClickListener(new View.OnClickListener() {
@@ -69,6 +70,8 @@ public class ExpensesActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        actionView.setText("Nuevo egreso");
 
         editAmount = findViewById(R.id.expenses_amount_edit);
         editApprovedBy = findViewById(R.id.expenses_name_edit);
@@ -193,6 +196,7 @@ public class ExpensesActivity extends AppCompatActivity {
                     editExpense = null;
                     isEdit = false;
                     get_expenses();
+                    actionView.setText("Nuevo egreso");
                     Toast.makeText(ExpensesActivity.this, "Se actualizo correctamente", Toast.LENGTH_LONG).show();
                 }
                 else {
@@ -264,7 +268,7 @@ public class ExpensesActivity extends AppCompatActivity {
         this.editApprovedBy.setText(editExpense.getApprovedBy());
         this.editReason.setText(editExpense.getReason());
         this.editAmount.setText(editExpense.getAmount().toString());
-
+        actionView.setText("Editando egreso: "+expense.getCreatedAt());
         Toast.makeText(ExpensesActivity.this, "Editando: "+expense.getId().toString(), Toast.LENGTH_SHORT).show();
     }
 
