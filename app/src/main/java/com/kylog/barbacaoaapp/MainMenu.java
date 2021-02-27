@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kylog.barbacaoaapp.activities.catalogs.CatalogsActivity;
+import com.kylog.barbacaoaapp.activities.events.EventsActivity;
 import com.kylog.barbacaoaapp.activities.expenses.ExpensesActivity;
 import com.kylog.barbacaoaapp.activities.notes.NotesActivity;
 import com.kylog.barbacaoaapp.models.User;
@@ -30,7 +31,7 @@ public class MainMenu extends AppCompatActivity {
 
     private SharedPreferences pref;
     private TextView user_name;
-    private Button products_button;
+    private Button products_button, events_button;
     private ImageButton notes_button;
     private Button expenses_button;
     private ImageButton userActionsButton;
@@ -44,6 +45,7 @@ public class MainMenu extends AppCompatActivity {
         userActionsButton = findViewById(R.id.user_actions_button);
         user_name = findViewById(R.id.user_name_view);
         expenses_button = findViewById(R.id.egresos_button);
+        events_button = findViewById(R.id.envetos_button);
 
         Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
@@ -81,6 +83,8 @@ public class MainMenu extends AppCompatActivity {
                 show_expenses();
             }
         });
+
+        events_button.setOnClickListener(v -> { show_events(); });
 
         pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
 
@@ -176,6 +180,11 @@ public class MainMenu extends AppCompatActivity {
 
     private void show_notes() {
         Intent intent = new Intent(MainMenu.this, NotesActivity.class);
+        startActivity(intent);
+    }
+
+    private void show_events(){
+        Intent intent = new Intent(MainMenu.this, EventsActivity.class);
         startActivity(intent);
     }
 

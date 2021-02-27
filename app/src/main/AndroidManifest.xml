@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BarcaoaApp.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.catalogs.CatalogsActivity"></activity>
+        <activity android:name=".activities.events.EventsActivity"></activity>
+        <activity android:name=".activities.catalogs.CatalogsActivity" />
         <activity android:name=".activities.expenses.ExpensesActivity" />
         <activity android:name=".activities.reset.password.PasswordActivity" />
         <activity android:name=".activities.reset.password.CodeActivity" />

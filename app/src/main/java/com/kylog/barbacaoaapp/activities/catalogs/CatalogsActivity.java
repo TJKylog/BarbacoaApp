@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.google.android.material.tabs.TabLayout;
 import com.kylog.barbacaoaapp.AppCustomService;
 import com.kylog.barbacaoaapp.MainActivity;
+import com.kylog.barbacaoaapp.MainMenu;
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
 
@@ -30,7 +31,7 @@ import retrofit2.Response;
 public class CatalogsActivity extends AppCompatActivity {
 
     private SharedPreferences pref;
-    private ImageButton userActionsButton,backButton;
+    private ImageButton userActionsButton,backButton, mainMenu;
     private TextView user_name;
 
     @Override
@@ -41,6 +42,7 @@ public class CatalogsActivity extends AppCompatActivity {
         pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         userActionsButton = findViewById(R.id.user_actions_button);
         backButton = findViewById(R.id.back_button);
+        mainMenu = findViewById(R.id.to_main_menu_view);
         user_name = findViewById(R.id.user_name_view);
         user_name.setText(getUseName());
 
@@ -54,6 +56,14 @@ public class CatalogsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showPopup(v);
+            }
+        });
+        mainMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CatalogsActivity.this , MainMenu.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
             }
         });
         backButton.setOnClickListener(new View.OnClickListener() {

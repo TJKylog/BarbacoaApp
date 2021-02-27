@@ -10,18 +10,22 @@ import android.os.Bundle;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kylog.barbacaoaapp.AppCustomService;
 import com.kylog.barbacaoaapp.MainActivity;
+import com.kylog.barbacaoaapp.MainMenu;
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
 import com.kylog.barbacaoaapp.activities.catalogs.CatalogsActivity;
+import com.kylog.barbacaoaapp.activities.expenses.ExpensesActivity;
 import com.kylog.barbacaoaapp.models.Product;
 import com.kylog.barbacaoaapp.models.forms.NewProductForm;
 
@@ -36,11 +40,12 @@ public class ProductsCreate extends AppCompatActivity {
     private SharedPreferences pref;
     private EditText editName;
     private EditText editPrice;
-    private EditText editMeasure;
-    private EditText editType;
+    private Spinner editMeasure;
+    private Spinner editType;
     private Button save_product;
-    private ImageButton userActionsButton,backButton;
+    private ImageButton userActionsButton,backButton, mainMenu;
     private TextView user_name;
+    private ArrayAdapter<CharSequence> adapterMeasure,adapterType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,16 +60,28 @@ public class ProductsCreate extends AppCompatActivity {
         editType = findViewById(R.id.product_type_field);
         save_product = findViewById(R.id.save_product_button);
 
+
+        adapterType = ArrayAdapter.createFromResource(this,
+                R.array.product_types_array, android.R.layout.simple_spinner_item);
+        adapterType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        editType.setAdapter(adapterType);
+
+        adapterMeasure = ArrayAdapter.createFromResource(this,
+                R.array.product_measures_array, android.R.layout.simple_spinner_item);
+        adapterMeasure.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        editMeasure.setAdapter(adapterMeasure);
+
         save_product.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                save_product(new NewProductForm(editName.getText().toString() , Double.parseDouble(String.valueOf(editPrice.getText())), editMeasure.getText().toString(), editType.getText().toString()));
+                save_product(new NewProductForm(editName.getText().toString() , Double.parseDouble(String.valueOf(editPrice.getText())), editMeasure.getSelectedItem().toString(), editType.getSelectedItem().toString()));
             }
         });
 
         userActionsButton = findViewById(R.id.user_actions_button);
         backButton = findViewById(R.id.back_button);
         user_name = findViewById(R.id.user_name_view);
+        mainMenu = findViewById(R.id.to_main_menu_view);
         user_name.setText(getUseName());
 
         userActionsButton.setOnClickListener(new View.OnClickListener() {
@@ -83,6 +100,14 @@ public class ProductsCreate extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+            }
+        });
+        mainMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProductsCreate.this , MainMenu.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
             }
         });
 

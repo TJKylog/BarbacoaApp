@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="product_types_array">
+        <item>Barbacoa</item>
+        <item>Bebida sin alcohol</item>
+        <item>Bebida alcohólica</item>
+        <item>Entrada</item>
+        <item>Postre</item>
+    </string-array>
+</resources>

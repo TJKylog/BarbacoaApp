@@ -22,9 +22,11 @@ import android.widget.Toast;
 
 import com.kylog.barbacaoaapp.AppCustomService;
 import com.kylog.barbacaoaapp.MainActivity;
+import com.kylog.barbacaoaapp.MainMenu;
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
 import com.kylog.barbacaoaapp.activities.catalogs.CatalogsActivity;
+import com.kylog.barbacaoaapp.activities.expenses.ExpensesActivity;
 import com.kylog.barbacaoaapp.models.User;
 import com.kylog.barbacaoaapp.models.forms.UserForm;
 
@@ -41,7 +43,7 @@ public class UsersEdit extends AppCompatActivity {
     private Button updateUser;
     private Integer id;
     private User user;
-    private ImageButton userActionsButton,backButton;
+    private ImageButton userActionsButton,backButton, mainMenu;
     private TextView user_name;
     ArrayAdapter<CharSequence> adapter;
 
@@ -95,9 +97,9 @@ public class UsersEdit extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 update_data(new UserForm(editName.getText().toString(),
+                        editEmail.getText().toString(),
                         firstLastname.getText().toString(),
                         secondLastname.getText().toString(),
-                        editEmail.getText().toString(),
                         editPassword.getText().toString(),
                         editType.getSelectedItem().toString()
                 ));
@@ -107,6 +109,7 @@ public class UsersEdit extends AppCompatActivity {
         userActionsButton = findViewById(R.id.user_actions_button);
         backButton = findViewById(R.id.back_button);
         user_name = findViewById(R.id.user_name_view);
+        mainMenu = findViewById(R.id.to_main_menu_view);
         user_name.setText(getUseName());
 
         userActionsButton.setOnClickListener(new View.OnClickListener() {
@@ -125,6 +128,14 @@ public class UsersEdit extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+            }
+        });
+        mainMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UsersEdit.this , MainMenu.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
             }
         });
 

@@ -118,13 +118,14 @@ public class NotesActivity extends AppCompatActivity {
     private String mConnectedDeviceName = null;
     private Double payment_amount,change;
     private ImageButton userActionsButton,backButton;
-    BluetoothAdapter mBluetoothAdapter;
+    private BluetoothAdapter mBluetoothAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notas);
         pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+        mService = null;
 
         typesList = findViewById(R.id.list_types);
         activeslist = findViewById(R.id.active_list);
@@ -976,6 +977,8 @@ public class NotesActivity extends AppCompatActivity {
             SendDataByte(cambio.getBytes("GBK"));
             SendDataByte(payment_method.getBytes("GBK"));
             SendDataByte(Command.LF);
+            SendDataByte(Command.LF);
+            SendDataByte("Gracias por su preferencia\n\n\n".getBytes("GBK"));
             SendDataByte("Este documento no tiene validez fiscal\n\n\n\n\n".getBytes("GBK"));
             SendDataByte(PrinterCommand.POS_Set_PrtAndFeedPaper(48));
             SendDataByte(Command.GS_V_m_n);

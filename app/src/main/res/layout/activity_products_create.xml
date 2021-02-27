@@ -49,26 +49,23 @@
             android:inputType="numberDecimal"
             android:layout_marginTop="20dp"/>
 
-        <EditText
+        <Spinner
             android:id="@+id/product_measure_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:ems="10"
             android:importantForAutofill="no"
-            android:inputType="text"
             android:hint="Medida"
             android:layout_marginTop="20dp" />
 
-        <EditText
+        <Spinner
             android:id="@+id/product_type_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:ems="10"
             android:importantForAutofill="no"
-            android:inputType="text"
-            android:hint="Tipo de producto"
             android:layout_marginTop="20dp"/>
 
         <Button
