@@ -1,11 +1,12 @@
 package com.kylog.barbacaoaapp.models;
 
-public class Others {
+public class BasicPackage {
+
     private Double amount;
     private Double price;
     private String name;
 
-    public Others(Double amount, Double price, String name) {
+    public BasicPackage(Double amount, Double price, String name) {
         this.amount = amount;
         this.price = price;
         this.name = name;
