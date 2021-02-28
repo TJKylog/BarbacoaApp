@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BarcaoaApp.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.products.ProductsActivity"></activity>
+        <activity android:name=".activities.events.CreateEventActivity"></activity>
+        <activity android:name=".activities.products.ProductsActivity" />
         <activity android:name=".activities.mesas.MesasActivity" />
         <activity android:name=".activities.users.UsersActivity" />
         <activity android:name=".activities.events.EventsActivity" />

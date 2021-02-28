@@ -1,8 +1,5 @@
 package com.kylog.barbacaoaapp.activities.events;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,11 +7,16 @@ import android.os.Bundle;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.kylog.barbacaoaapp.AppCustomService;
 import com.kylog.barbacaoaapp.MainActivity;
@@ -23,6 +25,7 @@ import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
 import com.kylog.barbacaoaapp.models.BasicPackage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -30,19 +33,19 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EventsActivity extends AppCompatActivity {
+public class CreateEventActivity extends AppCompatActivity {
 
-    private Button newEvent;
     private SharedPreferences pref;
     private ImageButton userActionsButton,backButton, mainMenu;
-    private TextView user_name, actionView;
+    private TextView user_name;
     private List<BasicPackage> basicPackageList;
-
+    private RecyclerView basicPackageR;
+    private BasicAdapter basicAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_events);
+        setContentView(R.layout.activity_create_event);
 
         pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
 
@@ -50,9 +53,7 @@ public class EventsActivity extends AppCompatActivity {
         backButton = findViewById(R.id.back_button);
         mainMenu = findViewById(R.id.to_main_menu_view);
         user_name = findViewById(R.id.user_name_view);
-        actionView = findViewById(R.id.expenses_action);
         user_name.setText(getUseName());
-
         userActionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,7 +77,7 @@ public class EventsActivity extends AppCompatActivity {
         mainMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(EventsActivity.this , MainMenu.class);
+                Intent intent = new Intent(CreateEventActivity.this , MainMenu.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             }
@@ -85,12 +86,19 @@ public class EventsActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
 
-        newEvent = findViewById(R.id.add_event_button);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        basicPackageR.setLayoutManager(linearLayoutManager);
 
-        newEvent.setOnClickListener(v -> {
-            Intent intent = new Intent(EventsActivity.this, CreateEventActivity.class);
-            startActivity(intent);
-        });
+        basicPackageList = new ArrayList<BasicPackage>();
+
+        basicAdapter = new BasicAdapter(basicPackageList, R.layout.item_package_list, new BasicAdapter.onItemClickListener() {
+            @Override
+            public void onItemClick(BasicPackage basicPackage, int position) {
+
+            }
+        }, CreateEventActivity.this);
+
 
     }
 
@@ -111,9 +119,9 @@ public class EventsActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if(response.isSuccessful()) {
-                            Toast.makeText(EventsActivity.this, "Cerrando sessión" , Toast.LENGTH_SHORT).show();
+                            Toast.makeText(CreateEventActivity.this, "Cerrando sessión" , Toast.LENGTH_SHORT).show();
                             pref.edit().clear().apply();
-                            Intent intent = new Intent(EventsActivity.this , MainActivity.class);
+                            Intent intent = new Intent(CreateEventActivity.this , MainActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
                         }
@@ -121,7 +129,7 @@ public class EventsActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Toast.makeText(EventsActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
+                        Toast.makeText(CreateEventActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
                     }
                 });
                 return true;
@@ -145,4 +153,5 @@ public class EventsActivity extends AppCompatActivity {
     public String authToken() {
         return getTokenType()+" "+getToken();
     }
+
 }
