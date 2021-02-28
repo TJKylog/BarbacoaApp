@@ -36,8 +36,9 @@
                     android:text="Consumos"
                     />
 
-                <Button
+                <ImageButton
                     android:id="@+id/productos_button"
+                    android:src="@drawable/catalogos"
                     android:layout_width="0dp"
                     android:layout_weight="30"
                     android:layout_margin="30dp"
@@ -45,13 +46,13 @@
                     android:text="Catálogos"/>
 
 
-                <Button
+                <ImageButton
                     android:id="@+id/egresos_button"
+                    android:src="@drawable/egresos"
                     android:layout_width="0dp"
                     android:layout_weight="30"
                     android:layout_height="match_parent"
                     android:layout_margin="30dp"
-                    android:text="Egresos"
                     />
 
             </LinearLayout>
@@ -62,13 +63,13 @@
                 android:layout_weight="50"
                 android:orientation="horizontal">
 
-                <Button
+                <ImageButton
                     android:id="@+id/envetos_button"
+                    android:src="@drawable/eventos"
                     android:layout_width="0dp"
                     android:layout_weight=".30"
                     android:layout_height="match_parent"
                     android:layout_margin="30dp"
-                    android:text="Eventos"
                     />
 
                 <Button
