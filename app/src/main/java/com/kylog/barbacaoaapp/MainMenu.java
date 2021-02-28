@@ -34,11 +34,7 @@ public class MainMenu extends AppCompatActivity {
 
     private SharedPreferences pref;
     private TextView user_name;
-    private Button products_button;
-    private Button mesas_button;
-    private Button users_button;
-    private ImageButton notes_button;
-    private Button expenses_button;
+    private ImageButton notes_button,products_button,mesas_button,users_button, expenses_button;
     private ImageButton userActionsButton;
 
     @Override
