@@ -23,6 +23,7 @@ import com.kylog.barbacaoaapp.MainActivity;
 import com.kylog.barbacaoaapp.MainMenu;
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
+import com.kylog.barbacaoaapp.activities.expenses.ExpensesActivity;
 import com.kylog.barbacaoaapp.models.BasicPackage;
 
 import java.util.ArrayList;
@@ -86,19 +87,27 @@ public class CreateEventActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
 
+        basicPackageR = findViewById(R.id.basic_package_list);
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         basicPackageR.setLayoutManager(linearLayoutManager);
 
         basicPackageList = new ArrayList<BasicPackage>();
+        basicPackageList.add(new BasicPackage(1.0,200.0,"Personas"));
+        basicPackageList.add(new BasicPackage(1.0,200.0,"Borrego"));
+        basicPackageList.add(new BasicPackage(1.0,200.0,"Consomé con garbanzo (guarniciones)"));
+        basicPackageList.add(new BasicPackage(1.0,200.0,"Arroz"));
+        basicPackageList.add(new BasicPackage(1.0,200.0,"Tortillas a mano"));
 
         basicAdapter = new BasicAdapter(basicPackageList, R.layout.item_package_list, new BasicAdapter.onItemClickListener() {
             @Override
             public void onItemClick(BasicPackage basicPackage, int position) {
-
+                Toast.makeText(CreateEventActivity.this, basicPackage.getName(), Toast.LENGTH_LONG).show();
             }
         }, CreateEventActivity.this);
 
+        basicPackageR.setAdapter(basicAdapter);
 
     }
 
