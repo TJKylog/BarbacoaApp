@@ -36,7 +36,7 @@
                 android:text="Nuevo evento"/>
         </RelativeLayout>
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/list_quotations"
+            android:id="@+id/list_events"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 

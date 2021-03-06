@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -25,6 +26,9 @@ import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
 import com.kylog.barbacaoaapp.activities.expenses.ExpensesActivity;
 import com.kylog.barbacaoaapp.models.BasicPackage;
+import com.kylog.barbacaoaapp.models.Others;
+import com.kylog.barbacaoaapp.models.forms.Event;
+import com.kylog.barbacaoaapp.models.forms.EventInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,10 +42,13 @@ public class CreateEventActivity extends AppCompatActivity {
 
     private SharedPreferences pref;
     private ImageButton userActionsButton,backButton, mainMenu;
+    private Button save_event;
     private TextView user_name;
     private List<BasicPackage> basicPackageList;
-    private RecyclerView basicPackageR;
+    private List<Others> othersList;
+    private RecyclerView basicPackageR, extrasList;
     private BasicAdapter basicAdapter;
+    private OthersAdapter othersAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,10 +95,27 @@ public class CreateEventActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         basicPackageR = findViewById(R.id.basic_package_list);
+        extrasList = findViewById(R.id.extras_list);
+        save_event = findViewById(R.id.save_event_button);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         basicPackageR.setLayoutManager(linearLayoutManager);
+
+        LinearLayoutManager layoutManager1 = new LinearLayoutManager(this);
+        layoutManager1.setOrientation(LinearLayoutManager.VERTICAL);
+        extrasList.setLayoutManager(layoutManager1);
+
+        othersList = new ArrayList<Others>();
+        othersList.add(new Others(1.0,200.0,"Personas"));
+
+        othersAdapter = new OthersAdapter(othersList, R.layout.item_package_list, new OthersAdapter.onItemClickListener() {
+            @Override
+            public void onItemClick(Others others, int position) {
+                Toast.makeText(CreateEventActivity.this, others.getName(), Toast.LENGTH_SHORT).show();
+            }
+        }, CreateEventActivity.this);
+        extrasList.setAdapter(othersAdapter);
 
         basicPackageList = new ArrayList<BasicPackage>();
         basicPackageList.add(new BasicPackage(1.0,200.0,"Personas"));
@@ -103,11 +127,51 @@ public class CreateEventActivity extends AppCompatActivity {
         basicAdapter = new BasicAdapter(basicPackageList, R.layout.item_package_list, new BasicAdapter.onItemClickListener() {
             @Override
             public void onItemClick(BasicPackage basicPackage, int position) {
-                Toast.makeText(CreateEventActivity.this, basicPackage.getName(), Toast.LENGTH_LONG).show();
+                Toast.makeText(CreateEventActivity.this, basicPackage.getName(), Toast.LENGTH_SHORT).show();
             }
         }, CreateEventActivity.this);
 
+        save_event.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                save_event();
+            }
+        });
+
         basicPackageR.setAdapter(basicAdapter);
+
+    }
+
+    private void save_event() {
+        AppCustomService service = RetrofitClient.getClient();
+        Call<ResponseBody> responseBodyCall = service.save_event(getTokenType()+" "+getToken(),
+                new Event(
+                        new EventInfo(othersList,
+                                basicPackageList,
+                                10.00,
+                                10.00,
+                                "name",
+                                "Calle",
+                                "2211673238",
+                                "05/03/2021",
+                                "10:00")
+                )
+        );
+
+        responseBodyCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful())
+                {
+                    Toast.makeText(CreateEventActivity.this, "se guardo" , Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(CreateEventActivity.this, "Error" , Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 

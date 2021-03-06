@@ -13,6 +13,7 @@ import com.kylog.barbacaoaapp.models.forms.AddAmount;
 import com.kylog.barbacaoaapp.models.forms.CodeForm;
 import com.kylog.barbacaoaapp.models.forms.DeleteProduct;
 import com.kylog.barbacaoaapp.models.forms.DoneTicketForm;
+import com.kylog.barbacaoaapp.models.forms.Event;
 import com.kylog.barbacaoaapp.models.forms.ExpenseForm;
 import com.kylog.barbacaoaapp.models.forms.FormActive;
 import com.kylog.barbacaoaapp.models.forms.LoginForm;
@@ -291,5 +292,19 @@ public interface AppCustomService {
             "X-Requested-With: XMLHttpRequest"
     })
     Call<SalesDay> sale_day(@Header("Authorization") String authorization);
+
+    @POST("api/auth/events")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<ResponseBody> save_event(@Header("Authorization") String authorization, @Body Event event);
+
+    @GET("api/auth/events")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<List<Event>> get_events(@Header("Authorization") String authorization);
 
 }
