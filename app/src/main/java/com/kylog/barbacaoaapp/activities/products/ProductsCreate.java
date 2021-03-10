@@ -74,7 +74,20 @@ public class ProductsCreate extends AppCompatActivity {
         save_product.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                save_product(new NewProductForm(editName.getText().toString() , Double.parseDouble(String.valueOf(editPrice.getText())), editMeasure.getSelectedItem().toString(), editType.getSelectedItem().toString()));
+                if(editName.getText().toString().matches("") || editPrice.getText().toString().matches(""))
+                {
+                    if (editName.getText().toString().matches(""))
+                    {
+                        editName.setError("Completa este campo");
+                    }
+                    if(editPrice.getText().toString().matches(""))
+                    {
+                        editPrice.setError("Completa este campo");
+                    }
+                }
+                else {
+                    save_product(new NewProductForm(editName.getText().toString() , Double.parseDouble(String.valueOf(editPrice.getText())), editMeasure.getSelectedItem().toString(), editType.getSelectedItem().toString()));
+                }
             }
         });
 
@@ -126,10 +139,11 @@ public class ProductsCreate extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     Toast.makeText(ProductsCreate.this, "Se guardó el producto correctamente", Toast.LENGTH_LONG).show();
                     Product product = response.body();
-                    Intent intent = new Intent(ProductsCreate.this , CatalogsActivity.class);
+                    Intent intent = new Intent(ProductsCreate.this , ProductsActivity.class);
                     startActivity(intent);
                 } else {
                     response.errorBody(); // do something with that
+                    Toast.makeText(ProductsCreate.this, "Ya existe el producto", Toast.LENGTH_LONG).show();
                 }
             }
 

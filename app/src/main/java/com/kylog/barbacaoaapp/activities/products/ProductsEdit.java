@@ -85,7 +85,17 @@ public class ProductsEdit extends AppCompatActivity {
         updateProductButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateProduct();
+                if(editName.getText().toString().matches("") || editPrice.getText().toString().matches("")) {
+                    if(editName.getText().toString().matches("")) {
+                        editName.setError("Completa este campo");
+                    }
+                    if(editPrice.getText().toString().matches("")) {
+                        editPrice.setError("Completa este campo");
+                    }
+                }
+                else {
+                    updateProduct();
+                }
             }
         });
 
@@ -174,7 +184,7 @@ public class ProductsEdit extends AppCompatActivity {
                 if(response.isSuccessful())
                 {
                     Toast.makeText(ProductsEdit.this, "Producto actualizado" , Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(ProductsEdit.this , CatalogsActivity.class);
+                    Intent intent = new Intent(ProductsEdit.this , ProductsActivity.class);
                     startActivity(intent);
                 }
                 else{

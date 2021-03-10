@@ -48,7 +48,6 @@ public class ProductAdapter extends ArrayAdapter<Product> {
     public static class viewHolder{
         public TextView name_item;
         public TextView price_item;
-        public TextView id_item;
         public TextView measure_item;
         public TextView type_item;
     }
@@ -62,7 +61,6 @@ public class ProductAdapter extends ArrayAdapter<Product> {
                 holder = new viewHolder();
 
                 holder.name_item = (TextView) vi.findViewById(R.id.product_name_text_list);
-                holder.id_item = (TextView) vi.findViewById(R.id.product_id_text_list);
                 holder.price_item = (TextView) vi.findViewById(R.id.product_price_text_list);
                 holder.measure_item = (TextView) vi.findViewById(R.id.product_measure_text_list);
                 holder.type_item = (TextView) vi.findViewById(R.id.product_type_text_list);
@@ -73,10 +71,9 @@ public class ProductAdapter extends ArrayAdapter<Product> {
             }
 
             holder.name_item.setText(lproduct.get(position).getName());
-            holder.id_item.setText(lproduct.get(position).getId().toString());
             holder.type_item.setText(lproduct.get(position).getType());
             holder.measure_item.setText(lproduct.get(position).getMeasure());
-            holder.price_item.setText(lproduct.get(position).getPrice().toString());
+            holder.price_item.setText("$ "+lproduct.get(position).getPrice().toString());
 
         } catch (Exception e) {
 
