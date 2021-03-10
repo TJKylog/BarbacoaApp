@@ -1,21 +1,23 @@
 package com.kylog.barbacaoaapp.activities.mesas;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.PopupMenu;
@@ -189,7 +191,7 @@ public class MesasActivity extends AppCompatActivity {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getMenuInflater();
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        menu.setHeaderTitle(this.mesas.get(info.position).getId().toString()+" "+mesas.get(info.position).getName());
+        menu.setHeaderTitle(this.mesas.get(info.position).getName());
         inflater.inflate(R.menu.context_menu, menu);
     }
 
@@ -201,41 +203,52 @@ public class MesasActivity extends AppCompatActivity {
         String name = this.mesas.get(info.position).getName();
         switch (item.getItemId()) {
             case R.id.delete_option: {
-                final CharSequence [] options = {"Eliminar", "Cancelar"};
-                final AlertDialog.Builder alertDelete = new AlertDialog.Builder(MesasActivity.this);
-                alertDelete.setTitle("Desea eliminar: "+name);
-                alertDelete.setItems(options, new DialogInterface.OnClickListener() {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(MesasActivity.this);
+                LayoutInflater inflater = getLayoutInflater();
+                View view = inflater.inflate(R.layout.delete_active_mesa_dialog, null);
+                builder.setView(view).setTitle("Eliminar mesa");
+                final AlertDialog dialog = builder.create();
+                dialog.show();
+                TextView mesa_name = view.findViewById(R.id.delete_active_mesa_name);
+                Button cancel = view.findViewById(R.id.cancel_button_delete_product);
+                Button save = view.findViewById(R.id.save_button_delete_product);
+
+                mesa_name.setText("¿Desea eliminar la mesa \""+name+"\" ?");
+
+                save.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if(options[which].equals("Eliminar")) {
-                            AppCustomService service = RetrofitClient.getClient();
-                            Call<ResponseBody> responseBodyCall = service.delete_mesa(getTokenType()+" "+getToken(), id);
-                            responseBodyCall.enqueue(new Callback<ResponseBody>() {
-                                @Override
-                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                    if(response.isSuccessful()) {
-                                        Toast.makeText(MesasActivity.this, "Mesa eliminada: "+ name , Toast.LENGTH_LONG).show();
-                                        mesas.remove(info.position);
-                                        adapter.notifyDataSetChanged();
-                                    }
-                                    else {
-                                        Toast.makeText(MesasActivity.this, "Se produjo un error al eliminar: "+ name , Toast.LENGTH_LONG).show();
-                                    }
+                    public void onClick(View v) {
+                        AppCustomService service = RetrofitClient.getClient();
+                        Call<ResponseBody> responseBodyCall = service.delete_mesa(getTokenType()+" "+getToken(), id);
+                        responseBodyCall.enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                if(response.isSuccessful()) {
+                                    Toast.makeText(MesasActivity.this, "Mesa eliminada: "+ name , Toast.LENGTH_LONG).show();
+                                    mesas.remove(info.position);
+                                    adapter.notifyDataSetChanged();
                                 }
-
-                                @Override
-                                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                    Toast.makeText(MesasActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
+                                else {
+                                    Toast.makeText(MesasActivity.this, "Se produjo un error al eliminar la mesa", Toast.LENGTH_LONG).show();
                                 }
-                            });
+                                dialog.dismiss();
+                            }
 
-                        }
-                        else {
-                            dialog.dismiss();
-                        }
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                Toast.makeText(MesasActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
+                                dialog.dismiss();
+                            }
+                        });
                     }
                 });
-                alertDelete.show();
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
                 return true;
             }
             case R.id.edit_option: {

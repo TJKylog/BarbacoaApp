@@ -54,7 +54,14 @@ public class MesasCreate extends AppCompatActivity {
         save_mesa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveMesa(new NewMesaForm(edit_name.getText().toString()));
+                if(edit_name.getText().toString().matches(""))
+                {
+                    edit_name.setError("Completa este campo");
+                }
+                else
+                {
+                    saveMesa(new NewMesaForm(edit_name.getText().toString()));
+                }
             }
         });
         userActionsButton = findViewById(R.id.user_actions_button);
@@ -105,11 +112,11 @@ public class MesasCreate extends AppCompatActivity {
                 {
                     Mesa mesa = response.body();
                     Toast.makeText(MesasCreate.this, "Se guardó correctamente", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(MesasCreate.this , CatalogsActivity.class);
+                    Intent intent = new Intent(MesasCreate.this , MesasActivity.class);
                     startActivity(intent);
                 }
                 else{
-                    response.errorBody();
+                    Toast.makeText(MesasCreate.this, "La mesa ya existe", Toast.LENGTH_SHORT).show();
                 }
             }
 

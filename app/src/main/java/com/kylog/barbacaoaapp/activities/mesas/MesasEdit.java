@@ -64,7 +64,13 @@ public class MesasEdit extends AppCompatActivity {
         update_mesa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                update_mesa();
+                if(edit_name.getText().toString().matches(""))
+                {
+                    edit_name.setError("Completa este campo");
+                }
+                else {
+                    update_mesa();
+                }
             }
         });
 
@@ -117,6 +123,9 @@ public class MesasEdit extends AppCompatActivity {
                     Toast.makeText(MesasEdit.this, "Mesa actualizada", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(MesasEdit.this, CatalogsActivity.class);
                     startActivity(intent);
+                }
+                else {
+                    Toast.makeText(MesasEdit.this, "La mesa ya existe", Toast.LENGTH_SHORT).show();
                 }
             }
 

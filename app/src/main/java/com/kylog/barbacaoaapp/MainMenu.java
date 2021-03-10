@@ -140,7 +140,7 @@ public class MainMenu extends AppCompatActivity {
                     User user = response.body();
                     user_name.setText(user.getName());
                     if(getUseName()==null && getUserEmail() == null)
-                        saveOnPreferences(user.getName(),user.getEmail());
+                        saveOnPreferences(user.getId(),user.getName(),user.getEmail());
                     Toast.makeText(MainMenu.this, user.getName() , Toast.LENGTH_LONG);
                 } else { //this returns you to the login activity if your session is invalid or has expired
                     response.errorBody();
@@ -158,8 +158,9 @@ public class MainMenu extends AppCompatActivity {
         });
     }
 
-    private void saveOnPreferences(String user_name, String user_email) {
+    private void saveOnPreferences( Integer id, String user_name, String user_email) {
         SharedPreferences.Editor editor = pref.edit();
+        editor.putString("user_id",id.toString());
         editor.putString("user_name",user_name);
         editor.putString("user_email",user_email);
         editor.apply();
