@@ -13,12 +13,10 @@ import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.autofill.AutofillValue;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -37,7 +35,7 @@ import com.kylog.barbacaoaapp.MainActivity;
 import com.kylog.barbacaoaapp.MainMenu;
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
-import com.kylog.barbacaoaapp.activities.expenses.ExpensesActivity;
+import com.kylog.barbacaoaapp.activities.notes.NotesActivity;
 import com.kylog.barbacaoaapp.models.BasicPackage;
 import com.kylog.barbacaoaapp.models.Others;
 import com.kylog.barbacaoaapp.models.forms.Event;
@@ -46,7 +44,6 @@ import com.kylog.barbacaoaapp.models.forms.EventInfo;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -158,7 +155,12 @@ public class CreateEventActivity extends AppCompatActivity {
         othersAdapter = new OthersAdapter(othersList, R.layout.item_package_list, new OthersAdapter.onItemClickListener() {
             @Override
             public void onItemClick(Others others, int position) {
-                showDialogEditExtra(others,position);
+                showDialogEditExtra(others, position);
+            }
+        }, new OthersAdapter.onLongItemClickListener() {
+            @Override
+            public void onLongItemClicked(Others others, int position) {
+                showDialogRemoveExtra(others,position);
             }
         }, CreateEventActivity.this);
         extrasList.setAdapter(othersAdapter);
@@ -173,7 +175,7 @@ public class CreateEventActivity extends AppCompatActivity {
         basicAdapter = new BasicAdapter(basicPackageList, R.layout.item_package_list, new BasicAdapter.onItemClickListener() {
             @Override
             public void onItemClick(BasicPackage basicPackage, int position) {
-                Toast.makeText(CreateEventActivity.this, basicPackage.getName(), Toast.LENGTH_SHORT).show();
+                showDialogEditBasic(basicPackage,position);
             }
         }, CreateEventActivity.this);
 
@@ -257,6 +259,84 @@ public class CreateEventActivity extends AppCompatActivity {
                 }
                 else {
                     othersAdapter.addOther(new Others( Double.parseDouble(String.valueOf(amount.getText())), Double.parseDouble(String.valueOf(price.getText())),name.getText().toString() ),  othersAdapter.getItemCount() );
+                    updateTotal();
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+    }
+
+    public void showDialogRemoveExtra(Others others, int position){
+        AlertDialog.Builder builder = new AlertDialog.Builder(CreateEventActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.delete_active_mesa_dialog, null);
+        builder.setView(view).setTitle("Eliminar extra");
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+        TextView mesa_name = view.findViewById(R.id.delete_active_mesa_name);
+        Button cancel = view.findViewById(R.id.cancel_button_delete_product);
+        Button save = view.findViewById(R.id.save_button_delete_product);
+
+        mesa_name.setText("¿Desea eliminar "+others.getName()+"?");
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                othersAdapter.removeOther(position);
+                dialog.dismiss();
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+    }
+
+    public void showDialogEditBasic(BasicPackage basicPackage, int position){
+        AlertDialog.Builder builder = new AlertDialog.Builder(CreateEventActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.extra_dialog, null);
+        builder.setView(view).setTitle("Editando");
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        Button save = view.findViewById(R.id.save_button_extra);
+        Button cancel = view.findViewById(R.id.cancel_button_extra);
+        EditText name = view.findViewById(R.id.name_extra_field);
+        EditText amount = view.findViewById(R.id.amount_extra_field);
+        EditText price = view.findViewById(R.id.price_extra_field);
+        name.setText(basicPackage.getName());
+        amount.setText(basicPackage.getAmount().toString());
+        price.setText(basicPackage.getPrice().toString());
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(name.getText().toString().matches("") || amount.getText().toString().matches("") || price.getText().toString().matches(""))
+                {
+                    if(name.getText().toString().matches(""))
+                    {
+                        name.setError("Complete este campo");
+                    }
+                    if(amount.getText().toString().matches("")){
+                        amount.setError("Complete este campo");
+                    }
+                    if(price.getText().toString().matches(""))
+                    {
+                        price.setError("Complete este campo");
+                    }
+                }
+                else {
+                    basicAdapter.editBasic(new BasicPackage( Double.parseDouble(String.valueOf(amount.getText())), Double.parseDouble(String.valueOf(price.getText())),name.getText().toString() ),  position );
                     updateTotal();
                     dialog.dismiss();
                 }

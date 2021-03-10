@@ -20,12 +20,14 @@ public class OthersAdapter extends  RecyclerView.Adapter<OthersAdapter.ViewHolde
     private int layout;
     private onItemClickListener listener;
     private Activity activity;
+    private onLongItemClickListener onLongListener;
 
-    public OthersAdapter(List<Others> othersList, int layout, onItemClickListener listener, Activity activity) {
+    public OthersAdapter(List<Others> othersList, int layout, onItemClickListener listener,onLongItemClickListener listener1, Activity activity) {
         this.othersList = othersList;
         this.layout = layout;
         this.listener = listener;
         this.activity = activity;
+        this.onLongListener = listener1;
     }
 
     @NonNull
@@ -38,7 +40,7 @@ public class OthersAdapter extends  RecyclerView.Adapter<OthersAdapter.ViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(othersList.get(position), listener);
+        holder.bind(othersList.get(position), listener, onLongListener);
     }
 
     @Override
@@ -57,7 +59,7 @@ public class OthersAdapter extends  RecyclerView.Adapter<OthersAdapter.ViewHolde
             this.priceView = v.findViewById(R.id.item_price_package);
         }
 
-        public void bind(final Others others, final onItemClickListener listener )
+        public void bind(final Others others, final onItemClickListener listener, final onLongItemClickListener listener1 )
         {
             this.nameView.setText(others.getName());
             this.amountView.setText(others.getAmount().toString());
@@ -68,11 +70,22 @@ public class OthersAdapter extends  RecyclerView.Adapter<OthersAdapter.ViewHolde
                     listener.onItemClick(others, getAdapterPosition());
                 }
             });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    listener1.onLongItemClicked(others, getAdapterPosition());
+                    return false;
+                }
+            });
         }
     }
 
     public interface onItemClickListener {
         void onItemClick(Others others, int position);
+    }
+
+    public interface onLongItemClickListener {
+        void onLongItemClicked(Others others, int position);
     }
 
     public void updateList(List<Others> othersList) {
@@ -89,5 +102,10 @@ public class OthersAdapter extends  RecyclerView.Adapter<OthersAdapter.ViewHolde
     public void editOther(Others others, int position){
         this.othersList.set(position, others);
         this.notifyItemChanged(position);
+    }
+
+    public void removeOther(int position){
+        this.othersList.remove(position);
+        this.notifyItemRemoved(position);
     }
 }

@@ -80,4 +80,9 @@ public class BasicAdapter extends RecyclerView.Adapter<BasicAdapter.ViewHolder> 
         this.basicPackageList.addAll(basicPackages);
         this.notifyDataSetChanged();
     }
+
+    public void editBasic(BasicPackage basicPackage, int position) {
+        this.basicPackageList.set(position,basicPackage);
+        this.notifyItemChanged(position);
+    }
 }
