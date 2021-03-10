@@ -75,4 +75,19 @@ public class OthersAdapter extends  RecyclerView.Adapter<OthersAdapter.ViewHolde
         void onItemClick(Others others, int position);
     }
 
+    public void updateList(List<Others> othersList) {
+        this.othersList.clear();
+        this.othersList.addAll(othersList);
+        this.notifyDataSetChanged();
+    }
+
+    public void addOther(Others others, int position){
+        this.othersList.add(position,others);
+        this.notifyItemInserted(position);
+    }
+
+    public void editOther(Others others, int position){
+        this.othersList.set(position, others);
+        this.notifyItemChanged(position);
+    }
 }
