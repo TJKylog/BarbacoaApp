@@ -44,13 +44,21 @@ public class Note {
      * @param waiter
      * @param consumes
      */
-    public Note(Integer id, String name, Waiter waiter, List<Consume> consumes, Double total,boolean delivery) {
+    public Note(Integer id, String name, Waiter waiter, List<Consume> consumes, Double total,boolean delivery,Integer invoice) {
         super();
         this.id = id;
         this.name = name;
         this.waiter = waiter;
         this.consumes = consumes;
         this.total = total;
+    }
+
+    public Integer getInvoice() {
+        return invoice;
+    }
+
+    public void setInvoice(Integer invoice) {
+        this.invoice = invoice;
     }
 
     public boolean isDelivery() {

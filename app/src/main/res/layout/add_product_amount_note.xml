@@ -7,22 +7,37 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <EditText
-            android:id="@+id/add_amount_product"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="0dp"
             android:layout_weight=".70"
             android:layout_height="wrap_content"
-            android:layout_margin="30dp"
-            android:maxLength="6"
-            android:hint="Cantidad"
-            android:importantForAutofill="no"
-            android:inputType="numberDecimal" />
-        <TextView
-            android:id="@+id/measure_label_note"
+            android:layout_margin="20dp">
+            <EditText
+                android:id="@+id/add_amount_product"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:maxLength="6"
+                android:hint="Cantidad"
+                android:importantForAutofill="no"
+                android:inputType="numberDecimal" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_weight=".30"
-            android:layout_height="wrap_content"
-            android:layout_margin="30dp"/>
+            android:layout_height="match_parent"
+            android:layout_margin="20dp">
+            <TextView
+                android:id="@+id/measure_label_note"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                />
+        </RelativeLayout>
+
+
 
     </LinearLayout>
 
