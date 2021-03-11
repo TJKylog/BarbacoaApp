@@ -2,6 +2,8 @@ package com.kylog.barbacaoaapp.activities.events;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,7 +24,9 @@ import com.kylog.barbacaoaapp.MainMenu;
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
 import com.kylog.barbacaoaapp.models.BasicPackage;
+import com.kylog.barbacaoaapp.models.forms.Event;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -36,8 +40,9 @@ public class EventsActivity extends AppCompatActivity {
     private SharedPreferences pref;
     private ImageButton userActionsButton,backButton, mainMenu;
     private TextView user_name, actionView;
-    private List<BasicPackage> basicPackageList;
-
+    private RecyclerView events_list;
+    private List<Event> events;
+    private EventAdapter eventAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,12 +91,48 @@ public class EventsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         newEvent = findViewById(R.id.add_event_button);
+        events_list = findViewById(R.id.list_events);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        events_list.setLayoutManager(linearLayoutManager);
+
+        events = new ArrayList<Event>();
+        eventAdapter = new EventAdapter(events, R.layout.item_event_list, new EventAdapter.onItemClickListener() {
+            @Override
+            public void onItemClick(Event event, int position) {
+                Toast.makeText(EventsActivity.this, event.getId().toString(), Toast.LENGTH_SHORT).show();
+            }
+        }, this);
+        events_list.setAdapter(eventAdapter);
 
         newEvent.setOnClickListener(v -> {
             Intent intent = new Intent(EventsActivity.this, CreateEventActivity.class);
             startActivity(intent);
         });
 
+        getEvents();
+
+    }
+
+    public void getEvents(){
+        AppCustomService service = RetrofitClient.getClient();
+        Call<List<Event>> callEvent = service.get_events(getTokenType()+" "+getToken());
+        callEvent.enqueue(new Callback<List<Event>>() {
+            @Override
+            public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
+                if(response.isSuccessful())
+                {
+                    events = response.body();
+                    eventAdapter.updateList(events);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Event>> call, Throwable t) {
+                Toast.makeText(EventsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     public void showPopup(View v) {
@@ -131,6 +172,7 @@ public class EventsActivity extends AppCompatActivity {
 
         }
     }
+
 
     private String getUseName(){
         return pref.getString("user_name", null);

@@ -4,6 +4,32 @@
     android:layout_height="match_parent"
     android:padding="20dp">
 
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <RadioButton
+            android:id="@+id/radio_mesa_here"
+            android:layout_width="0dp"
+            android:layout_weight=".50"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:checked="true"
+            android:text="Comedor" />
+
+        <RadioButton
+            android:id="@+id/radio_mesa_delivery"
+            android:layout_width="0dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_weight=".50"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="Domicilio" />
+    </RadioGroup>
+
     <TextView
         android:text="Selecciona mesa"
         android:layout_width="match_parent"
@@ -27,4 +53,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="20dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/cancel_button_add_mesa"
+            android:layout_width="0dp"
+            android:layout_weight="50"
+            android:layout_height="wrap_content"
+            android:text="Cancelar"
+            android:layout_margin="20dp"
+            />
+        <Button
+            android:id="@+id/save_button_add_mesa"
+            android:layout_width="0dp"
+            android:layout_weight="50"
+            android:layout_height="wrap_content"
+            android:text="Guardar"
+            android:layout_margin="20dp"
+            />
+
+    </LinearLayout>
 </LinearLayout>

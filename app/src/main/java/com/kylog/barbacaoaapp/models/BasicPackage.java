@@ -1,10 +1,19 @@
 package com.kylog.barbacaoaapp.models;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class BasicPackage {
 
-    private Double amount;
-    private Double price;
+    @SerializedName("name")
+    @Expose
     private String name;
+    @SerializedName("price")
+    @Expose
+    private Double price;
+    @SerializedName("amount")
+    @Expose
+    private Double amount;
 
     public BasicPackage(Double amount, Double price, String name) {
         this.amount = amount;

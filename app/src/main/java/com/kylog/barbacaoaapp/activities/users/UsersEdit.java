@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -96,13 +97,62 @@ public class UsersEdit extends AppCompatActivity {
         updateUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                update_data(new UserForm(editName.getText().toString(),
-                        editEmail.getText().toString(),
-                        firstLastname.getText().toString(),
-                        secondLastname.getText().toString(),
-                        editPassword.getText().toString(),
-                        editType.getSelectedItem().toString()
-                ));
+                if(editType.getSelectedItem().toString().matches("Mesero")) {
+                    if(editName.getText().toString().matches("") ||
+                            !isValidEmail(editEmail.getText().toString()) ||
+                            firstLastname.getText().toString().matches("") ||
+                            secondLastname.getText().toString().matches("")) {
+                        if(editName.getText().toString().matches("")){
+                            editEmail.setError("Completa este campos");
+                        }
+                        if(!isValidEmail(editEmail.getText().toString())) {
+                            editEmail.setError("Escribe un email valido");
+                        }
+                        if(firstLastname.getText().toString().matches("")) {
+                            firstLastname.setError("Complete este campo");
+                        }
+                        if(secondLastname.getText().toString().matches("")) {
+                            secondLastname.setError("Complete este campo");
+                        }
+                    }
+                    else {
+                        update_data(new UserForm(editName.getText().toString(),
+                                editEmail.getText().toString(),
+                                firstLastname.getText().toString(),
+                                secondLastname.getText().toString(),
+                                editPassword.getText().toString(),
+                                editType.getSelectedItem().toString()
+                        ));
+                    }
+                }
+                else {
+                    if(editName.getText().toString().matches("") ||
+                            !isValidEmail(editEmail.getText().toString()) ||
+                            firstLastname.getText().toString().matches("") ||
+                            secondLastname.getText().toString().matches("")) {
+                        if(editName.getText().toString().matches("")){
+                            editEmail.setError("Completa este campos");
+                        }
+                        if(!isValidEmail(editEmail.getText().toString())) {
+                            editEmail.setError("Escribe un email valido");
+                        }
+                        if(firstLastname.getText().toString().matches("")) {
+                            firstLastname.setError("Complete este campo");
+                        }
+                        if(secondLastname.getText().toString().matches("")) {
+                            secondLastname.setError("Complete este campo");
+                        }
+                    }
+                    else {
+                        update_data(new UserForm(editName.getText().toString(),
+                                editEmail.getText().toString(),
+                                firstLastname.getText().toString(),
+                                secondLastname.getText().toString(),
+                                editPassword.getText().toString(),
+                                editType.getSelectedItem().toString()
+                        ));
+                    }
+                }
             }
         });
 
@@ -177,7 +227,7 @@ public class UsersEdit extends AppCompatActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 if(response.isSuccessful()) {
                     Toast.makeText(UsersEdit.this, "Usuario actualizado" , Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(UsersEdit.this , CatalogsActivity.class);
+                    Intent intent = new Intent(UsersEdit.this , UsersActivity.class);
                     startActivity(intent);
                 }
             }
@@ -225,6 +275,25 @@ public class UsersEdit extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
 
+        }
+    }
+
+    private boolean validatePassword()
+    {
+        String password = editPassword.getText().toString();
+        if(password.length() > 6)
+            return true;
+
+        return false;
+    }
+
+    private boolean isValidEmail(String email) {
+        if(Patterns.EMAIL_ADDRESS.matcher(email).matches())
+        {
+            return true;
+        }
+        else {
+            return false;
         }
     }
 

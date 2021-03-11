@@ -19,27 +19,38 @@
         android:textColor="@color/purple_200"
         android:textColorHighlight="@color/purple_200"
         android:textSize="30sp"
-        android:layout_margin="40dp"/>
+        android:layout_margin="20dp"/>
 
 
-    <EditText
-        android:id="@+id/mesa_name_field"
+
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Nombre"
-        android:importantForAutofill="no"
-        android:inputType="text"
-        android:layout_margin="40dp"
-        />
+        android:layout_margin="10dp"
+        android:textColorHint="@color/primaryColor"
+        app:boxBackgroundColor="#118BA580"
+        >
+        <EditText
+            android:id="@+id/mesa_name_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Nombre"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-        android:id="@+id/save_mesa_button"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Guardar"
-        android:layout_margin="40dp"
-        />
-
-
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/save_mesa_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Guardar"
+            android:layout_margin="20dp"
+            />
+    </RelativeLayout>
 </LinearLayout>

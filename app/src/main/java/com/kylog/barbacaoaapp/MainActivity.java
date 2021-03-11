@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean isValidPassword(String password) {
-        return password.length() > 4;
+        return password.length() > 6;
     }
 
     private void saveOnPreferences(String accessToken, String tokenType) {

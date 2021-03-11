@@ -1,20 +1,22 @@
 package com.kylog.barbacaoaapp.activities.products;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.PopupMenu;
@@ -194,7 +196,7 @@ public class ProductsActivity extends AppCompatActivity {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getMenuInflater();
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        menu.setHeaderTitle(this.products.get(info.position).getId().toString()+" "+products.get(info.position).getName());
+        menu.setHeaderTitle(products.get(info.position).getName());
         inflater.inflate(R.menu.context_menu, menu);
     }
 
@@ -207,13 +209,22 @@ public class ProductsActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.delete_option:
             {
-                final CharSequence [] options = {"Eliminar","Cancelar"};
-                final AlertDialog.Builder alertDelete = new AlertDialog.Builder(ProductsActivity.this);
-                alertDelete.setTitle("Desea eliminar: "+name);
-                alertDelete.setItems(options, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if(options[which].equals("Eliminar")) {
+                if(id != 1)
+                {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ProductsActivity.this);
+                    LayoutInflater inflater = getLayoutInflater();
+                    View view = inflater.inflate(R.layout.delete_active_mesa_dialog, null);
+                    builder.setView(view).setTitle("Eliminar mesa");
+                    final AlertDialog dialog = builder.create();
+                    dialog.show();
+                    TextView mesa_name = view.findViewById(R.id.delete_active_mesa_name);
+                    Button cancel = view.findViewById(R.id.cancel_button_delete_product);
+                    Button save = view.findViewById(R.id.save_button_delete_product);
+                    mesa_name.setText("¿Desea eliminar el producto \""+name+"\" ?");
+
+                    save.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
                             AppCustomService service = RetrofitClient.getClient();
                             Call<ResponseBody> deleteResponse = service.delete_product(getTokenType()+" "+getToken(), id);
                             deleteResponse.enqueue(new Callback<ResponseBody>() {
@@ -227,26 +238,39 @@ public class ProductsActivity extends AppCompatActivity {
                                     else {
                                         Toast.makeText(ProductsActivity.this, "No se completo la acción: "+ name , Toast.LENGTH_LONG).show();
                                     }
+                                    dialog.dismiss();
                                 }
 
                                 @Override
                                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                                     Toast.makeText(ProductsActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
+                                    dialog.dismiss();
                                 }
                             });
                         }
-                        else {
+                    });
+                    cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
                             dialog.dismiss();
                         }
-                    }
-                });
-                alertDelete.show();
+                    });
+                }
+                else {
+                    Toast.makeText(ProductsActivity.this, "No se puedes eliminar este producto", Toast.LENGTH_LONG).show();
+                }
+
                 return true;
             }
             case R.id.edit_option:{
-                Intent intent = new  Intent(ProductsActivity.this,ProductsEdit.class);
-                intent.putExtra("id", id);
-                startActivity(intent);
+                if(id != 1) {
+                    Intent intent = new  Intent(ProductsActivity.this,ProductsEdit.class);
+                    intent.putExtra("id", id);
+                    startActivity(intent);
+                }
+                else{
+                    Toast.makeText(ProductsActivity.this, "No se puedes editar este producto", Toast.LENGTH_LONG).show();
+                }
             }
             default:
                 return super.onContextItemSelected(item);

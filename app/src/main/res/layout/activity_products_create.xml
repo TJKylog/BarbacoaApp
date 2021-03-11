@@ -26,28 +26,40 @@
             android:layout_margin="20dp"
             android:textSize="30sp" />
 
-
-        <EditText
-            android:id="@+id/product_name_field"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nombre"
-            android:layout_margin="20dp"
-            android:ems="10"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            android:layout_marginTop="30dp" />
+            android:layout_margin="10dp"
+            android:textColorHint="@color/primaryColor"
+            app:boxBackgroundColor="#118BA580"
+            >
+            <EditText
+                android:id="@+id/product_name_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nombre"
+                android:ems="10"
+                android:importantForAutofill="no"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
-            android:id="@+id/product_price_field"
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:ems="10"
-            android:hint="Precio"
-            android:importantForAutofill="no"
-            android:inputType="numberDecimal"
-            android:layout_marginTop="20dp"/>
+            android:layout_margin="10dp"
+            android:textColorHint="@color/primaryColor"
+            app:boxBackgroundColor="#118BA580"
+            >
+            <EditText
+                android:id="@+id/product_price_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Precio"
+                android:importantForAutofill="no"
+                android:inputType="numberDecimal"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Spinner
             android:id="@+id/product_measure_field"
@@ -56,8 +68,7 @@
             android:layout_margin="20dp"
             android:ems="10"
             android:importantForAutofill="no"
-            android:hint="Medida"
-            android:layout_marginTop="20dp" />
+            android:hint="Medida" />
 
         <Spinner
             android:id="@+id/product_type_field"
@@ -65,16 +76,19 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:ems="10"
-            android:importantForAutofill="no"
-            android:layout_marginTop="20dp"/>
+            android:importantForAutofill="no"/>
 
-        <Button
-            android:id="@+id/save_product_button"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:text="Guardar"
-            android:layout_marginTop="40dp" />
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/save_product_button"
+                android:layout_width="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:text="Guardar" />
+        </RelativeLayout>
 
     </LinearLayout>
 

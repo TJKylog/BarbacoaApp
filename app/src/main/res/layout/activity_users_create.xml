@@ -28,73 +28,110 @@
             android:textSize="30sp"
             />
 
-
-        <EditText
-            android:id="@+id/user_name_field"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:hint="Nombre"
-            android:ems="10"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            />
+            android:layout_margin="10dp"
+            android:textColorHint="@color/primaryColor"
+            app:boxBackgroundColor="#118BA580"
+            >
+            <EditText
+                android:id="@+id/user_name_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nombre"
+                android:ems="10"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
-            android:id="@+id/user_first_lastname"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            android:hint="Apellio materno"
-            android:layout_margin="20dp"
-            />
+            android:layout_margin="10dp"
+            android:textColorHint="@color/primaryColor"
+            app:boxBackgroundColor="#118BA580"
+            >
+            <EditText
+                android:id="@+id/user_first_lastname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:hint="Apellio paterno"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
-            android:id="@+id/user_second_lastname"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            android:hint="Apellido materno"
-            android:layout_margin="20dp"
-            />
+            android:layout_margin="10dp"
+            android:textColorHint="@color/primaryColor"
+            app:boxBackgroundColor="#118BA580"
+            >
+            <EditText
+                android:id="@+id/user_second_lastname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:hint="Apellido materno"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
-            android:id="@+id/user_email_field"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:ems="10"
-            android:hint="Email"
-            android:importantForAutofill="no"
-            android:inputType="textEmailAddress"
-            />
+            android:layout_margin="10dp"
+            android:textColorHint="@color/primaryColor"
+            app:boxBackgroundColor="#118BA580"
+            >
+            <EditText
+                android:id="@+id/user_email_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Email"
+                android:importantForAutofill="no"
+                android:inputType="textEmailAddress"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
 
         <Spinner
             android:id="@+id/user_role_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
+            android:ems="20"
             android:importantForAutofill="no"
             android:inputType="text"
             android:hint="Tipo de usuario"
             android:layout_margin="20dp"
             />
 
-        <EditText
-            android:id="@+id/user_password_field"
+
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:ems="10"
-            android:importantForAutofill="no"
-            android:inputType="textPassword"
-            android:hint="Contraseña"
-             />
-
+            android:layout_margin="10dp"
+            android:textColorHint="@color/primaryColor"
+            app:boxBackgroundColor="#118BA580"
+            >
+            <EditText
+                android:id="@+id/user_password_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:importantForAutofill="no"
+                android:inputType="textPassword"
+                android:hint="Contraseña"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
         <Button
             android:id="@+id/save_user_button"
             android:layout_width="match_parent"

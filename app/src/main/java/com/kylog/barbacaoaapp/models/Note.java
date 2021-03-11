@@ -22,6 +22,12 @@ public class Note {
     @SerializedName("total")
     @Expose
     private Double total;
+    @SerializedName("delivery")
+    @Expose
+    private boolean delivery;
+    @SerializedName("invoice")
+    @Expose
+    private Integer invoice;
 
     /**
      * No args constructor for use in serialization
@@ -38,13 +44,21 @@ public class Note {
      * @param waiter
      * @param consumes
      */
-    public Note(Integer id, String name, Waiter waiter, List<Consume> consumes, Double total) {
+    public Note(Integer id, String name, Waiter waiter, List<Consume> consumes, Double total,boolean delivery) {
         super();
         this.id = id;
         this.name = name;
         this.waiter = waiter;
         this.consumes = consumes;
         this.total = total;
+    }
+
+    public boolean isDelivery() {
+        return delivery;
+    }
+
+    public void setDelivery(boolean delivery) {
+        this.delivery = delivery;
     }
 
     public Integer getId() {

@@ -1,11 +1,35 @@
 package com.kylog.barbacaoaapp.models;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class Others {
-    private Double amount;
-    private Double price;
+    @SerializedName("name")
+    @Expose
     private String name;
+    @SerializedName("price")
+    @Expose
+    private Double price;
+    @SerializedName("amount")
+    @Expose
+    private Double amount;
+
+    /**
+     * No args constructor for use in serialization
+     *
+     */
+    public Others() {
+    }
+
+    /**
+     *
+     * @param amount
+     * @param price
+     * @param name
+     */
 
     public Others(Double amount, Double price, String name) {
+        super();
         this.amount = amount;
         this.price = price;
         this.name = name;

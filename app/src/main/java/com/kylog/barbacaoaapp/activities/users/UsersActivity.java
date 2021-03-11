@@ -1,20 +1,22 @@
 package com.kylog.barbacaoaapp.activities.users;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.PopupMenu;
@@ -28,6 +30,7 @@ import com.kylog.barbacaoaapp.MainMenu;
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
 import com.kylog.barbacaoaapp.activities.catalogs.CatalogsActivity;
+import com.kylog.barbacaoaapp.activities.events.CreateEventActivity;
 import com.kylog.barbacaoaapp.models.User;
 
 import java.util.ArrayList;
@@ -142,7 +145,7 @@ public class UsersActivity extends AppCompatActivity {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getMenuInflater();
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        menu.setHeaderTitle(this.users.get(info.position).getId().toString()+" "+users.get(info.position).getName());
+        menu.setHeaderTitle(users.get(info.position).getName());
         inflater.inflate(R.menu.context_menu, menu);
     }
 
@@ -160,13 +163,23 @@ public class UsersActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.delete_option:
             {
-                final CharSequence [] options = {"Eliminar","Cancelar"};
-                final AlertDialog.Builder alertDelete = new AlertDialog.Builder(UsersActivity.this);
-                alertDelete.setTitle("Confirmar acción: " + name);
-                alertDelete.setItems(options, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if(options[which].equals("Eliminar")) {
+                if(id != 1 && id != getUserId())
+                {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(UsersActivity.this);
+                    LayoutInflater inflater = getLayoutInflater();
+                    View view = inflater.inflate(R.layout.delete_active_mesa_dialog, null);
+                    builder.setView(view).setTitle("Eliminar usuario");
+                    final AlertDialog dialog = builder.create();
+                    dialog.show();
+                    TextView mesa_name = view.findViewById(R.id.delete_active_mesa_name);
+                    Button cancel = view.findViewById(R.id.cancel_button_delete_product);
+                    Button save = view.findViewById(R.id.save_button_delete_product);
+
+                    mesa_name.setText("¿Desea eliminar el usuario \""+name+"\" ?");
+
+                    save.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
                             AppCustomService service = RetrofitClient.getClient();
                             Call<ResponseBody> deleteResponse = service.delete_user(getTokenType()+" "+getToken(), id);
                             deleteResponse.enqueue(new Callback<ResponseBody>() {
@@ -178,22 +191,30 @@ public class UsersActivity extends AppCompatActivity {
                                         userAdapter.notifyDataSetChanged();
                                     }
                                     else {
-                                        Toast.makeText(UsersActivity.this, "No se completo la acción" , Toast.LENGTH_LONG).show();
+                                        Toast.makeText(UsersActivity.this, "Ocurrio un error al eliminar el usuario" , Toast.LENGTH_LONG).show();
                                     }
+                                    dialog.dismiss();
                                 }
 
                                 @Override
                                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                                     Toast.makeText(UsersActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
+                                    dialog.dismiss();
                                 }
                             });
                         }
-                        else {
+                    });
+                    cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
                             dialog.dismiss();
                         }
-                    }
-                });
-                alertDelete.show();
+                    });
+                }
+                else {
+                    Toast.makeText(UsersActivity.this, "No puedes eliminar este usuario", Toast.LENGTH_LONG).show();
+                }
+
                 return true;
             }
             case R.id.edit_option:{
@@ -241,6 +262,10 @@ public class UsersActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+
+    private Integer getUserId(){
+        return Integer.parseInt(pref.getString("user_id", null));
     }
 
     private String getUseName(){

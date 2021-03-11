@@ -161,7 +161,7 @@ public class NotesActivity extends AppCompatActivity {
         add_active_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAddActive();
+                getDataAvailable();
             }
         });
 
@@ -557,14 +557,14 @@ public class NotesActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(NotesActivity.this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.delete_active_mesa_dialog, null);
-        builder.setView(view).setTitle(name);
+        builder.setView(view).setTitle("Eliminar consumo");
         final AlertDialog dialog = builder.create();
         dialog.show();
         TextView mesa_name = view.findViewById(R.id.delete_active_mesa_name);
         Button cancel = view.findViewById(R.id.cancel_button_delete_product);
         Button save = view.findViewById(R.id.save_button_delete_product);
 
-        mesa_name.setText("Borrar: "+name);
+        mesa_name.setText("¿Está seguro que desea eliminar el consumo de la mesa \""+name+"\"?");
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -687,31 +687,7 @@ public class NotesActivity extends AppCompatActivity {
         });
     }
 
-    private void showAddActive(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(NotesActivity.this);
-        LayoutInflater inflater = getLayoutInflater();
-        final View v = inflater.inflate(R.layout.add_mesa, null);
-        spinnerMesas = v.findViewById(R.id.spinner_mesas);
-        spinnerWaiters = v.findViewById(R.id.spinner_waiters);
-
-        builder.setView(v)
-                .setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        final Mesa mesa = (Mesa) spinnerMesas.getSelectedItem();
-                        final Waiter waiter = (Waiter) spinnerWaiters.getSelectedItem();
-                        add_active(new FormActive(waiter.getId(),mesa.getId()));
-                    }
-                })
-                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
+    private void getDataAvailable(){
         AppCustomService service = RetrofitClient.getClient();
         Call<DataAvailable> dataAvailableCall = service.get_data_available(getTokenType()+" "+getToken());
 
@@ -722,14 +698,19 @@ public class NotesActivity extends AppCompatActivity {
                     dataAvailable = response.body();
                     if(dataAvailable.getMesas().isEmpty() || dataAvailable.getWaiters().isEmpty() )
                     {
-                        Toast.makeText(NotesActivity.this, "No hay mesas disponibles", Toast.LENGTH_SHORT).show();
-                        dialog.dismiss();
+                        if(dataAvailable.getMesas().isEmpty() && dataAvailable.getWaiters().isEmpty())
+                        {
+                            Toast.makeText(NotesActivity.this, "No hay mesas y meseros disponibles disponibles", Toast.LENGTH_SHORT).show();
+                        }
+                        else if( dataAvailable.getMesas().isEmpty() ) {
+                            Toast.makeText(NotesActivity.this, "No hay mesas disponibles", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Toast.makeText(NotesActivity.this, "No hay meseros disponibles", Toast.LENGTH_SHORT).show();
+                        }
                     }
                     else{
-                        ArrayAdapter spinnerAdapterMesas =  new ArrayAdapter( v.getContext() ,R.layout.support_simple_spinner_dropdown_item, dataAvailable.getMesas());
-                        spinnerMesas.setAdapter(spinnerAdapterMesas);
-                        ArrayAdapter spinnerAdapterWaiters = new ArrayAdapter(v.getContext(),R.layout.support_simple_spinner_dropdown_item , dataAvailable.getWaiters());
-                        spinnerWaiters.setAdapter(spinnerAdapterWaiters);
+                        showAddActive();
                     }
                 }
             }
@@ -739,9 +720,52 @@ public class NotesActivity extends AppCompatActivity {
                 Toast.makeText(NotesActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
             }
         });
-
-
     }
+
+    private void showAddActive(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(NotesActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        final View v = inflater.inflate(R.layout.add_mesa, null);
+        builder.setView(v).setTitle("Añadir mesa");
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        RadioButton delivery = v.findViewById(R.id.radio_mesa_delivery);
+        RadioButton here = v.findViewById(R.id.radio_mesa_here);
+        spinnerMesas = v.findViewById(R.id.spinner_mesas);
+        spinnerWaiters = v.findViewById(R.id.spinner_waiters);
+        Button save = v.findViewById(R.id.save_button_add_mesa);
+        Button cancel = v.findViewById(R.id.cancel_button_add_mesa);
+
+
+        ArrayAdapter spinnerAdapterMesas =  new ArrayAdapter( v.getContext() ,R.layout.support_simple_spinner_dropdown_item, dataAvailable.getMesas());
+        spinnerMesas.setAdapter(spinnerAdapterMesas);
+        ArrayAdapter spinnerAdapterWaiters = new ArrayAdapter(v.getContext(),R.layout.support_simple_spinner_dropdown_item , dataAvailable.getWaiters());
+        spinnerWaiters.setAdapter(spinnerAdapterWaiters);
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Mesa mesa = (Mesa) spinnerMesas.getSelectedItem();
+                final Waiter waiter = (Waiter) spinnerWaiters.getSelectedItem();
+                if(delivery.isChecked()) {
+                    add_active(new FormActive(waiter.getId(),mesa.getId(),true));
+                }
+                else {
+                    add_active(new FormActive(waiter.getId(),mesa.getId(),false));
+                }
+                dialog.dismiss();
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+    }
+
 
     private void add_active(FormActive formActive) {
         AppCustomService service = RetrofitClient.getClient();
@@ -772,7 +796,13 @@ public class NotesActivity extends AppCompatActivity {
             public void onResponse(Call<Note> call, Response<Note> response) {
                 if(response.isSuccessful()) {
                     note = response.body();
-                    note_mesa_name.setText(note.getName());
+
+                    if(note.isDelivery()){
+                        note_mesa_name.setText(note.getName()+": Entrega a domicilio" );
+                    }
+                    else {
+                        note_mesa_name.setText(note.getName());
+                    }
                     note_waiter_name.setText("Mesero: "+note.getWaiter());
                     total_consume_price.setText("Total: "+note.getTotal().toString()+" $");
                     consumeAdapter.updateList(note.getConsumes());
