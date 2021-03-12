@@ -307,4 +307,25 @@ public interface AppCustomService {
     })
     Call<List<Event>> get_events(@Header("Authorization") String authorization);
 
+    @GET("api/auth/events/{id}")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<Event> get_event(@Header("Authorization") String authorization,@Path("id") Integer id);
+
+    @PUT("api/auth/events/{id}")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<ResponseBody> update_event(@Header("Authorization") String authorization,@Path("id") Integer id,@Body Event event);
+
+    @DELETE("api/auth/events/{id}")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<ResponseBody> delete_event(@Header("Authorization") String authorization,@Path("id") Integer id);
+
 }

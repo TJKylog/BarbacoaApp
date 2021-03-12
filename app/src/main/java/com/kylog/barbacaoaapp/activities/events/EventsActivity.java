@@ -103,7 +103,7 @@ public class EventsActivity extends AppCompatActivity {
             public void onItemClick(Event event, int position) {
                 Toast.makeText(EventsActivity.this, event.getId().toString(), Toast.LENGTH_SHORT).show();
             }
-        }, this);
+        }, this, this);
         events_list.setAdapter(eventAdapter);
 
         newEvent.setOnClickListener(v -> {
@@ -172,7 +172,6 @@ public class EventsActivity extends AppCompatActivity {
 
         }
     }
-
 
     private String getUseName(){
         return pref.getString("user_name", null);

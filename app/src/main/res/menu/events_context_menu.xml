@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/event_add_payment_option"
+        android:title="Completar pago"/>
+    <item android:id="@+id/event_delete_option"
+        android:title="Eliminar" />
+    <item android:id="@+id/event_edit_option"
+        android:title="Editar"/>
+</menu>
