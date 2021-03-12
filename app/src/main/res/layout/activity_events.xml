@@ -35,6 +35,51 @@
                 android:layout_alignParentEnd="true"
                 android:text="Nuevo evento"/>
         </RelativeLayout>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal" android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight=".20"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="ID"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight=".20"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Total"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight=".20"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Anticipo"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight=".20"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Nombre del cliente"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight=".20"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Fecha"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list_events"
             android:layout_width="match_parent"

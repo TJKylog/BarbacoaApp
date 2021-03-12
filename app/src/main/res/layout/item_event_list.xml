@@ -5,19 +5,36 @@
 
     <TextView
         android:id="@+id/item_event_id"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight=".20"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"/>
+
+    <TextView
+        android:id="@+id/item_event_total"
+        android:layout_width="0dp"
+        android:layout_weight=".20"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"/>
+
+    <TextView
+        android:id="@+id/item_event_payment"
+        android:layout_width="0dp"
+        android:layout_weight=".20"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"/>
 
     <TextView
         android:id="@+id/item_event_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight=".20"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"/>
 
     <TextView
         android:id="@+id/item_event_date"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight=".20"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"/>
 

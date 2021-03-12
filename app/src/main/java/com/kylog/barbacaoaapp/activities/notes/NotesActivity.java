@@ -199,7 +199,7 @@ public class NotesActivity extends AppCompatActivity {
                 new ConsumeAdapter.itemClickListener() {
                     @Override
                     public void onItemClick(Consume consume, int position) {
-                        showDialogProduct(consume.getId(), consume.getName(),consume.getMeasure());
+                        showDialogProduct(consume.getId(), consume.getName(),consume.getMeasure(),consume.getAmount());
                     }
                 },
                 new ConsumeAdapter.OnItemLongClickListener() {
@@ -217,7 +217,7 @@ public class NotesActivity extends AppCompatActivity {
             public void onItemClick(Product product, int position) {
                 if(note != null)
                 {
-                    showDialogProduct(product.getId(),product.getName(),product.getMeasure());
+                    showDialogProduct(product.getId(),product.getName(),product.getMeasure(),0.0);
                 }
                 else {
                     Toast.makeText(NotesActivity.this, "Seleccione una mesa primero", Toast.LENGTH_SHORT).show();
@@ -412,7 +412,7 @@ public class NotesActivity extends AppCompatActivity {
         paymentCard.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                amount.setEnabled(isChecked);
+                amount.setEnabled(!isChecked);
             }
         });
 
@@ -601,14 +601,14 @@ public class NotesActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(NotesActivity.this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.delete_active_mesa_dialog, null);
-        builder.setView(view);
+        builder.setView(view).setTitle("Eliminar producto");
         final AlertDialog dialog = builder.create();
         dialog.show();
         TextView mesa_name = view.findViewById(R.id.delete_active_mesa_name);
         Button cancel = view.findViewById(R.id.cancel_button_delete_product);
         Button save = view.findViewById(R.id.save_button_delete_product);
 
-        mesa_name.setText("Borrar: "+name);
+        mesa_name.setText("¿Esta seguro de eliminar el producto \""+name+"\" de la mesa \""+note.getName()+"\"?" );
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -641,7 +641,7 @@ public class NotesActivity extends AppCompatActivity {
         });
     }
 
-    private void showDialogProduct(Integer id, String name,String measure_label_input){
+    private void showDialogProduct(Integer id, String name,String measure_label_input,Double total1 ){
         AlertDialog.Builder builder = new AlertDialog.Builder(NotesActivity.this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.add_product_amount_note, null);
@@ -657,26 +657,41 @@ public class NotesActivity extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AppCustomService service = RetrofitClient.getClient();
-                Call<ResponseBody> responseBodyCall = service.add_product_mesa(getTokenType()+" "+getToken(), note.getId(),
-                        new AddAmount(id,
-                                Double.parseDouble(String.valueOf(amount.getText())))
-                );
-                responseBodyCall.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if(response.isSuccessful())
-                        {
-                            get_mesa_consume(note.getId());
-                            dialog.dismiss();
+                if(amount.getText().toString().matches(""))
+                {
+                    amount.setError("Escriba la cantidad");
+                }
+                else {
+                    Double aDouble;
+                    Double value1 = Double.parseDouble(String.valueOf(amount.getText()));
+                    if(measure_label_input.matches("Gramos"))
+                    {
+                        aDouble =  value1 + (1000.00 * total1 );
+                    }
+                    else
+                    {
+                        aDouble = total1 + value1;
+                    }
+                    AppCustomService service = RetrofitClient.getClient();
+                    Call<ResponseBody> responseBodyCall = service.add_product_mesa(getTokenType()+" "+getToken(), note.getId(),
+                            new AddAmount(id, aDouble)
+                    );
+                    responseBodyCall.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if(response.isSuccessful())
+                            {
+                                get_mesa_consume(note.getId());
+                                dialog.dismiss();
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Toast.makeText(NotesActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            Toast.makeText(NotesActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
             }
         });
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -963,11 +978,13 @@ public class NotesActivity extends AppCompatActivity {
             SimpleDateFormat formatter = new SimpleDateFormat ("yyyy/MM/dd HH:mm:ss ");
             Date curDate = new Date(System.currentTimeMillis());
             String str = formatter.format(curDate);
+            String folio = "Folio: "+note.getInvoice().toString()+"\n";
             String date = str + "\n";
             try {
                 Command.ESC_Align[2] = 0x01;
                 SendDataByte(Command.ESC_Align);
                 SendDataByte("Ticket de venta\n".getBytes("GBK"));
+                SendDataByte(folio.getBytes("GBK"));
                 SendDataString(date);
                 Command.ESC_Align[2] = 0x00;
                 SendDataByte(Command.ESC_Align);
@@ -992,6 +1009,7 @@ public class NotesActivity extends AppCompatActivity {
         String str = formatter.format(curDate);
         String date = str + "\n";
         String pago = "Pago: "+String.valueOf(payment_amount)+"\n";
+        String folio = "Folio: "+note.getInvoice().toString()+"\n";
         String cambio = "Cambio: "+String.valueOf(change)+"\n";
         payment_method = "Forma de pago: "+ payment_method+"\n";
 
@@ -999,6 +1017,11 @@ public class NotesActivity extends AppCompatActivity {
             Command.ESC_Align[2] = 0x01;
             SendDataByte(Command.ESC_Align);
             SendDataByte("Ticket de venta\n".getBytes("GBK"));
+            SendDataByte(folio.getBytes("GBK"));
+            if(note.isDelivery())
+            {
+                SendDataByte("Entrega a domicilio\n".getBytes("GBK"));
+            }
             SendDataString(date);
             Command.ESC_Align[2] = 0x00;
             SendDataByte(Command.ESC_Align);
