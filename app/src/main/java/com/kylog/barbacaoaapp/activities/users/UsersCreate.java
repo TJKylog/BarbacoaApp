@@ -225,7 +225,7 @@ public class UsersCreate extends AppCompatActivity {
                     startActivity(intent);
                 }
                 else {
-                    Toast.makeText(UsersCreate.this, "Ocurrio un error al guardar" , Toast.LENGTH_LONG).show();
+                    Toast.makeText(UsersCreate.this, "El correo electrónico ya existe" , Toast.LENGTH_LONG).show();
                 }
             }
 

@@ -138,7 +138,7 @@ public class MesasEdit extends AppCompatActivity {
 
     private void get_mesa() {
         AppCustomService service = RetrofitClient.getClient();
-        Call<Mesa> mesaCall = service.get_mesa(getTokenType()+" "+getToken(), id);
+        Call<Mesa> mesaCall = service.edit_mesa(getTokenType()+" "+getToken(), id);
 
         mesaCall.enqueue(new Callback<Mesa>() {
             @Override
@@ -146,6 +146,7 @@ public class MesasEdit extends AppCompatActivity {
                 if(response.isSuccessful()) {
                     mesa = response.body();
                     edit_name.setText(mesa.getName());
+                    edit_name.setHint("Nombre: ("+mesa.getName()+")" );
                 }
             }
 

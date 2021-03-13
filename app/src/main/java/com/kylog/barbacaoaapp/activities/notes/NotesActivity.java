@@ -376,7 +376,7 @@ public class NotesActivity extends AppCompatActivity {
                 if(response.isSuccessful())
                 {
                     SalesDay salesDay = response.body();
-                    sale_date_total.setText(salesDay.getTotal().toString()+" $");
+                    sale_date_total.setText("$ "+salesDay.getTotal().toString());
                 }
             }
 
@@ -819,7 +819,7 @@ public class NotesActivity extends AppCompatActivity {
                         note_mesa_name.setText(note.getName());
                     }
                     note_waiter_name.setText("Mesero: "+note.getWaiter());
-                    total_consume_price.setText("Total: "+note.getTotal().toString()+" $");
+                    total_consume_price.setText("Total: $"+note.getTotal().toString());
                     consumeAdapter.updateList(note.getConsumes());
                 }
             }

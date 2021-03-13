@@ -8,15 +8,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kylog.barbacaoaapp.AppCustomService;
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
+import com.kylog.barbacaoaapp.activities.events.EventsActivity;
 import com.kylog.barbacaoaapp.models.Expense;
 
 import java.util.List;
@@ -94,25 +97,52 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
             switch (item.getItemId()) {
                 case R.id.delete_expense_option: {
                     if(context instanceof ExpensesActivity){
-                        AppCustomService service = RetrofitClient.getClient();
-                        retrofit2.Call<ResponseBody> responseBodyCall = service.delete_expense( ((ExpensesActivity)context).authToken()  , expenseList.get(this.getAdapterPosition()).getId());
-                        responseBodyCall.enqueue(new Callback<ResponseBody>() {
-                            @Override
-                            public void onResponse(retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
-                                if(response.isSuccessful())
-                                {
-                                    expenseList.remove(getAdapterPosition());
-                                    notifyItemRemoved(getAdapterPosition());
-                                    Toast.makeText(context, "Se elimino correctamente", Toast.LENGTH_LONG).show();
-                                }
-                                else {
-                                    Toast.makeText(context, "Ocurrio un error al eliminar", Toast.LENGTH_LONG).show();
-                                }
-                            }
 
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        LayoutInflater inflater = ((ExpensesActivity) context).getLayoutInflater();
+                        final View v = inflater.inflate(R.layout.delete_active_mesa_dialog, null);
+                        builder.setView(v).setTitle("Eliminar egreso");
+                        final AlertDialog dialog = builder.create();
+                        dialog.show();
+
+                        TextView mesa_name = v.findViewById(R.id.delete_active_mesa_name);
+                        Button cancel = v.findViewById(R.id.cancel_button_delete_product);
+                        Button save = v.findViewById(R.id.save_button_delete_product);
+
+                        mesa_name.setText("¿Esta seguro de eliminar el egreso?");
+
+                        save.setOnClickListener(new View.OnClickListener() {
                             @Override
-                            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                Toast.makeText(context, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
+                            public void onClick(View v) {
+                                AppCustomService service = RetrofitClient.getClient();
+                                retrofit2.Call<ResponseBody> responseBodyCall = service.delete_expense( ((ExpensesActivity)context).authToken()  , expenseList.get(getAdapterPosition()).getId());
+                                responseBodyCall.enqueue(new Callback<ResponseBody>() {
+                                    @Override
+                                    public void onResponse(retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
+                                        if(response.isSuccessful())
+                                        {
+                                            expenseList.remove(getAdapterPosition());
+                                            notifyItemRemoved(getAdapterPosition());
+                                            Toast.makeText(context, "Se elimino correctamente", Toast.LENGTH_LONG).show();
+                                        }
+                                        else {
+                                            Toast.makeText(context, "Ocurrio un error al eliminar", Toast.LENGTH_LONG).show();
+                                        }
+                                        dialog.dismiss();
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                        Toast.makeText(context, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
+                                        dialog.dismiss();
+                                    }
+                                });
+                            }
+                        });
+                        cancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
                             }
                         });
                     }
