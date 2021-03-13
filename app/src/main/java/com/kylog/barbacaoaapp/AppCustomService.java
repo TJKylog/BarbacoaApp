@@ -265,6 +265,13 @@ public interface AppCustomService {
     })
     Call<Note> get_mesa_consume(@Header("Authorization") String authorization, @Path("id") Integer id);
 
+    @GET("api/auth/mesas/{id}/edit")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<Mesa> edit_mesa(@Header("Authorization") String authorization, @Path("id") Integer id);
+
     @PUT("api/auth/mesa/update_product/{id}")
     @Headers({
             "Content-Type: application/json",

@@ -61,7 +61,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 
         public void bind(final Product product, final itemClickListener listener){
             this.product_name.setText(product.getName());
-            this.product_price.setText(product.getPrice().toString());
+            this.product_price.setText("$ "+product.getPrice().toString());
             this.product_measure.setText(product.getMeasure());
             this.product_type.setText(product.getType());
 

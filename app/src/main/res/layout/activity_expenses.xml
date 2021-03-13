@@ -32,33 +32,62 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/expenses_amount_edit"
+
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_weight="30"
                     android:layout_height="wrap_content"
-                    android:hint="Cantidad"
-                    android:layout_margin="30dp"
-                    android:inputType="numberDecimal"
-                    />
-                <EditText
-                    android:id="@+id/expenses_name_edit"
+                    android:layout_margin="10dp"
+                    android:textColorHint="@color/primaryColor"
+                    app:boxBackgroundColor="#118BA580"
+                    >
+                    <EditText
+                        android:id="@+id/expenses_amount_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Cantidad"
+                        android:inputType="numberDecimal"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_weight="30"
                     android:layout_height="wrap_content"
-                    android:layout_margin="30dp"
-                    android:hint="Autorizado por"
-                    android:inputType="text"
-                    />
-                <EditText
-                    android:id="@+id/expenses_reason_edit"
+                    android:layout_margin="10dp"
+                    android:textColorHint="@color/primaryColor"
+                    app:boxBackgroundColor="#118BA580"
+                    >
+                    <EditText
+                        android:id="@+id/expenses_name_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Autorizado por"
+                        android:inputType="text"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_weight="30"
                     android:layout_height="wrap_content"
-                    android:layout_margin="30dp"
-                    android:hint="Concepto"
-                    android:inputType="text"
-                    />
+                    android:layout_margin="10dp"
+                    android:textColorHint="@color/primaryColor"
+                    app:boxBackgroundColor="#118BA580"
+                    >
+                    <EditText
+                        android:id="@+id/expenses_reason_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Concepto"
+                        android:inputType="text"
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
             </LinearLayout>
             <RelativeLayout
                 android:layout_width="match_parent"

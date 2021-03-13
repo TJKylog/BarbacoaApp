@@ -117,7 +117,7 @@ public class ExpensesActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(editAmount.getText().toString().matches("") || editApprovedBy.getText().toString().matches("") || editAmount.getText().toString().matches(""))
+                if(!validate_fields())
                 {
                     Toast.makeText(ExpensesActivity.this, "Complete los campos faltantes", Toast.LENGTH_LONG).show();
                 }
@@ -239,6 +239,27 @@ public class ExpensesActivity extends AppCompatActivity {
                 Toast.makeText(ExpensesActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    public boolean validate_fields()
+    {
+        boolean isValid = false;
+        if(editApprovedBy.getText().toString().matches("") || editReason.getText().toString().matches("") || editAmount.getText().toString().matches("")) {
+            if(editApprovedBy.getText().toString().matches("")){
+                editApprovedBy.setError("Complete este campo");
+            }
+            if (editReason.getText().toString().matches("")) {
+                editReason.setError("Complete este campo");
+            }
+            if (editAmount.getText().toString().matches("")) {
+                editAmount.setError("Complete este campo");
+            }
+        }
+        else {
+            isValid = true;
+        }
+
+        return isValid;
     }
 
     private void get_expenses(){
