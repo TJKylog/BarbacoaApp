@@ -111,4 +111,14 @@ public class Expense {
         this.createdByName = createdByName;
     }
 
+    public String toString(){
+        String string = "Autorizado por: "+ approvedBy+"\n"+
+                        "Fecha: "+ createdAt +"\n"
+                        +"Concepto: "+ reason +"\n"+
+                        "Cantidad: "+amount.toString()+"\n\n\n\n\n\n\n\n\n"+
+                        "================================\n"+
+                        "\t\tFirma\n";
+        return string;
+    }
+
 }
