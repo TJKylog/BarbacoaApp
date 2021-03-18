@@ -34,15 +34,22 @@
                 android:text="Efectivo" />
         </RadioGroup>
 
-        <EditText
-            android:id="@+id/amount_cash_payment"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="30dp"
-            android:maxLength="6"
-            android:hint="Cantidad"
-            android:importantForAutofill="no"
-            android:inputType="numberDecimal" />
+            android:layout_margin="20dp"
+            android:textColorHint="@color/primaryColor"
+            >
+            <EditText
+                android:id="@+id/amount_cash_payment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLength="6"
+                android:hint="Cantidad"
+                android:importantForAutofill="no"
+                android:inputType="numberDecimal" />
+        </com.google.android.material.textfield.TextInputLayout>
+
     </LinearLayout>
 
     <FrameLayout
