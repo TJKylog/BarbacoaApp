@@ -348,7 +348,10 @@ public class NotesActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(NotesActivity.this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.sales_day_dialog, null);
-        builder.setView(view).setTitle("Venta del día");
+        TextView title = (TextView) getLayoutInflater().inflate(R.layout.title_dialog,null);
+        title.setText("Eliminar usuario");
+
+        builder.setView(view).setCustomTitle(title);
         final AlertDialog dialog = builder.create();
         dialog.show();
 
@@ -388,7 +391,9 @@ public class NotesActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(NotesActivity.this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.payment_note_layout, null);
-        builder.setView(view).setTitle("Cantidad del pago");
+        TextView title = (TextView) getLayoutInflater().inflate(R.layout.title_dialog,null);
+        title.setText("Cantidad del pago");
+        builder.setView(view).setCustomTitle(title);
         final AlertDialog dialog = builder.create();
         dialog.show();
         RadioButton paymentCard = view.findViewById(R.id.radio_payment_card);
@@ -545,7 +550,9 @@ public class NotesActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(NotesActivity.this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.delete_active_mesa_dialog, null);
-        builder.setView(view).setTitle("Eliminar consumo");
+        TextView title = (TextView) getLayoutInflater().inflate(R.layout.title_dialog,null);
+        title.setText("Eliminar consumo");
+        builder.setView(view).setCustomTitle(title);
         final AlertDialog dialog = builder.create();
         dialog.show();
         TextView mesa_name = view.findViewById(R.id.delete_active_mesa_name);
@@ -589,7 +596,9 @@ public class NotesActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(NotesActivity.this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.delete_active_mesa_dialog, null);
-        builder.setView(view).setTitle("Eliminar producto");
+        TextView title = (TextView) getLayoutInflater().inflate(R.layout.title_dialog,null);
+        title.setText("Eliminar producto");
+        builder.setView(view).setCustomTitle(title);
         final AlertDialog dialog = builder.create();
         dialog.show();
         TextView mesa_name = view.findViewById(R.id.delete_active_mesa_name);
@@ -633,7 +642,9 @@ public class NotesActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(NotesActivity.this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.add_product_amount_note, null);
-        builder.setView(view).setTitle(name);
+        TextView title = (TextView) getLayoutInflater().inflate(R.layout.title_dialog,null);
+        title.setText(name);
+        builder.setView(view).setCustomTitle(title);
         final AlertDialog dialog = builder.create();
         dialog.show();
         EditText amount = view.findViewById(R.id.add_amount_product);
@@ -729,7 +740,9 @@ public class NotesActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(NotesActivity.this);
         LayoutInflater inflater = getLayoutInflater();
         final View v = inflater.inflate(R.layout.add_mesa, null);
-        builder.setView(v).setTitle("Añadir mesa");
+        TextView title = (TextView) getLayoutInflater().inflate(R.layout.title_dialog,null);
+        title.setText("Añadir nota");
+        builder.setView(v).setCustomTitle(title);
         final AlertDialog dialog = builder.create();
         dialog.show();
 

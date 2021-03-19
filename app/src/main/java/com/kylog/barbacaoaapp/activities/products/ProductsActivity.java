@@ -214,7 +214,9 @@ public class ProductsActivity extends AppCompatActivity {
                     AlertDialog.Builder builder = new AlertDialog.Builder(ProductsActivity.this);
                     LayoutInflater inflater = getLayoutInflater();
                     View view = inflater.inflate(R.layout.delete_active_mesa_dialog, null);
-                    builder.setView(view).setTitle("Eliminar producto");
+                    TextView title = (TextView) getLayoutInflater().inflate(R.layout.title_dialog,null);
+                    title.setText("Eliminar producto");
+                    builder.setView(view).setCustomTitle(title);
                     final AlertDialog dialog = builder.create();
                     dialog.show();
                     TextView mesa_name = view.findViewById(R.id.delete_active_mesa_name);

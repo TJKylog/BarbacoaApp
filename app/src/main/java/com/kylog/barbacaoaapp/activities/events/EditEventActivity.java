@@ -281,7 +281,9 @@ public class EditEventActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(EditEventActivity.this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.delete_active_mesa_dialog, null);
-        builder.setView(view).setTitle("Eliminar extra");
+        TextView title = (TextView) getLayoutInflater().inflate(R.layout.title_dialog,null);
+        title.setText("Eliminar extra");
+        builder.setView(view).setCustomTitle(title);
         final AlertDialog dialog = builder.create();
         dialog.show();
         TextView mesa_name = view.findViewById(R.id.delete_active_mesa_name);
@@ -309,7 +311,9 @@ public class EditEventActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(EditEventActivity.this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.extra_dialog, null);
-        builder.setView(view).setTitle("Editando");
+        TextView title = (TextView) getLayoutInflater().inflate(R.layout.title_dialog,null);
+        title.setText("Editando");
+        builder.setView(view).setCustomTitle(title);
         final AlertDialog dialog = builder.create();
         dialog.show();
 
@@ -359,7 +363,9 @@ public class EditEventActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(EditEventActivity.this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.extra_dialog, null);
-        builder.setView(view).setTitle("Editar extra");
+        TextView title = (TextView) getLayoutInflater().inflate(R.layout.title_dialog,null);
+        title.setText("Editar extra");
+        builder.setView(view).setCustomTitle(title);
         final AlertDialog dialog = builder.create();
         dialog.show();
 

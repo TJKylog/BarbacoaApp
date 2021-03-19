@@ -6,11 +6,12 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,8 +30,6 @@ import com.kylog.barbacaoaapp.MainActivity;
 import com.kylog.barbacaoaapp.MainMenu;
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
-import com.kylog.barbacaoaapp.activities.catalogs.CatalogsActivity;
-import com.kylog.barbacaoaapp.activities.events.CreateEventActivity;
 import com.kylog.barbacaoaapp.models.User;
 
 import java.util.ArrayList;
@@ -154,6 +153,7 @@ public class UsersActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         Integer id;
@@ -168,7 +168,10 @@ public class UsersActivity extends AppCompatActivity {
                     AlertDialog.Builder builder = new AlertDialog.Builder(UsersActivity.this);
                     LayoutInflater inflater = getLayoutInflater();
                     View view = inflater.inflate(R.layout.delete_active_mesa_dialog, null);
-                    builder.setView(view).setTitle("Eliminar usuario");
+                    TextView title = (TextView) getLayoutInflater().inflate(R.layout.title_dialog,null);
+                    title.setText("Eliminar usuario");
+
+                    builder.setView(view).setCustomTitle(title);
                     final AlertDialog dialog = builder.create();
                     dialog.show();
                     TextView mesa_name = view.findViewById(R.id.delete_active_mesa_name);

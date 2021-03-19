@@ -98,7 +98,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                         AlertDialog.Builder builder = new AlertDialog.Builder(context);
                         LayoutInflater inflater = ((EventsActivity) context).getLayoutInflater();
                         final View v = inflater.inflate(R.layout.delete_active_mesa_dialog, null);
-                        builder.setView(v).setTitle("Eliminar evento");
+                        TextView title = (TextView) inflater.inflate(R.layout.title_dialog,null);
+                        title.setText("Eliminar evento");
+                        builder.setView(v).setCustomTitle(title);
                         final AlertDialog dialog = builder.create();
                         dialog.show();
 

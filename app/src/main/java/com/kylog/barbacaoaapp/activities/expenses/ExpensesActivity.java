@@ -235,7 +235,9 @@ public class ExpensesActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         final View v = inflater.inflate(R.layout.print_expense_dialog, null);
-        builder.setView(v).setTitle("Imprimir egreso");
+        TextView title = (TextView) getLayoutInflater().inflate(R.layout.title_dialog,null);
+        title.setText("Imprimir egreso");
+        builder.setView(v).setCustomTitle(title);
         final AlertDialog dialog = builder.create();
         dialog.show();
 

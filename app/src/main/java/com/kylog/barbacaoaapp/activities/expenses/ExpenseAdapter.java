@@ -101,7 +101,9 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
                         AlertDialog.Builder builder = new AlertDialog.Builder(context);
                         LayoutInflater inflater = ((ExpensesActivity) context).getLayoutInflater();
                         final View v = inflater.inflate(R.layout.delete_active_mesa_dialog, null);
-                        builder.setView(v).setTitle("Eliminar egreso");
+                        TextView title = (TextView) inflater.inflate(R.layout.title_dialog,null);
+                        title.setText("Eliminar egreso");
+                        builder.setView(v).setCustomTitle(title);
                         final AlertDialog dialog = builder.create();
                         dialog.show();
 
