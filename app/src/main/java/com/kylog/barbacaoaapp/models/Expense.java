@@ -117,7 +117,7 @@ public class Expense {
                         +"Concepto: "+ reason +"\n"+
                         "Cantidad: "+amount.toString()+"\n\n\n\n\n\n\n\n\n"+
                         "================================\n"+
-                        "\t\tFirma\n";
+                        "             Firma\n";
         return string;
     }
 

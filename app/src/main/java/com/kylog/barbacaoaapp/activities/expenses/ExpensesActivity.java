@@ -260,6 +260,7 @@ public class ExpensesActivity extends AppCompatActivity {
                 SendDataByte(Command.ESC_Init);
                 SendDataByte(Command.LF);
                 Print_Ex(expense);
+                dialog.dismiss();
             }
         });
     }
@@ -520,13 +521,11 @@ public class ExpensesActivity extends AppCompatActivity {
         SimpleDateFormat formatter = new SimpleDateFormat ("yyyy/MM/dd HH:mm:ss ");
         Date curDate = new Date(System.currentTimeMillis());
         String str = formatter.format(curDate);
-        String folio = "Folio: "+expense.getId().toString()+"\n";
         String date = str + "\n";
         try {
             Command.ESC_Align[2] = 0x01;
             SendDataByte(Command.ESC_Align);
             SendDataByte("Egreso\n".getBytes("GBK"));
-            SendDataByte(folio.getBytes("GBK"));
             SendDataString(date);
             Command.ESC_Align[2] = 0x00;
             SendDataByte(Command.ESC_Align);
