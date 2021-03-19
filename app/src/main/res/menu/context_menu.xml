@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/delete_option"
-        android:title="Eliminar" />
+        android:title="@string/eliminar"
+        android:icon="@drawable/ic_baseline_delete_forever_24"
+        />
     <item android:id="@+id/edit_option"
-        android:title="Editar"/>
+        android:title="@string/editar"
+        android:icon="@drawable/ic_baseline_edit_20"
+        />
 </menu>

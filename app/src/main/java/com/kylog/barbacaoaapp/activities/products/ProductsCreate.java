@@ -26,7 +26,9 @@ import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
 import com.kylog.barbacaoaapp.activities.catalogs.CatalogsActivity;
 import com.kylog.barbacaoaapp.activities.expenses.ExpensesActivity;
+import com.kylog.barbacaoaapp.models.Exist;
 import com.kylog.barbacaoaapp.models.Product;
+import com.kylog.barbacaoaapp.models.forms.NewMesaForm;
 import com.kylog.barbacaoaapp.models.forms.NewProductForm;
 
 import okhttp3.ResponseBody;
@@ -46,6 +48,7 @@ public class ProductsCreate extends AppCompatActivity {
     private ImageButton userActionsButton,backButton, mainMenu;
     private TextView user_name;
     private ArrayAdapter<CharSequence> adapterMeasure,adapterType;
+    private Exist exist = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,22 +74,47 @@ public class ProductsCreate extends AppCompatActivity {
         adapterMeasure.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         editMeasure.setAdapter(adapterMeasure);
 
+        editName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus) {
+                    verify_name(editName.getText().toString());
+                }
+            }
+        });
+
         save_product.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(editName.getText().toString().matches("") || editPrice.getText().toString().matches(""))
+                if(exist != null)
                 {
-                    if (editName.getText().toString().matches(""))
-                    {
-                        editName.setError("Completa este campo");
+                    if(editName.getText().toString().matches("") || editPrice.getText().toString().matches("") || !exist.getExist()) {
+                        if(!exist.getExist()) {
+                            editName.setError("Este producto ya existe");
+                        }
+                        if(editName.getText().toString().matches("")) {
+                            editName.setError("Completa este campo");
+                        }
+                        if(editPrice.getText().toString().matches("")) {
+                            editPrice.setError("Completa este campo");
+                        }
                     }
-                    if(editPrice.getText().toString().matches(""))
-                    {
-                        editPrice.setError("Completa este campo");
+                    else {
+                        save_product(new NewProductForm(editName.getText().toString() , Double.parseDouble(String.valueOf(editPrice.getText())), editMeasure.getSelectedItem().toString(), editType.getSelectedItem().toString()));
                     }
                 }
                 else {
-                    save_product(new NewProductForm(editName.getText().toString() , Double.parseDouble(String.valueOf(editPrice.getText())), editMeasure.getSelectedItem().toString(), editType.getSelectedItem().toString()));
+                    if(editName.getText().toString().matches("") || editPrice.getText().toString().matches("")) {
+                        if(editName.getText().toString().matches("")) {
+                            editName.setError("Completa este campo");
+                        }
+                        if(editPrice.getText().toString().matches("")) {
+                            editPrice.setError("Completa este campo");
+                        }
+                    }
+                    else {
+                        save_product(new NewProductForm(editName.getText().toString() , Double.parseDouble(String.valueOf(editPrice.getText())), editMeasure.getSelectedItem().toString(), editType.getSelectedItem().toString()));
+                    }
                 }
             }
         });
@@ -126,6 +154,28 @@ public class ProductsCreate extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
+    }
+
+    public void verify_name(String name){
+        AppCustomService service = RetrofitClient.getClient();
+        Call<Exist> booleanCall = service.verify(getTokenType()+" "+getToken(), new NewMesaForm(name));
+        booleanCall.enqueue(new Callback<Exist>() {
+            @Override
+            public void onResponse(Call<Exist> call, Response<Exist> response) {
+                if(response.isSuccessful()) {
+                    exist = response.body();
+
+                    if(exist.getExist())
+                    {
+                        editName.setError("Este producto ya existe");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Exist> call, Throwable t) {
+            }
+        });
     }
 
     private void save_product(NewProductForm newProductForm) {

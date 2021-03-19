@@ -121,7 +121,7 @@ public class MesasEdit extends AppCompatActivity {
                 if(response.isSuccessful())
                 {
                     Toast.makeText(MesasEdit.this, "Mesa actualizada", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(MesasEdit.this, CatalogsActivity.class);
+                    Intent intent = new Intent(MesasEdit.this, MesasActivity.class);
                     startActivity(intent);
                 }
                 else {
