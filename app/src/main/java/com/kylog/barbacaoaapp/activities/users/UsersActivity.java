@@ -30,6 +30,8 @@ import com.kylog.barbacaoaapp.MainActivity;
 import com.kylog.barbacaoaapp.MainMenu;
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
+import com.kylog.barbacaoaapp.activities.catalogs.CatalogsActivity;
+import com.kylog.barbacaoaapp.activities.mesas.MesasActivity;
 import com.kylog.barbacaoaapp.models.User;
 
 import java.util.ArrayList;
@@ -100,7 +102,9 @@ public class UsersActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                Intent intent = new Intent(UsersActivity.this , CatalogsActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
             }
         });
 

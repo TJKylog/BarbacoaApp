@@ -38,7 +38,7 @@ public class EventsActivity extends AppCompatActivity {
 
     private Button newEvent;
     private SharedPreferences pref;
-    private ImageButton userActionsButton,backButton, mainMenu;
+    private ImageButton userActionsButton, mainMenu;
     private TextView user_name, actionView;
     private RecyclerView events_list;
     private List<Event> events;
@@ -52,8 +52,7 @@ public class EventsActivity extends AppCompatActivity {
         pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
 
         userActionsButton = findViewById(R.id.user_actions_button);
-        backButton = findViewById(R.id.back_button);
-        mainMenu = findViewById(R.id.to_main_menu_view);
+        mainMenu = findViewById(R.id.to_main_menu_view_2);
         user_name = findViewById(R.id.user_name_view);
         actionView = findViewById(R.id.expenses_action);
         user_name.setText(getUseName());
@@ -68,13 +67,6 @@ public class EventsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showPopup(v);
-            }
-        });
-
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
             }
         });
 
