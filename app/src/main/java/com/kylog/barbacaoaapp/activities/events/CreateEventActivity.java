@@ -175,9 +175,15 @@ public class CreateEventActivity extends AppCompatActivity {
         basicAdapter = new BasicAdapter(basicPackageList, R.layout.item_package_list, new BasicAdapter.onItemClickListener() {
             @Override
             public void onItemClick(BasicPackage basicPackage, int position) {
-                showDialogEditBasic(basicPackage,position);
+                showDialogEditBasic(basicPackage, position);
             }
-        }, CreateEventActivity.this);
+        }, CreateEventActivity.this
+                , new BasicAdapter.onLongItemClickListener() {
+            @Override
+            public void onLongItemClicked(BasicPackage basicPackage, int position) {
+                showDialogRemoveBasic(basicPackage,position);
+            }
+        });
 
         save_event.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -273,6 +279,36 @@ public class CreateEventActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
+    }
+
+    public void showDialogRemoveBasic(BasicPackage basicPackage, int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(CreateEventActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.delete_active_mesa_dialog, null);
+        TextView title = (TextView) getLayoutInflater().inflate(R.layout.title_dialog,null);
+        title.setText("Eliminar");
+        builder.setView(view).setCustomTitle(title);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+        TextView mesa_name = view.findViewById(R.id.delete_active_mesa_name);
+        Button cancel = view.findViewById(R.id.cancel_button_delete_product);
+        Button save = view.findViewById(R.id.save_button_delete_product);
+        mesa_name.setText("¿Desea eliminar "+basicPackage.getName()+"?");
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                basicAdapter.remove(position);
+                dialog.dismiss();
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
     }
 
     public void showDialogRemoveExtra(Others others, int position){
