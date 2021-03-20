@@ -10,6 +10,7 @@ import com.kylog.barbacaoaapp.models.Note;
 import com.kylog.barbacaoaapp.models.Product;
 import com.kylog.barbacaoaapp.models.ProductType;
 import com.kylog.barbacaoaapp.models.SalesDay;
+import com.kylog.barbacaoaapp.models.UserName;
 import com.kylog.barbacaoaapp.models.forms.AddAmount;
 import com.kylog.barbacaoaapp.models.forms.CodeForm;
 import com.kylog.barbacaoaapp.models.forms.DeleteProduct;
@@ -343,4 +344,10 @@ public interface AppCustomService {
     })
     Call<ResponseBody> delete_event(@Header("Authorization") String authorization,@Path("id") Integer id);
 
+    @GET("api/auth/get_names")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<List<UserName>> user_names(@Header("Authorization") String authorization);
 }

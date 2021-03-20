@@ -33,6 +33,8 @@
                 android:orientation="horizontal">
 
 
+
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_weight="30"
@@ -51,22 +53,13 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
 
-                <com.google.android.material.textfield.TextInputLayout
+                <Spinner
+                    android:id="@+id/users_name"
                     android:layout_width="0dp"
                     android:layout_weight="30"
-                    android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:textColorHint="@color/primaryColor"
-                    >
-                    <EditText
-                        android:id="@+id/expenses_name_edit"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Autorizado por"
-                        android:inputType="text"
-                        />
-
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_height="wrap_content"
+                    />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="0dp"
