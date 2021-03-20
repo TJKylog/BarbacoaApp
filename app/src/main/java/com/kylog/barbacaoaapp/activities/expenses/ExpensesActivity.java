@@ -550,6 +550,4 @@ public class ExpensesActivity extends AppCompatActivity {
         return getTokenType()+" "+getToken();
     }
 
-
-
 }
