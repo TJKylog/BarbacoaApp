@@ -20,10 +20,12 @@ import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +41,7 @@ import com.kylog.barbacaoaapp.activities.notes.NotesActivity;
 import com.kylog.barbacaoaapp.command.Command;
 import com.kylog.barbacaoaapp.command.PrinterCommand;
 import com.kylog.barbacaoaapp.models.Expense;
+import com.kylog.barbacaoaapp.models.UserName;
 import com.kylog.barbacaoaapp.models.forms.ExpenseForm;
 
 import java.io.UnsupportedEncodingException;
@@ -75,15 +78,18 @@ public class ExpensesActivity extends AppCompatActivity {
 
 
     private SharedPreferences pref;
-    private ImageButton userActionsButton,backButton, mainMenu;
+    private ImageButton userActionsButton, mainMenu;
     private Button saveButton;
     private TextView user_name, actionView;
-    private EditText editAmount, editReason, editApprovedBy;
+    private EditText editAmount, editReason;
     private RecyclerView expensesList;
     private List<Expense> expenses;
     private Expense editExpense;
     private ExpenseAdapter expenseAdapter;
+    private List<UserName> userNameList;
+    private Spinner users_names;
     private boolean isEdit = false;
+    private ArrayAdapter spinnerUsers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,8 +108,7 @@ public class ExpensesActivity extends AppCompatActivity {
         }
 
         userActionsButton = findViewById(R.id.user_actions_button);
-        backButton = findViewById(R.id.back_button);
-        mainMenu = findViewById(R.id.to_main_menu_view);
+        mainMenu = findViewById(R.id.to_main_menu_view_2);
         user_name = findViewById(R.id.user_name_view);
         actionView = findViewById(R.id.expenses_action);
         user_name.setText(getUseName());
@@ -120,10 +125,17 @@ public class ExpensesActivity extends AppCompatActivity {
         actionView.setText("Nuevo egreso");
 
         editAmount = findViewById(R.id.expenses_amount_edit);
-        editApprovedBy = findViewById(R.id.expenses_name_edit);
         editReason = findViewById(R.id.expenses_reason_edit);
         expensesList = findViewById(R.id.expenses_list);
         saveButton = findViewById(R.id.save_expense_button);
+        users_names = findViewById(R.id.users_name);
+
+        get_expenses();
+
+        userNameList = new ArrayList<UserName>();
+
+        spinnerUsers =  new ArrayAdapter( this ,R.layout.support_simple_spinner_dropdown_item, userNameList );
+        users_names.setAdapter(spinnerUsers);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -160,12 +172,6 @@ public class ExpensesActivity extends AppCompatActivity {
                 showPopup(v);
             }
         });
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,8 +195,7 @@ public class ExpensesActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
 
-        get_expenses();
-
+        get_user_names();
     }
 
     public void showPopup(View v) {
@@ -231,11 +236,35 @@ public class ExpensesActivity extends AppCompatActivity {
         }
     }
 
+    private void get_user_names() {
+        AppCustomService service = RetrofitClient.getClient();
+        Call<List<UserName>> userNamesCall = service.user_names(getTokenType()+" "+getToken());
+        userNamesCall.enqueue(new Callback<List<UserName>>() {
+            @Override
+            public void onResponse(Call<List<UserName>> call, Response<List<UserName>> response) {
+                if(response.isSuccessful())
+                {
+                    userNameList = response.body();
+                    spinnerUsers =  new ArrayAdapter( ExpensesActivity.this ,R.layout.support_simple_spinner_dropdown_item, userNameList );
+                    users_names.setAdapter(spinnerUsers);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<UserName>> call, Throwable t) {
+
+            }
+        });
+
+    }
+
     private void showPrintExpenseDialog(Expense expense){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         final View v = inflater.inflate(R.layout.print_expense_dialog, null);
-        builder.setView(v).setTitle("Imprimir egreso");
+        TextView title = (TextView) getLayoutInflater().inflate(R.layout.title_dialog,null);
+        title.setText("Imprimir egreso");
+        builder.setView(v).setCustomTitle(title);
         final AlertDialog dialog = builder.create();
         dialog.show();
 
@@ -258,14 +287,17 @@ public class ExpensesActivity extends AppCompatActivity {
                 SendDataByte(Command.ESC_Init);
                 SendDataByte(Command.LF);
                 Print_Ex(expense);
+                dialog.dismiss();
             }
         });
     }
 
     private void updateExpense(){
+        final UserName userName = (UserName) users_names.getSelectedItem();
+
         AppCustomService service = RetrofitClient.getClient();
         Call<ResponseBody> responseBodyCall = service.update_expense(getTokenType()+" "+getToken(), editExpense.getId() , new ExpenseForm(
-                editApprovedBy.getText().toString(),
+                userName.getName(),
                 editReason.getText().toString(),
                 Double.parseDouble(String.valueOf(editAmount.getText()))));
 
@@ -274,7 +306,6 @@ public class ExpensesActivity extends AppCompatActivity {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if(response.isSuccessful())
                 {
-                    editApprovedBy.setText("");
                     editReason.setText("");
                     editAmount.setText("");
                     editExpense = null;
@@ -296,9 +327,10 @@ public class ExpensesActivity extends AppCompatActivity {
     }
 
     private void saveExpense(){
+        final UserName userName = (UserName) users_names.getSelectedItem();
         AppCustomService service = RetrofitClient.getClient();
         Call<ResponseBody> responseBodyCall = service.save_expense(getTokenType()+" "+getToken(), new ExpenseForm(
-                editApprovedBy.getText().toString(),
+                userName.getName(),
                 editReason.getText().toString(),
                 Double.parseDouble(String.valueOf(editAmount.getText()))));
 
@@ -307,7 +339,6 @@ public class ExpensesActivity extends AppCompatActivity {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if(response.isSuccessful())
                 {
-                    editApprovedBy.setText("");
                     editReason.setText("");
                     editAmount.setText("");
                     get_expenses();
@@ -328,10 +359,7 @@ public class ExpensesActivity extends AppCompatActivity {
     public boolean validate_fields()
     {
         boolean isValid = false;
-        if(editApprovedBy.getText().toString().matches("") || editReason.getText().toString().matches("") || editAmount.getText().toString().matches("")) {
-            if(editApprovedBy.getText().toString().matches("")){
-                editApprovedBy.setError("Complete este campo");
-            }
+        if( editReason.getText().toString().matches("") || editAmount.getText().toString().matches("")) {
             if (editReason.getText().toString().matches("")) {
                 editReason.setError("Complete este campo");
             }
@@ -370,7 +398,7 @@ public class ExpensesActivity extends AppCompatActivity {
     public void setExpense(Expense expense) {
         this.editExpense = expense;
         this.isEdit = true;
-        this.editApprovedBy.setText(editExpense.getApprovedBy());
+        this.users_names.setSelection(spinnerUsers.getPosition(editExpense.getApprovedBy()));
         this.editReason.setText(editExpense.getReason());
         this.editAmount.setText(editExpense.getAmount().toString());
         actionView.setText("Editando egreso: "+expense.getCreatedAt());
@@ -518,13 +546,11 @@ public class ExpensesActivity extends AppCompatActivity {
         SimpleDateFormat formatter = new SimpleDateFormat ("yyyy/MM/dd HH:mm:ss ");
         Date curDate = new Date(System.currentTimeMillis());
         String str = formatter.format(curDate);
-        String folio = "Folio: "+expense.getId().toString()+"\n";
         String date = str + "\n";
         try {
             Command.ESC_Align[2] = 0x01;
             SendDataByte(Command.ESC_Align);
             SendDataByte("Egreso\n".getBytes("GBK"));
-            SendDataByte(folio.getBytes("GBK"));
             SendDataString(date);
             Command.ESC_Align[2] = 0x00;
             SendDataByte(Command.ESC_Align);
@@ -555,7 +581,5 @@ public class ExpensesActivity extends AppCompatActivity {
     public String authToken() {
         return getTokenType()+" "+getToken();
     }
-
-
 
 }

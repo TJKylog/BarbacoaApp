@@ -19,8 +19,7 @@
             android:layout_weight="50"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:textColorHint="@color/primaryColor"
-            app:boxBackgroundColor="#118BA580">
+            android:textColorHint="@color/primaryColor">
             <EditText
                 android:id="@+id/name_customer_name_field"
                 android:hint="Nombre"
@@ -38,8 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:textColorHint="@color/primaryColor"
-            android:hint="Dirección"
-            app:boxBackgroundColor="#118BA580">
+            android:hint="Dirección">
             <EditText
                 android:id="@+id/name_customer_address_field"
                 android:layout_width="match_parent"
@@ -65,8 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:hint="Telefono"
-            android:textColorHint="@color/primaryColor"
-            app:boxBackgroundColor="#118BA580">
+            android:textColorHint="@color/primaryColor">
             <EditText
                 android:id="@+id/name_customer_phone_field"
                 android:layout_width="match_parent"
@@ -83,8 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:hint="Fecha"
-            android:textColorHint="@color/primaryColor"
-            app:boxBackgroundColor="#118BA580">
+            android:textColorHint="@color/primaryColor">
             <EditText
                 android:id="@+id/date_event"
 
@@ -103,8 +99,7 @@
             android:layout_weight=".20"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:textColorHint="@color/primaryColor"
-            app:boxBackgroundColor="#118BA580">
+            android:textColorHint="@color/primaryColor">
             <EditText
                 android:id="@+id/time_Event"
                 android:hint="Hora"
@@ -122,8 +117,7 @@
             android:layout_weight=".20"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:textColorHint="@color/primaryColor"
-            app:boxBackgroundColor="#118BA580">
+            android:textColorHint="@color/primaryColor">
             <EditText
                 android:id="@+id/advance_payment"
                 android:hint="Anticipo"
@@ -155,13 +149,15 @@
             android:id="@+id/basic_package_list"
             android:layout_width="0dp"
             android:layout_weight=".50"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/extras_list"
             android:layout_width="0dp"
             android:layout_weight=".50"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             />
     </LinearLayout>
     <TextView

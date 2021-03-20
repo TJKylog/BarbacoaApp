@@ -26,7 +26,6 @@
         <activity android:name=".activities.reset.password.PasswordActivity" />
         <activity android:name=".activities.reset.password.CodeActivity" />
         <activity android:name=".activities.reset.password.EmailActivity" />
-        <activity android:name=".activities.reset.password.ResetPasswordActivity" />
         <activity
             android:name=".activities.notes.DeviceListActivity"
             android:screenOrientation="landscape" />

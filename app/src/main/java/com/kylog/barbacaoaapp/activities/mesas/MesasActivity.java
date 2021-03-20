@@ -30,6 +30,7 @@ import com.kylog.barbacaoaapp.MainActivity;
 import com.kylog.barbacaoaapp.MainMenu;
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
+import com.kylog.barbacaoaapp.activities.catalogs.CatalogsActivity;
 import com.kylog.barbacaoaapp.activities.users.UsersActivity;
 import com.kylog.barbacaoaapp.models.Mesa;
 
@@ -103,7 +104,9 @@ public class MesasActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                Intent intent = new Intent(MesasActivity.this , CatalogsActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
             }
         });
 
@@ -207,7 +210,9 @@ public class MesasActivity extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MesasActivity.this);
                 LayoutInflater inflater = getLayoutInflater();
                 View view = inflater.inflate(R.layout.delete_active_mesa_dialog, null);
-                builder.setView(view).setTitle("Eliminar mesa");
+                TextView title = (TextView) getLayoutInflater().inflate(R.layout.title_dialog,null);
+                title.setText("Eliminar mesa");
+                builder.setView(view).setCustomTitle(title);
                 final AlertDialog dialog = builder.create();
                 dialog.show();
                 TextView mesa_name = view.findViewById(R.id.delete_active_mesa_name);

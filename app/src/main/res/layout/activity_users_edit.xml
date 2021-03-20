@@ -33,7 +33,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:textColorHint="@color/primaryColor"
-            app:boxBackgroundColor="#118BA580"
             >
             <EditText
                 android:id="@+id/edit_user_name_field"
@@ -51,7 +50,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:textColorHint="@color/primaryColor"
-            app:boxBackgroundColor="#118BA580"
             >
             <EditText
                 android:id="@+id/edit_user_first_lastname"
@@ -69,7 +67,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:textColorHint="@color/primaryColor"
-            app:boxBackgroundColor="#118BA580"
             >
             <EditText
                 android:id="@+id/edit_user_second_lastname"
@@ -87,7 +84,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:textColorHint="@color/primaryColor"
-            app:boxBackgroundColor="#118BA580"
             >
             <EditText
                 android:id="@+id/edit_user_email_field"
@@ -116,7 +112,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:textColorHint="@color/primaryColor"
-            app:boxBackgroundColor="#118BA580"
             >
             <EditText
                 android:id="@+id/edit_user_password_field"

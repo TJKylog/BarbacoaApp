@@ -105,6 +105,7 @@ public class UsersCreate extends AppCompatActivity {
                 else {
                     if(editName.getText().toString().matches("") ||
                             !isValidEmail(editEmail.getText().toString()) ||
+                            !validatePassword() ||
                             editPassword.getText().toString().matches("") ||
                             firstLastname.getText().toString().matches("") ||
                             secondLastname.getText().toString().matches("")) {
@@ -116,7 +117,7 @@ public class UsersCreate extends AppCompatActivity {
                             editEmail.setError("Escribe un correo valido");
                         }
                         if(!validatePassword()){
-                            editPassword.setError("La contraseña debe ser mayor a 6 caracteres");
+                            editPassword.setError("La contraseña debe tener al menos 6 caracteres");
                         }
                         if(firstLastname.getText().toString().matches("")) {
                             firstLastname.setError("Completa este campo");
@@ -195,7 +196,7 @@ public class UsersCreate extends AppCompatActivity {
     private boolean validatePassword()
     {
         String password = editPassword.getText().toString();
-        if(password.length() > 6)
+        if(password.length() >= 6)
             return true;
 
         return false;

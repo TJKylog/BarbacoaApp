@@ -144,6 +144,7 @@ public class MainMenu extends AppCompatActivity {
                     Toast.makeText(MainMenu.this, user.getName() , Toast.LENGTH_LONG);
                 } else { //this returns you to the login activity if your session is invalid or has expired
                     response.errorBody();
+
                     pref.edit().clear().apply();
                     Intent intent = new Intent(MainMenu.this , MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

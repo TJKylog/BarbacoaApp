@@ -31,7 +31,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:textColorHint="@color/primaryColor"
-            app:boxBackgroundColor="#118BA580"
             >
             <EditText
                 android:id="@+id/product_name_field"
@@ -49,7 +48,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:textColorHint="@color/primaryColor"
-            app:boxBackgroundColor="#118BA580"
             >
             <EditText
                 android:id="@+id/product_price_field"

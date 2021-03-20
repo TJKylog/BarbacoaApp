@@ -27,7 +27,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:textColorHint="@color/primaryColor"
-        app:boxBackgroundColor="#118BA580"
         >
         <EditText
             android:id="@+id/mesa_edit_name_field"

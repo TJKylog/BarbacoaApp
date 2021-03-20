@@ -6,7 +6,7 @@
     android:orientation="vertical"
     tools:context=".activities.events.EventsActivity">
 
-    <include layout="@layout/toolbar_general"
+    <include layout="@layout/toobar_main_menu"
         android:id="@+id/main_toolbar"/>
 
     <LinearLayout
@@ -76,7 +76,7 @@
                 android:layout_weight=".20"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="Fecha"
+                android:text="Fecha del evento"
                 android:textStyle="bold"/>
 
         </LinearLayout>

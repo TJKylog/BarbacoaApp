@@ -20,13 +20,14 @@ public class BasicAdapter extends RecyclerView.Adapter<BasicAdapter.ViewHolder> 
     private int layout;
     private onItemClickListener listener;
     private Activity activity;
+    private onLongItemClickListener onLongListener;
 
-
-    public BasicAdapter(List<BasicPackage> basicPackages, int layout, onItemClickListener listener, Activity activity){
+    public BasicAdapter(List<BasicPackage> basicPackages, int layout, onItemClickListener listener, Activity activity, onLongItemClickListener listener1){
         this.basicPackageList = basicPackages;
         this.layout = layout;
         this.listener = listener;
         this.activity = activity;
+        this.onLongListener = listener1;
     }
 
     @NonNull
@@ -68,11 +69,22 @@ public class BasicAdapter extends RecyclerView.Adapter<BasicAdapter.ViewHolder> 
                     listener.onItemClick(basicPackage, getAdapterPosition());
                 }
             });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    onLongListener.onLongItemClicked(basicPackage, getAdapterPosition());
+                    return false;
+                }
+            });
         }
     }
 
     public interface onItemClickListener{
         void onItemClick(BasicPackage basicPackage, int position);
+    }
+
+    public interface onLongItemClickListener {
+        void onLongItemClicked(BasicPackage basicPackage, int position);
     }
 
     public void updateList(List<BasicPackage> basicPackages) {
@@ -84,5 +96,10 @@ public class BasicAdapter extends RecyclerView.Adapter<BasicAdapter.ViewHolder> 
     public void editBasic(BasicPackage basicPackage, int position) {
         this.basicPackageList.set(position,basicPackage);
         this.notifyItemChanged(position);
+    }
+
+    public void remove( int position){
+        this.basicPackageList.remove(position);
+        this.notifyItemRemoved(position);
     }
 }

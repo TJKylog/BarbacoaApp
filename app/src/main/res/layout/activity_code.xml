@@ -20,21 +20,34 @@
             android:textAlignment="center"
             />
 
-        <EditText
-            android:id="@+id/reset_password_code_field"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_customer_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="30dp"
-            android:hint="Código"
-            />
+            android:layout_margin="20dp"
+            android:textColorHint="@color/primaryColor">
+            <EditText
+                android:id="@+id/reset_password_code_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Código"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
-            android:id="@+id/send_code_button"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Enviar código"
-            android:layout_margin="30dp"
-            />
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/send_code_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enviar código"
+                android:layout_margin="30dp"
+                android:layout_centerInParent="true"
+                />
+        </RelativeLayout>
+
+
 
     </LinearLayout>
 

@@ -30,24 +30,12 @@
             android:text="Domicilio" />
     </RadioGroup>
 
-    <TextView
-        android:text="Selecciona mesa"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        />
 
     <Spinner
         android:id="@+id/spinner_mesas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="20dp"/>
-    <TextView
-        android:text="Selecciona mesero"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        />
     <Spinner
         android:id="@+id/spinner_waiters"
         android:layout_width="match_parent"

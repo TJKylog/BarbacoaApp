@@ -94,7 +94,9 @@ public class EditEventActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                Intent intent = new Intent(EditEventActivity.this , EventsActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
             }
         });
 
@@ -174,7 +176,12 @@ public class EditEventActivity extends AppCompatActivity {
             public void onItemClick(BasicPackage basicPackage, int position) {
                 showDialogEditBasic(basicPackage,position);
             }
-        }, EditEventActivity.this);
+        }, EditEventActivity.this, new BasicAdapter.onLongItemClickListener() {
+            @Override
+            public void onLongItemClicked(BasicPackage basicPackage, int position) {
+                showDialogRemoveBasic(basicPackage,position);
+            }
+        });
 
         save_event.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -277,11 +284,43 @@ public class EditEventActivity extends AppCompatActivity {
         });
     }
 
+    public void showDialogRemoveBasic(BasicPackage basicPackage, int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(EditEventActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.delete_active_mesa_dialog, null);
+        TextView title = (TextView) getLayoutInflater().inflate(R.layout.title_dialog,null);
+        title.setText("Eliminar");
+        builder.setView(view).setCustomTitle(title);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+        TextView mesa_name = view.findViewById(R.id.delete_active_mesa_name);
+        Button cancel = view.findViewById(R.id.cancel_button_delete_product);
+        Button save = view.findViewById(R.id.save_button_delete_product);
+        mesa_name.setText("¿Desea eliminar "+basicPackage.getName()+"?");
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                basicAdapter.remove(position);
+                dialog.dismiss();
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+    }
+
     public void showDialogRemoveExtra(Others others, int position){
         AlertDialog.Builder builder = new AlertDialog.Builder(EditEventActivity.this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.delete_active_mesa_dialog, null);
-        builder.setView(view).setTitle("Eliminar extra");
+        TextView title = (TextView) getLayoutInflater().inflate(R.layout.title_dialog,null);
+        title.setText("Eliminar extra");
+        builder.setView(view).setCustomTitle(title);
         final AlertDialog dialog = builder.create();
         dialog.show();
         TextView mesa_name = view.findViewById(R.id.delete_active_mesa_name);
@@ -309,7 +348,9 @@ public class EditEventActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(EditEventActivity.this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.extra_dialog, null);
-        builder.setView(view).setTitle("Editando");
+        TextView title = (TextView) getLayoutInflater().inflate(R.layout.title_dialog,null);
+        title.setText("Editando");
+        builder.setView(view).setCustomTitle(title);
         final AlertDialog dialog = builder.create();
         dialog.show();
 
@@ -359,7 +400,9 @@ public class EditEventActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(EditEventActivity.this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.extra_dialog, null);
-        builder.setView(view).setTitle("Editar extra");
+        TextView title = (TextView) getLayoutInflater().inflate(R.layout.title_dialog,null);
+        title.setText("Editar extra");
+        builder.setView(view).setCustomTitle(title);
         final AlertDialog dialog = builder.create();
         dialog.show();
 

@@ -61,7 +61,17 @@ public class ConsumeAdapter extends RecyclerView.Adapter<ConsumeAdapter.ViewHold
         }
 
         public void bind(final Consume consume,final itemClickListener listener, final OnItemLongClickListener listener1) {
-            this.product_amount.setText(consume.getAmount().toString());
+            if(consume.getMeasure().matches("Gramos")) {
+                Double g = consume.getAmount() * 1000;
+                this.product_amount.setText(g.toString()+" "+consume.getMeasure());
+            }
+            else if (consume.getMeasure().matches("Dulcesito corazón")) {
+                this.product_amount.setText(consume.getAmount().toString());
+            }
+            else {
+                this.product_amount.setText(consume.getAmount().toString()+" "+consume.getMeasure());
+            }
+
             this.product_name.setText(consume.getName());
             this.product_price.setText("$ "+consume.getPrice().toString());
             this.amount_price.setText("$ "+consume.getAmountPrice().toString());

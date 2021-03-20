@@ -52,7 +52,11 @@ public class EmailActivity extends AppCompatActivity {
                     Intent intent = new Intent(EmailActivity.this, CodeActivity.class);
                     intent.putExtra("email", editEmail.getText().toString());
                     startActivity(intent);
-                } else {
+                }
+                else if (response.code() == 403) {
+                    Toast.makeText(EmailActivity.this, "No tienes permitido restablecer contraseña", Toast.LENGTH_SHORT).show();
+                }
+                else {
                     Toast.makeText(EmailActivity.this, "No se encontro el correo electornico",Toast.LENGTH_SHORT).show();
                 }
             }

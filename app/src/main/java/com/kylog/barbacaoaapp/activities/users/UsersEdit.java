@@ -62,6 +62,8 @@ public class UsersEdit extends AppCompatActivity {
         secondLastname = findViewById(R.id.edit_user_second_lastname);
         updateUser = findViewById(R.id.update_user_button);
 
+        editPassword.setText("defalutpass");
+
         adapter = ArrayAdapter.createFromResource(this,
                 R.array.roles_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -97,6 +99,10 @@ public class UsersEdit extends AppCompatActivity {
         updateUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String string = "";
+                if(!editPassword.getText().toString().matches("defalutpass"))
+                    string = editPassword.getText().toString();
+
                 if(editType.getSelectedItem().toString().matches("Mesero")) {
                     if(editName.getText().toString().matches("") ||
                             !isValidEmail(editEmail.getText().toString()) ||
@@ -120,7 +126,7 @@ public class UsersEdit extends AppCompatActivity {
                                 editEmail.getText().toString(),
                                 firstLastname.getText().toString(),
                                 secondLastname.getText().toString(),
-                                editPassword.getText().toString(),
+                                string,
                                 editType.getSelectedItem().toString()
                         ));
                     }
@@ -142,13 +148,16 @@ public class UsersEdit extends AppCompatActivity {
                         if(secondLastname.getText().toString().matches("")) {
                             secondLastname.setError("Complete este campo");
                         }
+                        if(!validatePassword()){
+                            editPassword.setError("La contraseña debe tener al menos 6 caracteres");
+                        }
                     }
                     else {
                         update_data(new UserForm(editName.getText().toString(),
                                 editEmail.getText().toString(),
                                 firstLastname.getText().toString(),
                                 secondLastname.getText().toString(),
-                                editPassword.getText().toString(),
+                                string,
                                 editType.getSelectedItem().toString()
                         ));
                     }
@@ -208,6 +217,9 @@ public class UsersEdit extends AppCompatActivity {
                     secondLastname.setText(user.getSecondLastname());
                     editEmail.setText(user.getEmail());
                     editType.setSelection(adapter.getPosition(user.getRole()));
+                }
+                else if (response.code() == 401) {
+                    Toast.makeText(UsersEdit.this, "El correo ya existe", Toast.LENGTH_SHORT).show();
                 }
             }
 

@@ -24,10 +24,9 @@ import com.kylog.barbacaoaapp.MainActivity;
 import com.kylog.barbacaoaapp.MainMenu;
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
-import com.kylog.barbacaoaapp.activities.catalogs.CatalogsActivity;
-import com.kylog.barbacaoaapp.activities.expenses.ExpensesActivity;
-import com.kylog.barbacaoaapp.activities.mesas.MesasEdit;
+import com.kylog.barbacaoaapp.models.Exist;
 import com.kylog.barbacaoaapp.models.Product;
+import com.kylog.barbacaoaapp.models.forms.NewMesaForm;
 import com.kylog.barbacaoaapp.models.forms.NewProductForm;
 
 import okhttp3.ResponseBody;
@@ -49,6 +48,7 @@ public class ProductsEdit extends AppCompatActivity {
     private ImageButton userActionsButton,backButton,mainMenu;
     private TextView user_name;
     private ArrayAdapter<CharSequence> adapterMeasure,adapterType;
+    private Exist exist = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,16 +85,35 @@ public class ProductsEdit extends AppCompatActivity {
         updateProductButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(editName.getText().toString().matches("") || editPrice.getText().toString().matches("")) {
-                    if(editName.getText().toString().matches("")) {
-                        editName.setError("Completa este campo");
+                if(exist != null)
+                {
+                    if(editName.getText().toString().matches("") || editPrice.getText().toString().matches("") || exist.getExist()) {
+                        if(exist.getExist()) {
+                            editName.setError("Este producto ya existe");
+                        }
+                        if(editName.getText().toString().matches("")) {
+                            editName.setError("Completa este campo");
+                        }
+                        if(editPrice.getText().toString().matches("")) {
+                            editPrice.setError("Completa este campo");
+                        }
                     }
-                    if(editPrice.getText().toString().matches("")) {
-                        editPrice.setError("Completa este campo");
+                    else {
+                        updateProduct();
                     }
                 }
                 else {
-                    updateProduct();
+                    if(editName.getText().toString().matches("") || editPrice.getText().toString().matches("")) {
+                        if(editName.getText().toString().matches("")) {
+                            editName.setError("Completa este campo");
+                        }
+                        if(editPrice.getText().toString().matches("")) {
+                            editPrice.setError("Completa este campo");
+                        }
+                    }
+                    else {
+                        updateProduct();
+                    }
                 }
             }
         });
@@ -105,6 +124,15 @@ public class ProductsEdit extends AppCompatActivity {
         user_name = findViewById(R.id.user_name_view);
 
         user_name.setText(getUseName());
+
+        editName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus) {
+                    verify_name(editName.getText().toString());
+                }
+            }
+        });
 
         userActionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,6 +166,29 @@ public class ProductsEdit extends AppCompatActivity {
 
     }
 
+    public void verify_name(String name){
+        AppCustomService service = RetrofitClient.getClient();
+        Call<Exist> booleanCall = service.verify(getTokenType()+" "+getToken(), new NewMesaForm(name));
+        booleanCall.enqueue(new Callback<Exist>() {
+            @Override
+            public void onResponse(Call<Exist> call, Response<Exist> response) {
+                if(response.isSuccessful()) {
+                    exist = response.body();
+
+                    if(exist.getExist())
+                    {
+                        editName.setError("Este producto ya existe");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Exist> call, Throwable t) {
+            }
+        });
+    }
+
+
     private String getToken(){
         return pref.getString("token", null);
     }
@@ -168,7 +219,7 @@ public class ProductsEdit extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Product> call, Throwable t) {
-
+                Toast.makeText(ProductsEdit.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -188,7 +239,7 @@ public class ProductsEdit extends AppCompatActivity {
                     startActivity(intent);
                 }
                 else{
-                    Toast.makeText(ProductsEdit.this, "Ocurrio un error al guardar" , Toast.LENGTH_LONG).show();
+                    Toast.makeText(ProductsEdit.this, "El producto ya existe" , Toast.LENGTH_LONG).show();
                 }
             }
 
