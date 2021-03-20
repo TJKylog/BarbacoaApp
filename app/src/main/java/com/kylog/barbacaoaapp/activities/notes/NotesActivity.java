@@ -142,7 +142,7 @@ public class NotesActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager2 = new LinearLayoutManager(this);
         layoutManager2.setOrientation(LinearLayoutManager.HORIZONTAL);
         activeslist.setLayoutManager(layoutManager2);
-        LinearLayoutManager layoutManager3 = new GridLayoutManager(this,2);
+        LinearLayoutManager layoutManager3 = new GridLayoutManager(this,3);
         productsGrid.setLayoutManager(layoutManager3);
         LinearLayoutManager layoutManager4 = new LinearLayoutManager(this);
         layoutManager4.setOrientation(LinearLayoutManager.VERTICAL);

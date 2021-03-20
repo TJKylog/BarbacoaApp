@@ -88,8 +88,8 @@ public class ProductsCreate extends AppCompatActivity {
             public void onClick(View v) {
                 if(exist != null)
                 {
-                    if(editName.getText().toString().matches("") || editPrice.getText().toString().matches("") || !exist.getExist()) {
-                        if(!exist.getExist()) {
+                    if(editName.getText().toString().matches("") || editPrice.getText().toString().matches("") || exist.getExist()) {
+                        if(exist.getExist()) {
                             editName.setError("Este producto ya existe");
                         }
                         if(editName.getText().toString().matches("")) {

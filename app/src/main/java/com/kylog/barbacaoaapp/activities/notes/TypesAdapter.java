@@ -57,6 +57,9 @@ public class TypesAdapter extends RecyclerView.Adapter<TypesAdapter.ViewHolder> 
 
         public void bind(final ProductType productType, final onItemClickListener listener){
             this.type_name.setText(productType.getType());
+
+            this.type_name.setTextColor(getSelected() == getAdapterPosition() ? Color.BLACK : Color.WHITE);
+
             if(productType.getType().matches("Barbacoa"))
                 this.icon.setBackgroundResource(R.drawable.ic_drumstick_bite_solid);
             else if(productType.getType().matches("Bebida sin alcohol"))
