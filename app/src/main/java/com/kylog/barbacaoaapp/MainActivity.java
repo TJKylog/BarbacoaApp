@@ -81,8 +81,12 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(MainActivity.this , MainMenu.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
-                } else {
-                    response.errorBody();
+                }
+                else if (response.code() == 402) {
+                    Toast.makeText(MainActivity.this, "No tienes permitido accesar a la app", Toast.LENGTH_SHORT).show();
+                }
+                else {
+
                     Toast.makeText(MainActivity.this, "Correo o contraseña incorrectos", Toast.LENGTH_SHORT).show();
                 }
             }

@@ -54,6 +54,8 @@ import com.kylog.barbacaoaapp.models.forms.DoneTicketForm;
 import com.kylog.barbacaoaapp.models.forms.FormActive;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -246,7 +248,6 @@ public class NotesActivity extends AppCompatActivity {
         done_tikcet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //showDialogDoneTicket();
                 if(mConnectedDeviceName == null) {
                     Intent serverIntent = new Intent(NotesActivity.this, DeviceListActivity.class);
                     startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
@@ -349,7 +350,7 @@ public class NotesActivity extends AppCompatActivity {
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.sales_day_dialog, null);
         TextView title = (TextView) getLayoutInflater().inflate(R.layout.title_dialog,null);
-        title.setText("Eliminar usuario");
+        title.setText("Venta del día");
 
         builder.setView(view).setCustomTitle(title);
         final AlertDialog dialog = builder.create();
@@ -399,12 +400,14 @@ public class NotesActivity extends AppCompatActivity {
         RadioButton paymentCard = view.findViewById(R.id.radio_payment_card);
         RadioButton paymentCash = view.findViewById(R.id.radio_payment_cash);
         EditText amount = view.findViewById(R.id.amount_cash_payment);
+        amount.setEnabled(false);
         Button cancel = view.findViewById(R.id.cancel_done_ticket);
         Button save = view.findViewById(R.id.done_ticket);
 
         paymentCard.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                amount.setText("");
                 amount.setEnabled(!isChecked);
             }
         });
@@ -443,6 +446,8 @@ public class NotesActivity extends AppCompatActivity {
                     payment_amount = Double.parseDouble(String.valueOf(amount.getText()));
                     if (payment_amount >= note.getTotal()) {
                         change = payment_amount - note.getTotal();
+                        BigDecimal bd = new BigDecimal(change).setScale(2, RoundingMode.HALF_UP);
+                        change = bd.doubleValue();
                         AppCustomService service = RetrofitClient.getClient();
                         Call<ResponseBody> responseBodyCall = service.done_ticket(getTokenType() + " " + getToken(), note.getId(),
                                 new DoneTicketForm("Efectivo" ,payment_amount, change)
@@ -724,6 +729,8 @@ public class NotesActivity extends AppCompatActivity {
                         }
                     }
                     else{
+                        dataAvailable.getMesas().add(0, new Mesa(0,"Selecciona mesa"));
+                        dataAvailable.getWaiters().add(0, new Waiter(0,"Selecciona mesero"));
                         showAddActive();
                     }
                 }
@@ -765,12 +772,29 @@ public class NotesActivity extends AppCompatActivity {
                 final Mesa mesa = (Mesa) spinnerMesas.getSelectedItem();
                 final Waiter waiter = (Waiter) spinnerWaiters.getSelectedItem();
                 if(delivery.isChecked()) {
-                    add_active(new FormActive(waiter.getId(),mesa.getId(),true));
+                    if(waiter.getId() == 0 && mesa.getId() == 0)
+                            Toast.makeText(NotesActivity.this, "Seleccione mesa y mesero", Toast.LENGTH_LONG).show();
+                    else if (waiter.getId() == 0)
+                            Toast.makeText(NotesActivity.this, "Seleccione mesero", Toast.LENGTH_LONG).show();
+                    else if(mesa.getId() == 0)
+                            Toast.makeText(NotesActivity.this, "Seleccione mesa", Toast.LENGTH_LONG).show();
+                    else {
+                        add_active(new FormActive(waiter.getId(), mesa.getId(), true));
+                        dialog.dismiss();
+                    }
                 }
                 else {
-                    add_active(new FormActive(waiter.getId(),mesa.getId(),false));
+                    if(waiter.getId() == 0 && mesa.getId() == 0)
+                        Toast.makeText(NotesActivity.this, "Seleccione mesa y mesero", Toast.LENGTH_LONG).show();
+                    else if (waiter.getId() == 0)
+                        Toast.makeText(NotesActivity.this, "Seleccione mesero", Toast.LENGTH_LONG).show();
+                    else if(mesa.getId() == 0)
+                        Toast.makeText(NotesActivity.this, "Seleccione mesa", Toast.LENGTH_LONG).show();
+                    else {
+                        add_active(new FormActive(waiter.getId(), mesa.getId(), false));
+                        dialog.dismiss();
+                    }
                 }
-                dialog.dismiss();
             }
         });
 

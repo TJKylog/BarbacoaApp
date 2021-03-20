@@ -48,10 +48,40 @@ public class PasswordActivity extends AppCompatActivity {
         sendPasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                send_new_password();
+                if( !validatePassword() || !validatePassword2() ||  !editPassword.getText().toString().matches(editRepeatPassword.getText().toString()) )
+                {
+                    if(!validatePassword())
+                        editPassword.setError("La contraseña debe tener al menos 6 caracteres");
+                    if(!validatePassword2())
+                        editRepeatPassword.setError("La contraseña debe tener al menos 6 caracteres");
+                    if (!editPassword.getText().toString().matches(editRepeatPassword.getText().toString()))
+                        Toast.makeText(PasswordActivity.this, "Las contraseñas no coinciden",Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    send_new_password();
+                }
+
             }
         });
 
+    }
+
+    private boolean validatePassword()
+    {
+        String password = editPassword.getText().toString();
+        if(password.length() >= 6)
+            return true;
+
+        return false;
+    }
+
+    private boolean validatePassword2()
+    {
+        String password = editRepeatPassword.getText().toString();
+        if(password.length() >= 6)
+            return true;
+
+        return false;
     }
 
     private void send_new_password() {
@@ -66,9 +96,8 @@ public class PasswordActivity extends AppCompatActivity {
                     Intent intent = new Intent(PasswordActivity.this , MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
-                }
-                else {
-                    Toast.makeText(PasswordActivity.this, "Ocurrio un error al guardar su contraseña",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(PasswordActivity.this, "Su código ya fue usuado o expiró",Toast.LENGTH_SHORT).show();
                 }
             }
 

@@ -20,19 +20,35 @@
             android:text="Restablecer contraseña"
             android:textAlignment="center"
             />
-        <EditText
-            android:id="@+id/reset_password_email_field"
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_customer_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="correo"
-            android:layout_margin="30dp"/>
-        <Button
-            android:id="@+id/send_email_reset_password"
+            android:layout_margin="20dp"
+            android:textColorHint="@color/primaryColor">
+            <EditText
+                android:id="@+id/reset_password_email_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Correo"
+                android:inputType="textEmailAddress"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Enviar código"
-            android:layout_margin="30dp"
-            />
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/send_email_reset_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enviar código"
+                android:layout_margin="30dp"
+                android:layout_centerInParent="true"
+                />
+        </RelativeLayout>
+
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
