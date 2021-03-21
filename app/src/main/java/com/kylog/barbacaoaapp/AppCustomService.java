@@ -6,6 +6,7 @@ import com.kylog.barbacaoaapp.models.DataAvailable;
 import com.kylog.barbacaoaapp.models.Exist;
 import com.kylog.barbacaoaapp.models.Expense;
 import com.kylog.barbacaoaapp.models.Mesa;
+import com.kylog.barbacaoaapp.models.Message;
 import com.kylog.barbacaoaapp.models.Note;
 import com.kylog.barbacaoaapp.models.Product;
 import com.kylog.barbacaoaapp.models.ProductType;
@@ -174,14 +175,14 @@ public interface AppCustomService {
             "Content-Type: application/json",
             "X-Requested-With: XMLHttpRequest"
     })
-    Call<ResponseBody> save_expense(@Header("Authorization") String authorization, @Body ExpenseForm expenseForm);
+    Call<Message> save_expense(@Header("Authorization") String authorization, @Body ExpenseForm expenseForm);
 
     @PUT("api/auth/expenses/{id}")
     @Headers({
             "Content-Type: application/json",
             "X-Requested-With: XMLHttpRequest"
     })
-    Call<ResponseBody> update_expense(@Header("Authorization") String authorization ,@Path("id") Integer id , @Body ExpenseForm expenseForm);
+    Call<Message> update_expense(@Header("Authorization") String authorization ,@Path("id") Integer id , @Body ExpenseForm expenseForm);
 
     @DELETE("api/auth/expenses/{id}")
     @Headers({

@@ -1,11 +1,5 @@
 package com.kylog.barbacaoaapp.activities.expenses;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -29,15 +23,19 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.kylog.barbacaoaapp.AppCustomService;
 import com.kylog.barbacaoaapp.BluetoothService;
 import com.kylog.barbacaoaapp.MainActivity;
 import com.kylog.barbacaoaapp.MainMenu;
 import com.kylog.barbacaoaapp.R;
 import com.kylog.barbacaoaapp.RetrofitClient;
-import com.kylog.barbacaoaapp.activities.catalogs.CatalogsActivity;
 import com.kylog.barbacaoaapp.activities.notes.DeviceListActivity;
-import com.kylog.barbacaoaapp.activities.notes.NotesActivity;
 import com.kylog.barbacaoaapp.command.Command;
 import com.kylog.barbacaoaapp.command.PrinterCommand;
 import com.kylog.barbacaoaapp.models.Expense;
@@ -296,14 +294,14 @@ public class ExpensesActivity extends AppCompatActivity {
         final UserName userName = (UserName) users_names.getSelectedItem();
 
         AppCustomService service = RetrofitClient.getClient();
-        Call<ResponseBody> responseBodyCall = service.update_expense(getTokenType()+" "+getToken(), editExpense.getId() , new ExpenseForm(
+        Call<com.kylog.barbacaoaapp.models.Message> messageCall = service.update_expense(getTokenType()+" "+getToken(), editExpense.getId() , new ExpenseForm(
                 userName.getName(),
                 editReason.getText().toString(),
                 Double.parseDouble(String.valueOf(editAmount.getText()))));
 
-        responseBodyCall.enqueue(new Callback<ResponseBody>() {
+        messageCall.enqueue(new Callback<com.kylog.barbacaoaapp.models.Message>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(Call<com.kylog.barbacaoaapp.models.Message> call, Response<com.kylog.barbacaoaapp.models.Message> response) {
                 if(response.isSuccessful())
                 {
                     editReason.setText("");
@@ -312,7 +310,8 @@ public class ExpensesActivity extends AppCompatActivity {
                     isEdit = false;
                     get_expenses();
                     actionView.setText("Nuevo egreso");
-                    Toast.makeText(ExpensesActivity.this, "Se actualizo correctamente", Toast.LENGTH_LONG).show();
+                    com.kylog.barbacaoaapp.models.Message message = response.body();
+                    Toast.makeText(ExpensesActivity.this, message.getMessage(), Toast.LENGTH_LONG).show();
                 }
                 else {
                     Toast.makeText(ExpensesActivity.this, "Ocurrio un error al guardar", Toast.LENGTH_LONG).show();
@@ -320,7 +319,7 @@ public class ExpensesActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<com.kylog.barbacaoaapp.models.Message> call, Throwable t) {
                 Toast.makeText(ExpensesActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
             }
         });
@@ -329,20 +328,21 @@ public class ExpensesActivity extends AppCompatActivity {
     private void saveExpense(){
         final UserName userName = (UserName) users_names.getSelectedItem();
         AppCustomService service = RetrofitClient.getClient();
-        Call<ResponseBody> responseBodyCall = service.save_expense(getTokenType()+" "+getToken(), new ExpenseForm(
+        Call<com.kylog.barbacaoaapp.models.Message> responseBodyCall = service.save_expense(getTokenType()+" "+getToken(), new ExpenseForm(
                 userName.getName(),
                 editReason.getText().toString(),
                 Double.parseDouble(String.valueOf(editAmount.getText()))));
 
-        responseBodyCall.enqueue(new Callback<ResponseBody>() {
+        responseBodyCall.enqueue(new Callback<com.kylog.barbacaoaapp.models.Message>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(Call<com.kylog.barbacaoaapp.models.Message> call, Response<com.kylog.barbacaoaapp.models.Message> response) {
                 if(response.isSuccessful())
                 {
                     editReason.setText("");
                     editAmount.setText("");
                     get_expenses();
-                    Toast.makeText(ExpensesActivity.this, "Se guardo correctamente", Toast.LENGTH_LONG).show();
+                    com.kylog.barbacaoaapp.models.Message message = response.body();
+                    Toast.makeText(ExpensesActivity.this, message.getMessage(), Toast.LENGTH_LONG).show();
                 }
                 else {
                     Toast.makeText(ExpensesActivity.this, "Ocurrio un error al guardar", Toast.LENGTH_LONG).show();
@@ -350,7 +350,7 @@ public class ExpensesActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<com.kylog.barbacaoaapp.models.Message> call, Throwable t) {
                 Toast.makeText(ExpensesActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
             }
         });
