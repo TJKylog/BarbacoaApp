@@ -163,7 +163,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
             Event event = events.get(this.getAdapterPosition());
-            menu.setHeaderTitle(event.getId().toString());
+            menu.setHeaderTitle(event.getEvent_info().getCustomer_name());
             MenuInflater inflater = activity.getMenuInflater();
             inflater.inflate(R.menu.events_context_menu, menu);
             for (int i = 0; i < menu.size(); i++)

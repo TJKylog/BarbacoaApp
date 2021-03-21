@@ -165,7 +165,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
             Expense expense = expenseList.get(this.getAdapterPosition());
-            menu.setHeaderTitle(expense.getId().toString());
+            menu.setHeaderTitle(expense.getReason());
             MenuInflater inflater = activity.getMenuInflater();
             inflater.inflate(R.menu.context_menu_expenses, menu);
             for (int i = 0; i < menu.size(); i++)
