@@ -11,6 +11,7 @@ import com.kylog.barbacaoaapp.models.Note;
 import com.kylog.barbacaoaapp.models.Product;
 import com.kylog.barbacaoaapp.models.ProductType;
 import com.kylog.barbacaoaapp.models.SalesDay;
+import com.kylog.barbacaoaapp.models.SaveTicket;
 import com.kylog.barbacaoaapp.models.UserName;
 import com.kylog.barbacaoaapp.models.forms.AddAmount;
 import com.kylog.barbacaoaapp.models.forms.CodeForm;
@@ -301,7 +302,7 @@ public interface AppCustomService {
             "Content-Type: application/json",
             "X-Requested-With: XMLHttpRequest"
     })
-    Call<ResponseBody> done_ticket(@Header("Authorization") String authorization, @Path("id") Integer id, @Body DoneTicketForm doneTicketForm);
+    Call<SaveTicket> done_ticket(@Header("Authorization") String authorization, @Path("id") Integer id, @Body DoneTicketForm doneTicketForm);
 
     @GET("api/auth/day/sales")
     @Headers({

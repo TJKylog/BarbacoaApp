@@ -63,7 +63,7 @@ public class OthersAdapter extends  RecyclerView.Adapter<OthersAdapter.ViewHolde
         {
             this.nameView.setText(others.getName());
             this.amountView.setText(others.getAmount().toString());
-            this.priceView.setText(others.getPrice().toString());
+            this.priceView.setText("$ "+others.getPrice().toString());
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

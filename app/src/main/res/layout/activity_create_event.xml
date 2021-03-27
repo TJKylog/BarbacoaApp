@@ -1,181 +1,254 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+
     tools:context=".activities.events.CreateEventActivity">
-    <include layout="@layout/toolbar_general"
-        android:id="@+id/main_toolbar"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/text_input_customer_name"
-            android:layout_width="0dp"
-            android:layout_weight="50"
+        android:orientation="vertical">
+
+        <include layout="@layout/toolbar_general"
+            android:id="@+id/main_toolbar"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:textColorHint="@color/primaryColor">
-            <EditText
-                android:id="@+id/name_customer_name_field"
-                android:hint="Nombre"
-                android:layout_width="match_parent"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_customer_name"
+                android:layout_width="0dp"
+                android:layout_weight="50"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                android:maxLines="1"
-                />
+                android:layout_margin="10dp"
+                android:textColorHint="@color/primaryColor">
+                <EditText
+                    android:id="@+id/name_customer_name_field"
+                    android:hint="Nombre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    />
 
-        </com.google.android.material.textfield.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="0dp"
-            android:layout_weight="50"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:textColorHint="@color/primaryColor"
-            android:hint="Dirección">
-            <EditText
-                android:id="@+id/name_customer_address_field"
-                android:layout_width="match_parent"
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_weight="50"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                android:maxLines="1"
-                />
+                android:layout_margin="10dp"
+                android:textColorHint="@color/primaryColor"
+                android:hint="Dirección">
+                <EditText
+                    android:id="@+id/name_customer_address_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    />
 
-        </com.google.android.material.textfield.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-    </LinearLayout>
+        </LinearLayout>
 
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="0dp"
-            android:layout_weight=".30"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:hint="Telefono"
-            android:textColorHint="@color/primaryColor">
-            <EditText
-                android:id="@+id/name_customer_phone_field"
-                android:layout_width="match_parent"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_weight=".30"
                 android:layout_height="wrap_content"
-                android:inputType="phone"
-                android:maxLines="1"
-                />
+                android:layout_margin="10dp"
+                android:hint="Telefono"
+                android:textColorHint="@color/primaryColor">
+                <EditText
+                    android:id="@+id/name_customer_phone_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone"
+                    android:maxLines="1"
+                    />
 
-        </com.google.android.material.textfield.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="0dp"
-            android:layout_weight=".30"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:hint="Fecha"
-            android:textColorHint="@color/primaryColor">
-            <EditText
-                android:id="@+id/date_event"
-
-                android:layout_width="match_parent"
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_weight=".30"
                 android:layout_height="wrap_content"
-                android:inputType="date"
-                android:focusable="false"
-                android:clickable="true"
-                android:maxLines="1"
-                />
+                android:layout_margin="10dp"
+                android:hint="Fecha"
+                android:textColorHint="@color/primaryColor">
+                <EditText
+                    android:id="@+id/date_event"
 
-        </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="date"
+                    android:focusable="false"
+                    android:clickable="true"
+                    android:maxLines="1"
+                    />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="0dp"
-            android:layout_weight=".20"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:textColorHint="@color/primaryColor">
-            <EditText
-                android:id="@+id/time_Event"
-                android:hint="Hora"
-                android:layout_width="match_parent"
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_weight=".20"
                 android:layout_height="wrap_content"
-                android:inputType="date"
-                android:focusable="false"
-                android:clickable="true"
-                android:maxLines="1"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_margin="10dp"
+                android:textColorHint="@color/primaryColor">
+                <EditText
+                    android:id="@+id/time_Event"
+                    android:hint="Hora"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="date"
+                    android:focusable="false"
+                    android:clickable="true"
+                    android:maxLines="1"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="0dp"
-            android:layout_weight=".20"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:textColorHint="@color/primaryColor">
-            <EditText
-                android:id="@+id/advance_payment"
-                android:hint="Anticipo"
-                android:layout_width="match_parent"
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_weight=".20"
                 android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_margin="10dp"
+                android:textColorHint="@color/primaryColor">
+                <EditText
+                    android:id="@+id/advance_payment"
+                    android:hint="Anticipo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
 
-    </LinearLayout>
+        </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <Button
-            android:id="@+id/add_extra_button"
-            android:text="Añadir extra"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight=".50"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_margin="10dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight=".30"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="Nombre"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight=".30"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="Cantidad"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight=".30"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="Costo"/>
+                </LinearLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/basic_package_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight=".50"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_margin="10dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight=".30"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="Nombre"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight=".30"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="Cantidad"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight=".30"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="Costo"/>
+                </LinearLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/extras_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/custom_flat_button"
+                android:id="@+id/add_extra_button"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_baseline_add_24"
+                />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/total_event"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:textSize="20dp"
             />
-    </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/save_event_button"
+                android:layout_width="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Guardar"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/basic_package_list"
-            android:layout_width="0dp"
-            android:layout_weight=".50"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/extras_list"
-            android:layout_width="0dp"
-            android:layout_weight=".50"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            />
     </LinearLayout>
-    <TextView
-        android:id="@+id/total_event"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textStyle="bold"
-        android:textSize="20dp"
-        />
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <Button
-            android:id="@+id/save_event_button"
-            android:layout_width="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="Guardar"
-            android:layout_height="wrap_content"/>
-    </RelativeLayout>
-</LinearLayout>
+
+
+</ScrollView>

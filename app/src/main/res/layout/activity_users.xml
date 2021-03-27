@@ -24,22 +24,21 @@
             android:layout_marginTop="20dp"
             android:textAlignment="center"/>
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_user_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            app:srcCompat="@drawable/ic_plus"
+            />
+
         <ListView
             android:id="@+id/user_list_labels"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="20dp"/>
+            android:layout_height="match_parent"/>
 
     </LinearLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/add_user_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="30dp"
-        android:clickable="true"
-        app:srcCompat="@drawable/ic_plus"
-        />
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

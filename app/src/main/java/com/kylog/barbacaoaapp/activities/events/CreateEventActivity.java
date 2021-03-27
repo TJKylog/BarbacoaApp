@@ -54,7 +54,8 @@ public class CreateEventActivity extends AppCompatActivity {
 
     private SharedPreferences pref;
     private ImageButton userActionsButton,backButton, mainMenu;
-    private Button save_event, add_extra;
+    private Button save_event;
+    private ImageButton add_extra;
     private TextView user_name, total_event;
     private List<BasicPackage> basicPackageList;
     private EditText dateEvent,timeDate,nameEditText,addressEditText,phoneEditText,advance_payment;
