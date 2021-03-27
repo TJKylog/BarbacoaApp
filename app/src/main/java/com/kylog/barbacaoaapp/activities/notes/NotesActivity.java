@@ -47,6 +47,7 @@ import com.kylog.barbacaoaapp.models.Note;
 import com.kylog.barbacaoaapp.models.Product;
 import com.kylog.barbacaoaapp.models.ProductType;
 import com.kylog.barbacaoaapp.models.SalesDay;
+import com.kylog.barbacaoaapp.models.SaveTicket;
 import com.kylog.barbacaoaapp.models.Waiter;
 import com.kylog.barbacaoaapp.models.forms.AddAmount;
 import com.kylog.barbacaoaapp.models.forms.DeleteProduct;
@@ -418,14 +419,16 @@ public class NotesActivity extends AppCompatActivity {
                 if(paymentCard.isChecked()) {
                     payment_amount = 0.0;
                     AppCustomService service = RetrofitClient.getClient();
-                    Call<ResponseBody> responseBodyCall = service.done_ticket(getTokenType() + " " + getToken(), note.getId(),
+                    Call<SaveTicket> responseBodyCall = service.done_ticket(getTokenType() + " " + getToken(), note.getId(),
                                 new DoneTicketForm("Tarjeta" ,payment_amount, change)
                     );
-                    responseBodyCall.enqueue(new Callback<ResponseBody>() {
+                    responseBodyCall.enqueue(new Callback<SaveTicket>() {
                         @Override
-                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        public void onResponse(Call<SaveTicket> call, Response<SaveTicket> response) {
                             if (response.isSuccessful()) {
                                 dialog.dismiss();
+                                SaveTicket saveTicket = response.body();
+                                note.setInvoice(saveTicket.getInvoice());
                                 Toast.makeText(NotesActivity.this, "La venta se guardó correctamente", Toast.LENGTH_LONG).show();
                                 SendDataByte(Command.ESC_Init);
                                 SendDataByte(Command.LF);
@@ -437,7 +440,7 @@ public class NotesActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        public void onFailure(Call<SaveTicket> call, Throwable t) {
                             Toast.makeText(NotesActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
                         }
                     });
@@ -449,13 +452,15 @@ public class NotesActivity extends AppCompatActivity {
                         BigDecimal bd = new BigDecimal(change).setScale(2, RoundingMode.HALF_UP);
                         change = bd.doubleValue();
                         AppCustomService service = RetrofitClient.getClient();
-                        Call<ResponseBody> responseBodyCall = service.done_ticket(getTokenType() + " " + getToken(), note.getId(),
+                        Call<SaveTicket> responseBodyCall = service.done_ticket(getTokenType() + " " + getToken(), note.getId(),
                                 new DoneTicketForm("Efectivo" ,payment_amount, change)
                         );
-                        responseBodyCall.enqueue(new Callback<ResponseBody>() {
+                        responseBodyCall.enqueue(new Callback<SaveTicket>() {
                             @Override
-                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            public void onResponse(Call<SaveTicket> call, Response<SaveTicket> response) {
                                 if (response.isSuccessful()) {
+                                    SaveTicket saveTicket = response.body();
+                                    note.setInvoice(saveTicket.getInvoice());
                                     dialog.dismiss();
                                     Toast.makeText(NotesActivity.this, "La venta se guardó correctamente", Toast.LENGTH_LONG).show();
                                     SendDataByte(Command.ESC_Init);
@@ -468,7 +473,7 @@ public class NotesActivity extends AppCompatActivity {
                             }
 
                             @Override
-                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            public void onFailure(Call<SaveTicket> call, Throwable t) {
                                 Toast.makeText(NotesActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
                             }
                         });
@@ -1003,13 +1008,11 @@ public class NotesActivity extends AppCompatActivity {
             SimpleDateFormat formatter = new SimpleDateFormat ("yyyy/MM/dd HH:mm:ss ");
             Date curDate = new Date(System.currentTimeMillis());
             String str = formatter.format(curDate);
-            String folio = "Folio: "+note.getInvoice().toString()+"\n";
             String date = str + "\n";
             try {
                 Command.ESC_Align[2] = 0x01;
                 SendDataByte(Command.ESC_Align);
                 SendDataByte("Ticket de venta\n".getBytes("GBK"));
-                SendDataByte(folio.getBytes("GBK"));
                 SendDataString(date);
                 Command.ESC_Align[2] = 0x00;
                 SendDataByte(Command.ESC_Align);
