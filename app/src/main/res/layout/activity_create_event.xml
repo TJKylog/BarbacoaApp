@@ -19,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_customer_name"
                 android:layout_width="0dp"
@@ -139,20 +140,81 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/basic_package_list"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_weight=".50"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"/>
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_margin="10dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight=".30"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="Nombre"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight=".30"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="Cantidad"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight=".30"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="Costo"/>
+                </LinearLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/basic_package_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"/>
+            </LinearLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/extras_list"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_weight=".50"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                />
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_margin="10dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight=".30"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="Nombre"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight=".30"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="Cantidad"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight=".30"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="Costo"/>
+                </LinearLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/extras_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    />
+
+            </LinearLayout>
+
+
         </LinearLayout>
         <RelativeLayout
             android:layout_width="match_parent"
