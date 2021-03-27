@@ -58,7 +58,8 @@ public class ActiveAdapter extends RecyclerView.Adapter<ActiveAdapter.ViewHolder
 
         public void bind(final ActiveMesa activeMesa, final itemClickListener listener, final OnItemLongClickListener listener1){
             this.mesa_name.setText(activeMesa.getName());
-            itemView.setBackgroundColor(getSelected() == getAdapterPosition() ? Color.LTGRAY : Color.TRANSPARENT);
+            this.mesa_name.setTextColor(getSelected() == getAdapterPosition() ? Color.BLACK : Color.WHITE);
+            itemView.setBackgroundResource(getSelected() == getAdapterPosition() ? R.drawable.type_selected : R.drawable.rounded_view);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
