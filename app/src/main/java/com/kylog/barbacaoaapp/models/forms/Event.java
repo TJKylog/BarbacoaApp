@@ -61,4 +61,9 @@ public class Event {
     public void setEvent_info(EventInfo event_info) {
         this.event_info = event_info;
     }
+
+    public String toString(){
+        String event_string = this.event_info.toString();
+        return event_string;
+    }
 }
