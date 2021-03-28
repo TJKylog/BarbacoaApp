@@ -404,7 +404,8 @@ public class EventsActivity extends AppCompatActivity {
             SendDataByte(Command.ESC_Align);
             Command.GS_ExclamationMark[2] = 0x00;
             SendDataByte(Command.GS_ExclamationMark);
-            SendDataByte("".getBytes("GBK"));
+            SendDataByte(event.toString().getBytes("GBK"));
+            SendDataByte("\n\n\n\n\n================================\n             Firma\n".getBytes("GBK"));
             SendDataByte(Command.LF);
             SendDataByte(PrinterCommand.POS_Set_PrtAndFeedPaper(48));
             SendDataByte(Command.GS_V_m_n);

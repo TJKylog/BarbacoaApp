@@ -122,7 +122,7 @@ public class Note {
             else {
                 con_name = consume.getName();
             }
-            note_string = note_string+consume.getAmount().toString()+"  "+con_name+"  "+ consume.getPrice().toString()+"  "+consume.getAmountPrice().toString();
+            note_string = note_string+consume.getAmount().toString()+" "+con_name+" "+ consume.getPrice().toString()+" "+consume.getAmountPrice().toString()+"\n";
         }
         note_string = note_string+"\n================================\n"+"Total: "+this.total+"\n================================\n";
 

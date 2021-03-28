@@ -120,4 +120,26 @@ public class EventInfo {
     public void setHour(String hour) {
         this.hour = hour;
     }
+
+    public String toString() {
+        String event_info = "Fecha: "+this.date+" "+this.hour+"\n";
+
+        event_info = event_info+"Nombre: "+this.customer_name+"\n";
+
+        event_info = event_info+"Tel: "+this.phone+"\n";
+        event_info = event_info+"Dereccion: "+this.address+"\n\n\n\n";
+        event_info = event_info+"CANT NOMBRE        P/U  IMP"+"\n================================\n";
+
+        for (BasicPackage basicPackage: this.basic_package ) {
+            event_info = event_info+basicPackage.getAmount().toString()+" "+basicPackage.getName()+" $"+basicPackage.getPrice().toString()+"\n";
+        }
+        for (Others other:extras_list) {
+            event_info = event_info+other.getAmount().toString()+" "+other.getName()+" $"+other.getPrice().toString()+"\n";
+        }
+
+        event_info = event_info+"\n================================\n"+"Total: "+this.total.toString()+"\nAnticipo: "+advance_payment.toString()+"\n================================\n";
+
+        return  event_info;
+    }
+
 }
