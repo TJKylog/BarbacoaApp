@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="20dp"
@@ -9,23 +9,27 @@
 
     <TextView
         android:id="@+id/product_name_text_list"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight=".25"
         android:layout_height="wrap_content"
         android:text="" />
 
     <TextView
         android:id="@+id/product_price_text_list"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight=".25"
         android:layout_height="wrap_content"
         android:text=""/>
     <TextView
         android:id="@+id/product_measure_text_list"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight=".25"
         android:layout_height="wrap_content"
         android:text=""/>
     <TextView
         android:id="@+id/product_type_text_list"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight=".25"
         android:layout_height="wrap_content"
         android:text=""/>
 

@@ -116,7 +116,6 @@ public class NotesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notas);
         pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
-        mService = null;
 
         typesList = findViewById(R.id.list_types);
         activeslist = findViewById(R.id.active_list);

@@ -32,6 +32,14 @@
             android:clickable="true"
             app:srcCompat="@drawable/ic_plus" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Nombre"
+            android:layout_margin="20dp"
+            />
+
         <ListView
             android:id="@+id/list_mesas_labels"
             android:layout_width="match_parent"

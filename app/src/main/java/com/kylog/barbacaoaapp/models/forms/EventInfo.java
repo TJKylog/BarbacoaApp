@@ -27,26 +27,34 @@ public class EventInfo {
     @SerializedName("extras_list")
     @Expose
     private List<Others> extras_list;
-    @SerializedName("basic_package")
-    @Expose
-    private List<BasicPackage> basic_package;
     @SerializedName("customer_name")
     @Expose
     private String customer_name;
     @SerializedName("advance_payment")
     @Expose
     private Double advance_payment;
+    @SerializedName("event_observations")
+    @Expose
+    private String event_observations;
 
-    public EventInfo(List<Others> extras_list, List<BasicPackage> basic_package, Double total, Double advance_payment, String customer_name, String address, String phone, String date, String hour) {
+    public EventInfo(List<Others> extras_list, Double total, Double advance_payment, String customer_name, String event_observations, String address, String phone, String date, String hour) {
         this.extras_list = extras_list;
-        this.basic_package = basic_package;
         this.total = total;
         this.advance_payment = advance_payment;
         this.customer_name = customer_name;
         this.address = address;
         this.phone = phone;
+        this.event_observations = event_observations;
         this.date = date;
         this.hour = hour;
+    }
+
+    public String getEvent_observations() {
+        return event_observations;
+    }
+
+    public void setEvent_observations(String event_observations) {
+        this.event_observations = event_observations;
     }
 
     public List<Others> getExtras_list() {
@@ -55,14 +63,6 @@ public class EventInfo {
 
     public void setExtras_list(List<Others> extras_list) {
         this.extras_list = extras_list;
-    }
-
-    public List<BasicPackage> getBasic_package() {
-        return basic_package;
-    }
-
-    public void setBasic_package(List<BasicPackage> basic_package) {
-        this.basic_package = basic_package;
     }
 
     public Double getTotal() {
@@ -130,14 +130,12 @@ public class EventInfo {
         event_info = event_info+"Dereccion: "+this.address+"\n\n\n\n";
         event_info = event_info+"CANT NOMBRE        P/U  IMP"+"\n================================\n";
 
-        for (BasicPackage basicPackage: this.basic_package ) {
-            event_info = event_info+basicPackage.getAmount().toString()+" "+basicPackage.getName()+" $"+basicPackage.getPrice().toString()+"\n";
-        }
+        Double remaining_amount = this.total - this.advance_payment;
         for (Others other:extras_list) {
             event_info = event_info+other.getAmount().toString()+" "+other.getName()+" $"+other.getPrice().toString()+"\n";
         }
 
-        event_info = event_info+"\n================================\n"+"Total: "+this.total.toString()+"\nAnticipo: "+advance_payment.toString()+"\n================================\n";
+        event_info = event_info+"\n================================\n"+"Total: "+this.total.toString()+"\nAnticipo: "+advance_payment.toString()+"\nRestante: "+remaining_amount.toString() +"\n================================\n";
 
         return  event_info;
     }

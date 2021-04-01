@@ -32,6 +32,38 @@
             android:clickable="true"
             app:srcCompat="@drawable/ic_plus" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="20dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight=".25"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="Nombre"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight=".25"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="Precio"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight=".25"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="Unidad"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight=".25"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="Tipo"/>
+
+        </LinearLayout>
+
         <ListView
             android:id="@+id/list_products_labels"
             android:layout_width="match_parent"

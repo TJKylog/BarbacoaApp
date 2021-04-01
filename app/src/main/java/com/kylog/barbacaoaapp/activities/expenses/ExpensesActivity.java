@@ -40,6 +40,7 @@ import com.kylog.barbacaoaapp.command.Command;
 import com.kylog.barbacaoaapp.command.PrinterCommand;
 import com.kylog.barbacaoaapp.models.Expense;
 import com.kylog.barbacaoaapp.models.UserName;
+import com.kylog.barbacaoaapp.models.forms.Event;
 import com.kylog.barbacaoaapp.models.forms.ExpenseForm;
 
 import java.io.UnsupportedEncodingException;
@@ -94,7 +95,6 @@ public class ExpensesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expenses);
         pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
-        mService = null;
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -132,7 +132,8 @@ public class ExpensesActivity extends AppCompatActivity {
 
         userNameList = new ArrayList<UserName>();
 
-        spinnerUsers =  new ArrayAdapter( this ,R.layout.support_simple_spinner_dropdown_item, userNameList );
+        spinnerUsers =  new ArrayAdapter( this ,R.layout.simple_spinner_item, userNameList );
+        spinnerUsers.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
         users_names.setAdapter(spinnerUsers);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -143,13 +144,7 @@ public class ExpensesActivity extends AppCompatActivity {
         expenseAdapter = new ExpenseAdapter(expenses, R.layout.item_list_expense_layout, new ExpenseAdapter.itemClickListener() {
             @Override
             public void onItemClick(Expense expense, int position) {
-                if(mConnectedDeviceName == null) {
-                    Intent serverIntent = new Intent(ExpensesActivity.this, DeviceListActivity.class);
-                    startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
-                }
-                else {
-                    showPrintExpenseDialog(expense);
-                }
+
 
             }
         },ExpensesActivity.this, ExpensesActivity.this);
@@ -194,6 +189,16 @@ public class ExpensesActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         get_user_names();
+    }
+
+    public void check_bluetooth(Expense expense) {
+        if(mConnectedDeviceName == null) {
+            Intent serverIntent = new Intent(ExpensesActivity.this, DeviceListActivity.class);
+            startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
+        }
+        else {
+            showPrintExpenseDialog(expense);
+        }
     }
 
     public void showPopup(View v) {
