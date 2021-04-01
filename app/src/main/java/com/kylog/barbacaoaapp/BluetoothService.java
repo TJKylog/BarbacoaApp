@@ -5,15 +5,20 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
+import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
+
+import androidx.annotation.Nullable;
 
 import com.kylog.barbacaoaapp.activities.notes.NotesActivity;
 
@@ -23,7 +28,7 @@ import com.kylog.barbacaoaapp.activities.notes.NotesActivity;
  * incoming connections, a thread for connecting with a device, and a
  * thread for performing data transmissions when connected.
  */
-public class BluetoothService {
+public class BluetoothService extends Service {
     // Debugging
     private static final String TAG = "BluetoothService";
     private static final boolean DEBUG = true;
@@ -60,6 +65,8 @@ public class BluetoothService {
         mHandler = handler;
     }
 
+    public BluetoothService() {
+    }
 
     /**
      * Set the current state of the connection
@@ -204,6 +211,12 @@ public class BluetoothService {
         bundle.putString(NotesActivity.TOAST, "Device connection was lost");
         msg.setData(bundle);
         mHandler.sendMessage(msg);
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     /**

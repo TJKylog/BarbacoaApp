@@ -95,6 +95,12 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         @Override
         public boolean onMenuItemClick(MenuItem item) {
             switch (item.getItemId()) {
+                case R.id.print_expense_option:{
+                    if(context instanceof ExpensesActivity) {
+                        ((ExpensesActivity) context).check_bluetooth( expenseList.get(getAdapterPosition()));
+                    }
+                    return true;
+                }
                 case R.id.delete_expense_option: {
                     if(context instanceof ExpensesActivity){
 

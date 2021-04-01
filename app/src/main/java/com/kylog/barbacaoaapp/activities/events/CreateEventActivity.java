@@ -57,11 +57,9 @@ public class CreateEventActivity extends AppCompatActivity {
     private Button save_event;
     private ImageButton add_extra;
     private TextView user_name, total_event;
-    private List<BasicPackage> basicPackageList;
-    private EditText dateEvent,timeDate,nameEditText,addressEditText,phoneEditText,advance_payment;
+    private EditText dateEvent,timeDate,nameEditText,addressEditText,phoneEditText,advance_payment, eventObservations;
     private List<Others> othersList;
-    private RecyclerView basicPackageR, extrasList;
-    private BasicAdapter basicAdapter;
+    private RecyclerView extrasList;
     private OthersAdapter othersAdapter;
     private Double total = 0.0;
 
@@ -109,7 +107,6 @@ public class CreateEventActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
 
-        basicPackageR = findViewById(R.id.basic_package_list);
         extrasList = findViewById(R.id.extras_list);
         save_event = findViewById(R.id.save_event_button);
         dateEvent =  findViewById(R.id.date_event);
@@ -120,6 +117,7 @@ public class CreateEventActivity extends AppCompatActivity {
         phoneEditText = findViewById(R.id.name_customer_phone_field);
         advance_payment = findViewById(R.id.advance_payment);
         total_event = findViewById(R.id.total_event);
+        eventObservations = findViewById(R.id.event_observations);
 
         timeDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,11 +140,6 @@ public class CreateEventActivity extends AppCompatActivity {
             }
         });
 
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        basicPackageR.setLayoutManager(linearLayoutManager);
-
         LinearLayoutManager layoutManager1 = new LinearLayoutManager(this);
         layoutManager1.setOrientation(LinearLayoutManager.VERTICAL);
         extrasList.setLayoutManager(layoutManager1);
@@ -166,26 +159,6 @@ public class CreateEventActivity extends AppCompatActivity {
         }, CreateEventActivity.this);
         extrasList.setAdapter(othersAdapter);
 
-        basicPackageList = new ArrayList<BasicPackage>();
-        basicPackageList.add(new BasicPackage(1.0,200.0,"Personas"));
-        basicPackageList.add(new BasicPackage(1.0,200.0,"Borrego"));
-        basicPackageList.add(new BasicPackage(1.0,200.0,"Consomé con garbanzo (guarniciones)"));
-        basicPackageList.add(new BasicPackage(1.0,200.0,"Arroz"));
-        basicPackageList.add(new BasicPackage(1.0,200.0,"Tortillas a mano"));
-
-        basicAdapter = new BasicAdapter(basicPackageList, R.layout.item_package_list, new BasicAdapter.onItemClickListener() {
-            @Override
-            public void onItemClick(BasicPackage basicPackage, int position) {
-                showDialogEditBasic(basicPackage, position);
-            }
-        }, CreateEventActivity.this
-                , new BasicAdapter.onLongItemClickListener() {
-            @Override
-            public void onLongItemClicked(BasicPackage basicPackage, int position) {
-                showDialogRemoveBasic(basicPackage,position);
-            }
-        });
-
         save_event.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -194,7 +167,8 @@ public class CreateEventActivity extends AppCompatActivity {
                         phoneEditText.getText().toString().matches("") ||
                         advance_payment.getText().toString().matches("") ||
                         dateEvent.getText().toString().matches("") ||
-                        timeDate.getText().toString().matches("")) {
+                        timeDate.getText().toString().matches("") ||
+                        eventObservations.getText().toString().matches("")) {
                     if(nameEditText.getText().toString().matches(""))
                     {
                         nameEditText.setError("Completa este campo");
@@ -219,6 +193,10 @@ public class CreateEventActivity extends AppCompatActivity {
                     {
                         timeDate.setError("Completa este campo");
                     }
+                    if(eventObservations.getText().toString().matches(""))
+                    {
+                        eventObservations.setError("Completa este campo");
+                    }
                 }
                 else {
                     save_event();
@@ -226,8 +204,6 @@ public class CreateEventActivity extends AppCompatActivity {
 
             }
         });
-
-        basicPackageR.setAdapter(basicAdapter);
 
         updateTotal();
 
@@ -282,36 +258,6 @@ public class CreateEventActivity extends AppCompatActivity {
         });
     }
 
-    public void showDialogRemoveBasic(BasicPackage basicPackage, int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(CreateEventActivity.this);
-        LayoutInflater inflater = getLayoutInflater();
-        View view = inflater.inflate(R.layout.delete_active_mesa_dialog, null);
-        TextView title = (TextView) getLayoutInflater().inflate(R.layout.title_dialog,null);
-        title.setText("Eliminar");
-        builder.setView(view).setCustomTitle(title);
-        final AlertDialog dialog = builder.create();
-        dialog.show();
-        TextView mesa_name = view.findViewById(R.id.delete_active_mesa_name);
-        Button cancel = view.findViewById(R.id.cancel_button_delete_product);
-        Button save = view.findViewById(R.id.save_button_delete_product);
-        mesa_name.setText("¿Desea eliminar "+basicPackage.getName()+"?");
-
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                basicAdapter.remove(position);
-                dialog.dismiss();
-            }
-        });
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-    }
-
     public void showDialogRemoveExtra(Others others, int position){
         AlertDialog.Builder builder = new AlertDialog.Builder(CreateEventActivity.this);
         LayoutInflater inflater = getLayoutInflater();
@@ -335,58 +281,6 @@ public class CreateEventActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-    }
-
-    public void showDialogEditBasic(BasicPackage basicPackage, int position){
-        AlertDialog.Builder builder = new AlertDialog.Builder(CreateEventActivity.this);
-        LayoutInflater inflater = getLayoutInflater();
-        View view = inflater.inflate(R.layout.extra_dialog, null);
-        TextView title = (TextView) getLayoutInflater().inflate(R.layout.title_dialog,null);
-        title.setText("Editando");
-        builder.setView(view).setCustomTitle(title);
-        final AlertDialog dialog = builder.create();
-        dialog.show();
-
-        Button save = view.findViewById(R.id.save_button_extra);
-        Button cancel = view.findViewById(R.id.cancel_button_extra);
-        EditText name = view.findViewById(R.id.name_extra_field);
-        EditText amount = view.findViewById(R.id.amount_extra_field);
-        EditText price = view.findViewById(R.id.price_extra_field);
-        name.setText(basicPackage.getName());
-        amount.setText(basicPackage.getAmount().toString());
-        price.setText(basicPackage.getPrice().toString());
-
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(name.getText().toString().matches("") || amount.getText().toString().matches("") || price.getText().toString().matches(""))
-                {
-                    if(name.getText().toString().matches(""))
-                    {
-                        name.setError("Complete este campo");
-                    }
-                    if(amount.getText().toString().matches("")){
-                        amount.setError("Complete este campo");
-                    }
-                    if(price.getText().toString().matches(""))
-                    {
-                        price.setError("Complete este campo");
-                    }
-                }
-                else {
-                    basicAdapter.editBasic(new BasicPackage( Double.parseDouble(String.valueOf(amount.getText())), Double.parseDouble(String.valueOf(price.getText())),name.getText().toString() ),  position );
-                    updateTotal();
-                    dialog.dismiss();
-                }
-            }
-        });
-
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -477,10 +371,6 @@ public class CreateEventActivity extends AppCompatActivity {
             total =  o.getPrice() + total;
         }
 
-        for (BasicPackage b:basicPackageList)
-        {
-            total = b.getPrice() + total;
-        }
         total_event.setText("$"+total);
     }
 
@@ -489,10 +379,10 @@ public class CreateEventActivity extends AppCompatActivity {
         Call<ResponseBody> responseBodyCall = service.save_event(getTokenType()+" "+getToken(),
                 new Event(
                         new EventInfo(othersList,
-                                basicPackageList,
                                 total,
                                 Double.parseDouble(advance_payment.getText().toString()),
                                 nameEditText.getText().toString(),
+                                eventObservations.getText().toString(),
                                 addressEditText.getText().toString(),
                                 phoneEditText.getText().toString(),
                                 dateEvent.getText().toString(),

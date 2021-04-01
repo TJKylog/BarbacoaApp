@@ -93,6 +93,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         @Override
         public boolean onMenuItemClick(MenuItem item) {
             switch (item.getItemId()) {
+                case R.id.print_event_option:{
+                    if(context instanceof EventsActivity){
+                        ((EventsActivity) context).check_bluetooth(events.get(getAdapterPosition()));
+                    }
+                    return true;
+                }
                 case R.id.event_delete_option: {
                     if(context instanceof EventsActivity) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(context);

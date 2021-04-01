@@ -87,8 +87,6 @@ public class EventsActivity extends AppCompatActivity {
 
         pref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
 
-        mService = null;
-
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         // If the adapter is null, then Bluetooth is not supported
@@ -140,14 +138,6 @@ public class EventsActivity extends AppCompatActivity {
         eventAdapter = new EventAdapter(events, R.layout.item_event_list, new EventAdapter.onItemClickListener() {
             @Override
             public void onItemClick(Event event, int position) {
-                if(mConnectedDeviceName == null) {
-                    Intent serverIntent = new Intent(EventsActivity.this, DeviceListActivity.class);
-                    startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
-                }
-                else {
-                    showPrintExpenseDialog(event);
-                }
-
             }
         }, this, this);
         events_list.setAdapter(eventAdapter);
@@ -179,6 +169,16 @@ public class EventsActivity extends AppCompatActivity {
                 Toast.makeText(EventsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    public void check_bluetooth(Event event){
+        if(mConnectedDeviceName == null) {
+            Intent serverIntent = new Intent(EventsActivity.this, DeviceListActivity.class);
+            startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
+        }
+        else {
+            showPrintExpenseDialog(event);
+        }
     }
 
     public void showPopup(View v) {

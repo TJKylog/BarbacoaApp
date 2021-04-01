@@ -63,7 +63,7 @@ public class MesaAdapter extends ArrayAdapter<Mesa> {
                 holder = (MesaAdapter.viewHolder) vi.getTag();
             }
 
-            String str = lmesa.get(position).getId().toString() + " - " + lmesa.get(position).getName();
+            String str = lmesa.get(position).getName();
 
             holder.name_item_mesa.setText(str);
 

@@ -53,13 +53,14 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
 
-                <Spinner
-                    android:id="@+id/users_name"
-                    android:layout_width="0dp"
-                    android:layout_weight="30"
-                    android:layout_margin="10dp"
-                    android:layout_height="wrap_content"
-                    />
+                    <Spinner
+                        android:id="@+id/users_name"
+                        android:layout_width="0dp"
+                        android:layout_weight="30"
+                        android:layout_height="60dp"
+                        android:layout_margin="10dp"
+
+                        />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="0dp"
