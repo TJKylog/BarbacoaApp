@@ -29,7 +29,7 @@
                     android:id="@+id/consumos_button"
                     android:src="@drawable/consumos"
                     android:layout_width="0dp"
-                    android:layout_weight="30"
+                    android:layout_weight="50"
                     android:layout_margin="30dp"
                     android:layout_height="match_parent"
                     android:padding="30dp"
@@ -40,20 +40,13 @@
                     android:id="@+id/productos_button"
                     android:src="@drawable/catalogos"
                     android:layout_width="0dp"
-                    android:layout_weight="30"
+                    android:layout_weight="50"
                     android:layout_margin="30dp"
                     android:layout_height="match_parent"
                     android:text="Catálogos"/>
 
 
-                <ImageButton
-                    android:id="@+id/egresos_button"
-                    android:src="@drawable/egresos"
-                    android:layout_width="0dp"
-                    android:layout_weight="30"
-                    android:layout_height="match_parent"
-                    android:layout_margin="30dp"
-                    />
+
 
             </LinearLayout>
 
@@ -67,26 +60,19 @@
                     android:id="@+id/envetos_button"
                     android:src="@drawable/eventos"
                     android:layout_width="0dp"
-                    android:layout_weight=".30"
+                    android:layout_weight=".50"
                     android:layout_height="match_parent"
                     android:layout_margin="30dp"
                     />
 
-                <Button
+                <ImageButton
+                    android:id="@+id/egresos_button"
+                    android:src="@drawable/egresos"
                     android:layout_width="0dp"
-                    android:layout_weight=".30"
+                    android:layout_weight=".50"
                     android:layout_height="match_parent"
                     android:layout_margin="30dp"
-                    android:visibility="invisible"
-                    android:text="button"/>
-
-                <Button
-                    android:layout_width="0dp"
-                    android:layout_weight=".30"
-                    android:layout_height="match_parent"
-                    android:layout_margin="30dp"
-                    android:visibility="invisible"
-                    android:text="button"/>
+                    />
 
             </LinearLayout>
 
