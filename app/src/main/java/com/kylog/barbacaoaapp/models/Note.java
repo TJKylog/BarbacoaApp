@@ -117,15 +117,58 @@ public class Note {
 
         for (Consume consume: this.consumes) {
             String con_name;
-            if(consume.getName().length() > 13)
-                con_name = consume.getName().substring(0, 14);
+            if(consume.getName().length() > 7)
+                con_name = consume.getName().substring(0, 7);
             else {
                 con_name = consume.getName();
             }
-            note_string = note_string+consume.getAmount().toString()+" "+con_name+" "+ consume.getPrice().toString()+" "+consume.getAmountPrice().toString()+"\n";
+
+            note_string = note_string+ticket_row(consume.getAmount().toString(), con_name, consume.getPrice().toString(), consume.getAmountPrice().toString())+"\n";
         }
         note_string = note_string+"\n================================\n"+"Total: "+this.total+"\n================================\n";
 
         return note_string;
+    }
+
+    private String ticket_row(String amount, String name, String PU, String total){
+        String row = "";
+        Integer length1;
+
+        if(amount.length() < 6 )
+        {
+            length1 = 6 - amount.length();
+            for (int i = 0; i < length1; ++i) {
+                amount = amount+" ";
+
+            }
+        }
+
+        if(name.length() < 7 )
+        {
+            length1 = 7 - name.length();
+            for (int i = 0; i <= length1; ++i) {
+                name = name+" ";
+            }
+        }
+
+        if(PU.length() < 6 )
+        {
+            length1 = 6 - PU.length();
+            for (int i = 0; i < length1; ++i) {
+                PU = PU+" ";
+            }
+        }
+
+        if(total.length() < 7 )
+        {
+            length1 = 6 - total.length();
+            for (int i = 0; i < length1; ++i) {
+                total = total+" ";
+            }
+        }
+
+        row = amount+" "+name+" "+PU+" "+total;
+
+        return row;
     }
 }
