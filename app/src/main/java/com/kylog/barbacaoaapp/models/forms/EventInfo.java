@@ -128,16 +128,52 @@ public class EventInfo {
 
         event_info = event_info+"Tel: "+this.phone+"\n";
         event_info = event_info+"Dereccion: "+this.address+"\n\n\n\n";
-        event_info = event_info+"CANT NOMBRE        P/U  IMP"+"\n================================\n";
+        event_info = event_info+"CANT   NOMBRE          IMP"+"\n================================\n";
 
         Double remaining_amount = this.total - this.advance_payment;
         for (Others other:extras_list) {
-            event_info = event_info+other.getAmount().toString()+" "+other.getName()+" $"+other.getPrice().toString()+"\n";
+
+            event_info = event_info+ticket_row(other.getAmount().toString(),other.getName(),other.getPrice().toString())+"\n";
         }
 
         event_info = event_info+"\n================================\n"+"Total: "+this.total.toString()+"\nAnticipo: "+advance_payment.toString()+"\nRestante: "+remaining_amount.toString() +"\n================================\n";
 
         return  event_info;
+    }
+
+
+    private String ticket_row(String amount, String name, String total){
+        String row = "";
+        Integer length1;
+
+        if(amount.length() < 6 )
+        {
+            length1 = 6 - amount.length();
+            for (int i = 0; i < length1; ++i) {
+                amount = amount+" ";
+
+            }
+        }
+
+        if(name.length() < 16 )
+        {
+            length1 = 16 - name.length();
+            for (int i = 0; i <= length1; ++i) {
+                name = name+" ";
+            }
+        }
+
+        if(total.length() < 7 )
+        {
+            length1 = 6 - total.length();
+            for (int i = 0; i < length1; ++i) {
+                total = total+" ";
+            }
+        }
+
+        row = amount+" "+name+" "+total;
+
+        return row;
     }
 
 }
