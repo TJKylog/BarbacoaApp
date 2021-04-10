@@ -352,4 +352,11 @@ public interface AppCustomService {
             "X-Requested-With: XMLHttpRequest"
     })
     Call<List<UserName>> user_names(@Header("Authorization") String authorization);
+
+    @GET("api/auth/set/invoice/{id}")
+    @Headers({
+            "Content-Type: application/json",
+            "X-Requested-With: XMLHttpRequest"
+    })
+    Call<Note> set_invoice(@Header("Authorization") String authorization, @Path("id") Integer id);
 }

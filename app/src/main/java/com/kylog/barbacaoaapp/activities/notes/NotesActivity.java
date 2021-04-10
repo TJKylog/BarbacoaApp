@@ -233,9 +233,7 @@ public class NotesActivity extends AppCompatActivity {
                             return;
                         }
                         else {
-                            SendDataByte(Command.ESC_Init);
-                            SendDataByte(Command.LF);
-                            Print_Ex();
+                            set_invoice();
                         }
                     }
                     else {
@@ -248,6 +246,7 @@ public class NotesActivity extends AppCompatActivity {
         done_tikcet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if(mConnectedDeviceName == null) {
                     Intent serverIntent = new Intent(NotesActivity.this, DeviceListActivity.class);
                     startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
@@ -387,6 +386,29 @@ public class NotesActivity extends AppCompatActivity {
 
     }
 
+    private void set_invoice() {
+        AppCustomService service = RetrofitClient.getClient();
+        Call<Note> noteCall = service.set_invoice(getTokenType() + " " + getToken(), note.getId());
+
+        noteCall.enqueue(new Callback<Note>() {
+            @Override
+            public void onResponse(Call<Note> call, Response<Note> response) {
+                if(response.isSuccessful())
+                {
+                    note = response.body();
+                    SendDataByte(Command.ESC_Init);
+                    SendDataByte(Command.LF);
+                    Print_Ex();
+                    check_note_invoice();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Note> call, Throwable t) {
+                Toast.makeText(NotesActivity.this, "No se pudo conectar con el servidor, revise su conexión", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 
     private void showDialogDoneTicket(){
         AlertDialog.Builder builder = new AlertDialog.Builder(NotesActivity.this);
@@ -599,6 +621,17 @@ public class NotesActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
+    }
+
+    private void check_note_invoice(){
+        if(note != null){
+            if(note.getInvoice() == -1) {
+                done_tikcet.setEnabled(false);
+            }
+            else {
+                done_tikcet.setEnabled(true);
+            }
+        }
     }
 
     private void showDialogDeleteProduct(Integer id, String name) {
@@ -850,6 +883,7 @@ public class NotesActivity extends AppCompatActivity {
                     note_waiter_name.setText("Mesero: "+note.getWaiter());
                     total_consume_price.setText("Total: $"+note.getTotal().toString());
                     consumeAdapter.updateList(note.getConsumes());
+                    check_note_invoice();
                 }
             }
 
@@ -996,6 +1030,7 @@ public class NotesActivity extends AppCompatActivity {
      *
      */
     private void Print_Test(){
+
     }
 
     /**
