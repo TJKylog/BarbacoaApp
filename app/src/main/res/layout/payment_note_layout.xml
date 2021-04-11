@@ -12,16 +12,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            <RadioButton
-                android:id="@+id/radio_payment_card"
-                android:layout_width="0dp"
-                android:layout_weight=".50"
-                android:layout_marginEnd="30dp"
-                android:layout_marginStart="30dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="16dp"
-                android:checked="true"
-                android:text="Tarjeta" />
+
 
             <RadioButton
                 android:id="@+id/radio_payment_cash"
@@ -30,8 +21,19 @@
                 android:layout_marginStart="30dp"
                 android:layout_weight=".50"
                 android:layout_height="wrap_content"
-                android:checked="false"
+                android:checked="true"
                 android:text="Efectivo" />
+
+            <RadioButton
+                android:id="@+id/radio_payment_card"
+                android:layout_width="0dp"
+                android:layout_weight=".50"
+                android:layout_marginEnd="30dp"
+                android:layout_marginStart="30dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:checked="false"
+                android:text="Tarjeta" />
         </RadioGroup>
 
         <com.google.android.material.textfield.TextInputLayout
