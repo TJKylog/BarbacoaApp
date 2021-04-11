@@ -422,7 +422,6 @@ public class NotesActivity extends AppCompatActivity {
         RadioButton paymentCard = view.findViewById(R.id.radio_payment_card);
         RadioButton paymentCash = view.findViewById(R.id.radio_payment_cash);
         EditText amount = view.findViewById(R.id.amount_cash_payment);
-        amount.setEnabled(false);
         Button cancel = view.findViewById(R.id.cancel_done_ticket);
         Button save = view.findViewById(R.id.done_ticket);
 
