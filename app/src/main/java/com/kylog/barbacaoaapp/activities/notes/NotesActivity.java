@@ -1042,11 +1042,13 @@ public class NotesActivity extends AppCompatActivity {
             SimpleDateFormat formatter = new SimpleDateFormat ("yyyy/MM/dd HH:mm:ss ");
             Date curDate = new Date(System.currentTimeMillis());
             String str = formatter.format(curDate);
+            String folio = "Folio: "+note.getInvoice().toString()+"\n";
             String date = str + "\n";
             try {
                 Command.ESC_Align[2] = 0x01;
                 SendDataByte(Command.ESC_Align);
                 SendDataByte("Ticket de venta\n".getBytes("GBK"));
+                SendDataByte(folio.getBytes("GBK"));
                 SendDataString(date);
                 Command.ESC_Align[2] = 0x00;
                 SendDataByte(Command.ESC_Align);
