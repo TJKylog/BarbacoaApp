@@ -117,8 +117,8 @@ public class Note {
 
         for (Consume consume: this.consumes) {
             String con_name;
-            if(consume.getName().length() > 7)
-                con_name = consume.getName().substring(0, 7);
+            if(consume.getName().length() > 11)
+                con_name = consume.getName().substring(0, 11);
             else {
                 con_name = consume.getName();
             }
@@ -143,9 +143,9 @@ public class Note {
             }
         }
 
-        if(name.length() < 7 )
+        if(name.length() < 11 )
         {
-            length1 = 7 - name.length();
+            length1 = 11 - name.length();
             for (int i = 0; i <= length1; ++i) {
                 name = name+" ";
             }
@@ -161,7 +161,7 @@ public class Note {
 
         if(total.length() < 7 )
         {
-            length1 = 6 - total.length();
+            length1 = 7 - total.length();
             for (int i = 0; i < length1; ++i) {
                 total = total+" ";
             }
