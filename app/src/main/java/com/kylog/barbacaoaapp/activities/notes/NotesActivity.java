@@ -410,6 +410,15 @@ public class NotesActivity extends AppCompatActivity {
         });
     }
 
+    private void clean_ui(){
+        get_active();
+        this.note = null;
+        note_mesa_name.setText("");
+        note_waiter_name.setText("");
+        total_consume_price.setText("");
+        consumeAdapter.updateList(new ArrayList<Consume>());
+    }
+
     private void showDialogDoneTicket(){
         AlertDialog.Builder builder = new AlertDialog.Builder(NotesActivity.this);
         LayoutInflater inflater = getLayoutInflater();
@@ -453,9 +462,7 @@ public class NotesActivity extends AppCompatActivity {
                                 SendDataByte(Command.ESC_Init);
                                 SendDataByte(Command.LF);
                                 Print_Ex2("Tarjeta");
-                                Intent intent = getIntent();
-                                finish();
-                                startActivity(intent);
+                                clean_ui();
                             }
                         }
 
@@ -486,9 +493,7 @@ public class NotesActivity extends AppCompatActivity {
                                     SendDataByte(Command.ESC_Init);
                                     SendDataByte(Command.LF);
                                     Print_Ex2("Efectivo");
-                                    Intent intent = getIntent();
-                                    finish();
-                                    startActivity(intent);
+                                    clean_ui();
                                 }
                             }
 
@@ -602,7 +607,17 @@ public class NotesActivity extends AppCompatActivity {
                         if(response.isSuccessful())
                         {
                             Toast.makeText(NotesActivity.this, "Se eliminó correctamente el consumo de la mesa ", Toast.LENGTH_LONG).show();
-                            get_active();
+                            if(note != null) {
+                                if (note.getId() == id) {
+                                    clean_ui();
+                                }
+                                else{
+                                    get_active();
+                                }
+                            }
+                            else {
+                                get_active();
+                            }
                             dialog.dismiss();
                         }
                     }
